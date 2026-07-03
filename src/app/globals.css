@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* The ported marketing site uses semantic class names (h-1, container, hero…)
+   that collide with Tailwind utilities. Exclude that markup and the site's own
+   stylesheet/scripts from Tailwind's scanning so it doesn't generate clashing
+   utilities like `.h-1 { height: 4px }`. */
+@source not "./page.tsx";
+@source not "../../public/assets";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
