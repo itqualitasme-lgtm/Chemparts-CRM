@@ -23,13 +23,13 @@ The existing website keeps its marketing role; its "Get a quote" / product CTAs 
 
 ## 2. Tech stack (recommended)
 
-- **Next.js 15 (App Router) + TypeScript** — same stack as your LIMS-QUALITAS project, so patterns, hosting and maintenance carry over.
-- **PostgreSQL + Prisma ORM** — relational data (quotes, orders, stock) needs a real RDBMS.
-- **Auth:** credentials-based sessions (email + password) with role-based access control (RBAC). One `User` table with roles: `ADMIN`, `STAFF`, `CUSTOMER`, `VENDOR`. Email verification on self-registration.
-- **Email:** Nodemailer over SMTP using `noreply@chemparts-me.com` (you create the mailbox in your hosting panel; we configure host/port/credentials in `.env`). All transactional mail (registration, quote sent, status change, vendor bill received) goes through one templated mail service.
-- **PDF generation:** server-side HTML→PDF (Playwright/Chromium) so the quotation PDF is pixel-identical to the on-screen preview. Letterhead designed once (logo, ISO/ICV badges, addresses, bank details, signature block) and reused for Quotation, Proforma Invoice, and later Invoice/Delivery Note.
-- **File storage:** local disk on the VPS under `/uploads` (product images, datasheets, vendor bills, customer POs), served through an authenticated route.
-- **Deployment:** your VPS (same pattern as LIMS), Nginx reverse proxy, `store.chemparts-me.com` CNAME → server; SSL via Let's Encrypt.
+- **Next.js 15 (App Router) + TypeScript** — same framework as your LIMS-QUALITAS project, so patterns carry over.
+- **Hosting: Vercel** — native Next.js platform, global CDN (fast for customers anywhere in the world), zero server maintenance. `store.chemparts-me.com` added as a custom domain via CNAME; SSL automatic. Vercel Cron for scheduled jobs (quote-expiry reminders, low-stock digest).
+- **Database & backend: Supabase** — managed PostgreSQL + Prisma ORM. Serverless functions connect through Supabase's connection pooler (Supavisor, port 6543) — configured from day one.
+- **Auth: Supabase Auth** — email/password with built-in email verification and password reset. Role (`ADMIN`, `STAFF`, `CUSTOMER`, `VENDOR`) stored in app metadata + a `profiles` table; app-level RBAC middleware guards each portal's route group.
+- **Email:** `noreply@chemparts-me.com` (you create the mailbox; we configure SMTP in env vars). Supabase Auth emails point at the same SMTP so all mail comes from one address. All transactional mail (registration, quote sent, status change, vendor bill received) goes through one templated mail service, logged in EmailLog.
+- **PDF generation:** server-side HTML→PDF using `puppeteer-core` + `@sparticuz/chromium` (serverless Chromium that runs on Vercel functions) so the quotation PDF is pixel-identical to the on-screen preview. Letterhead designed once (logo, ISO/ICV badges, addresses, bank details, signature block) and reused for Quotation, Proforma Invoice, and later Invoice/Delivery Note. Fallback if function limits bite: a small external render service.
+- **File storage: Supabase Storage** — private buckets with signed URLs for product images, datasheets, vendor bills, customer POs.
 
 ### Alternatives considered
 1. **Separate apps per portal** (store app + CRM app) — cleaner isolation but duplicated auth/models and two deployments. Rejected: you're a small team; one codebase is easier.
@@ -116,7 +116,7 @@ You create `noreply@chemparts-me.com` in the hosting panel; I'll walk you throug
 8. **Numbering schemes** (CPQ/CPO/PO/BILL with yearly reset) configurable in settings.
 9. **Internal vs customer-visible notes** everywhere.
 10. **EmailLog + resend** so "did the customer get the quote?" is answerable.
-11. **Security basics:** RBAC middleware on every route group, hashed passwords (argon2), rate limiting, uploads virus-size-type checked, daily DB backup script on the VPS.
+11. **Security basics:** RBAC middleware on every route group, Supabase Auth password handling, rate limiting, uploads size/type checked, Supabase automated backups (point-in-time recovery on Pro plan).
 12. **Future-ready payments:** order/payment schema now; gateway (Telr / Network International / Stripe — whichever your bank supports) wired in a later phase, enabled per-order for consumables/spares first.
 13. **Later phases to consider (not in initial scope):** service/AMC module (calibration certificates, service tickets — natural fit for lab instruments), WhatsApp notifications, Arabic localization.
 
@@ -138,5 +138,6 @@ Each phase ends with a working deploy you can review at `store.chemparts-me.com`
 1. Show prices publicly for consumables/spares, or only after login? (Equipment stays enquiry-only.)
 2. New customer self-registration: instantly active, or admin approval required?
 3. Default currency AED — correct? Which others must appear on quotes?
-4. Hosting: deploy to the same VPS as LIMS-QUALITAS, or a separate server?
-5. Payment gateway preference when we get there (Telr, Network International, Stripe, PayTabs)?
+4. Payment gateway preference when we get there (Telr, Network International, Stripe, PayTabs)?
+
+*(Resolved: hosting = Vercel + Supabase, decided 2026-07-03.)*

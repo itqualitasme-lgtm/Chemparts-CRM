@@ -16,7 +16,7 @@ Commercial platform for **Chemparts Middle East FZC** / **Chemparts Medical & La
 
 ## Stack (planned)
 
-Next.js 15 (App Router) · TypeScript · PostgreSQL · Prisma · Nodemailer (noreply@chemparts-me.com) · Playwright PDF · VPS + Nginx
+Next.js 15 (App Router) · TypeScript · Vercel · Supabase (Postgres, Auth, Storage) · Prisma · Nodemailer (noreply@chemparts-me.com) · serverless Chromium PDF
 
 ## Status
 
