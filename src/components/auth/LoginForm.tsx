@@ -164,7 +164,9 @@ export default function LoginForm({ next }: { next?: string }) {
           }}
         />
         <div className="relative">
-          <AnimatedLogo variant="dark" width={168} />
+          <Link href="/" aria-label="Chemparts — home" className="block">
+            <AnimatedLogo variant="dark" width={168} />
+          </Link>
           <p className="mx-auto mt-10 max-w-xs text-sm leading-relaxed text-white/70">
             Analytical instruments, OEM spare parts and laboratory services across the Gulf — since
             2003.
