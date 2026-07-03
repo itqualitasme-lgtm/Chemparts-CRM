@@ -69,13 +69,20 @@ enum ProductType {
 }
 
 model Brand {
-  id          String    @id @default(cuid())
-  name        String    @unique
-  logo        String?
-  description String?
-  products    Product[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id              String    @id @default(cuid())
+  name            String    @unique
+  slug            String    @unique @default("")
+  logo            String? // Storage URL or imported filename
+  website         String?
+  countryOfOrigin String?
+  focus           String? // specialization, e.g. "Petroleum testing"
+  partnerSince    String? // e.g. "2008" or "IN-HOUSE"
+  defaultCurrency String    @default("AED")
+  description     String?
+  featured        Boolean   @default(false)
+  products        Product[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
 model Category {
@@ -107,21 +114,43 @@ model Product {
   industries String[]
   testTypes  String[]
   standards  String[]
-  specs      Json?
+  specs      Json? // extra arbitrary spec rows beyond the columns below
+  // structured spec fields shown on the product page (from the website)
+  productType String? // "Petroleum Tester", "Analytical Instrument"
+  sample      String? // sample compatibility
+  output      String? // output / measurement
+  // partnership / warranty / service strip (per-product, were hardcoded on the old site)
+  partnerStatus String?  @default("Direct partner") // Authorized: <this>
+  warranty      String?  @default("Manufacturer")
+  service       String?  @default("In-region")
   modelNo    String?
   hsCode     String?
   unit       String      @default("pc")
+  datasheetUrl String? // uploaded specification PDF (Storage)
   // pricing (spares/consumables; equipment stays enquiry-only)
   listPrice  Decimal?    @db.Decimal(12, 2)
   costPrice  Decimal?    @db.Decimal(12, 2)
   currency   String      @default("AED")
+  priceUpdatedAt DateTime?
   stockTracked Boolean   @default(false)
   // link spare parts to their parent equipment
   parentEquipment   Product?  @relation("EquipmentSpares", fields: [parentEquipmentId], references: [id])
   parentEquipmentId String?
   spares            Product[] @relation("EquipmentSpares")
+  priceHistory      PriceHistory[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+}
+
+model PriceHistory {
+  id        String   @id @default(cuid())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  oldPrice  Decimal? @db.Decimal(12, 2)
+  newPrice  Decimal? @db.Decimal(12, 2)
+  currency  String   @default("AED")
+  changedById String?
+  changedAt DateTime @default(now())
 }
 
 model Setting {
