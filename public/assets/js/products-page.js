@@ -117,7 +117,7 @@
         : `<div class="empty-state">
             <span class="eyebrow">No matches</span>
             <h3>No instruments match the current filters.</h3>
-            <p>Try removing a filter, or <a href="contact.html" style="color:var(--crimson); text-decoration:underline;">contact our team</a> — we can also source instruments outside this catalog.</p>
+            <p>Try removing a filter, or <a href="/contact" style="color:var(--crimson); text-decoration:underline;">contact our team</a> — we can also source instruments outside this catalog.</p>
             <button type="button" class="btn btn--primary btn--sm" data-clear-filters>Clear all filters</button>
           </div>`;
       const clear = grid.querySelector('[data-clear-filters]');

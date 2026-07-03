@@ -275,7 +275,7 @@
         img.src = p.image;
         img.alt = p.brand + ' ' + p.name;
         name.textContent = p.name;
-        if (link) link.href = `product.html?slug=${encodeURIComponent(p.slug)}`;
+        if (link) link.href = `/product?slug=${encodeURIComponent(p.slug)}`;
         const s = p.specs || {};
         specs.innerHTML =
           `<tr><th>Make</th><td>${esc(p.brand)}</td></tr>` +
@@ -359,7 +359,7 @@
     const inds = (p.industries || []).join(',');
     const featuredPill = p.featured ? '<span class="pill pill--crimson">Featured</span>' : '';
     return `
-      <a class="card" href="product.html?slug=${encodeURIComponent(p.slug)}" data-industry="${inds}">
+      <a class="card" href="/product?slug=${encodeURIComponent(p.slug)}" data-industry="${inds}">
         <div class="card__media">
           ${featuredPill}
           <img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">

@@ -1,0 +1,12 @@
+/* Safety net for the ported marketing site.
+   The site uses semantic heading classes .h-1/.h-2/.h-3 that collide with
+   Tailwind's height utilities (h-1 -> height:0.25rem), which collapses hero and
+   section titles. These rules are UNLAYERED, so they beat Tailwind's layered
+   utilities in the cascade no matter what Tailwind's source scanner does — a
+   permanent guard so the collision cannot recur when new pages are added.
+   No Tailwind-using page uses bare h-1/h-2/h-3, so this is safe. */
+.h-1,
+.h-2,
+.h-3 {
+  height: auto;
+}

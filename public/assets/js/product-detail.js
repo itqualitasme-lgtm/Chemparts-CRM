@@ -92,7 +92,7 @@
       `<li class="pill" style="margin-right:8px; margin-bottom:8px;">${escape(st)}</li>`
     ).join('');
     standards.innerHTML = `<ul style="list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; gap:8px;">${list}</ul>
-      <p class="body-lg" style="margin-top:24px;">All listed standards are supported by this instrument's current configuration. For verification of a specific revision or calibration certificate, please <a href="contact.html" style="color:var(--crimson); text-decoration:underline;">contact our team</a>.</p>`;
+      <p class="body-lg" style="margin-top:24px;">All listed standards are supported by this instrument's current configuration. For verification of a specific revision or calibration certificate, please <a href="/contact" style="color:var(--crimson); text-decoration:underline;">contact our team</a>.</p>`;
   }
 
   const docs = document.querySelector('[data-pdp-docs]');
@@ -122,7 +122,7 @@
   // Inject Schema.org Product JSON-LD
   try {
     const origin = window.location.origin || 'https://chemparts-me.com';
-    const url = origin + '/product.html?slug=' + encodeURIComponent(product.slug);
+    const url = origin + '/product?slug=' + encodeURIComponent(product.slug);
     const imgUrl = origin + '/' + (product.image || '').replace(/^\/+/, '');
     const schema = {
       "@context": "https://schema.org",

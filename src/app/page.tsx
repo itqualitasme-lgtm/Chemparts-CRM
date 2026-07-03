@@ -1,81 +1,16 @@
-import Script from 'next/script'
-import { getSessionUser } from '@/lib/auth/session'
-import { homePathFor } from '@/lib/auth/rbac'
+import SiteHeader from '@/components/site/SiteHeader'
+import SiteFooter from '@/components/site/SiteFooter'
+import SiteChrome from '@/components/site/SiteChrome'
+import { getInstrumentCount } from '@/lib/counts'
 
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const user = await getSessionUser()
-  const firstName = user ? (user.fullName || '').trim().split(/\s+/)[0] || user.email : ''
+  const instrumentCount = await getInstrumentCount()
 
   return (
     <>
-      <link rel="stylesheet" href="/assets/css/styles.css" />
-
-      <a className="skip-link" href="#main">Skip to content</a>
-
-      <header className="site-header" data-scrolled="false">
-        <div className="site-header__top" aria-hidden="true">
-          <span className="topticker__live mono">LIVE · UAE</span>
-          <div className="topticker__scroll">
-            <div className="topticker__scroll-track">
-              <span>AUTHORIZED PARTNER · Hitachi · Tanaka · Oxford Instruments · KEM</span>
-              <span>ICV CERTIFIED · Approved for ADNOC group procurement</span>
-              <span>120 ANALYTICAL INSTRUMENTS · 16 brand partners · in stock</span>
-              <span>STANDARDS · ASTM · ISO · IP · referenced on every quote</span>
-              <span>SAME WORKING-DAY RESPONSE · UAE · Qatar · across the Gulf</span>
-              <span>OEM SPARE PARTS · held in regional stock · no 6-week waits</span>
-              <span>TURNKEY LAB SOLUTIONS · design · install · calibrate · service</span>
-              <span>ISO 9001 · 14001 · NABL traceable calibrations</span>
-              <span>SHARJAH · ABU DHABI · DOHA · since 2003</span>
-              <span>WHATSAPP +971 55 756 6123 · Get a quote in under 24 hours</span>
-              <span>AUTHORIZED PARTNER · Hitachi · Tanaka · Oxford Instruments · KEM</span>
-              <span>ICV CERTIFIED · Approved for ADNOC group procurement</span>
-              <span>120 ANALYTICAL INSTRUMENTS · 16 brand partners · in stock</span>
-              <span>STANDARDS · ASTM · ISO · IP · referenced on every quote</span>
-              <span>SAME WORKING-DAY RESPONSE · UAE · Qatar · across the Gulf</span>
-              <span>OEM SPARE PARTS · held in regional stock · no 6-week waits</span>
-              <span>TURNKEY LAB SOLUTIONS · design · install · calibrate · service</span>
-              <span>ISO 9001 · 14001 · NABL traceable calibrations</span>
-              <span>SHARJAH · ABU DHABI · DOHA · since 2003</span>
-              <span>WHATSAPP +971 55 756 6123 · Get a quote in under 24 hours</span>
-            </div>
-          </div>
-          <span className="topticker__right mono">ISO 9001 · 14001 · ICV CERTIFIED</span>
-        </div>
-        <div className="site-header__main">
-          <a className="brand" href="/" aria-label="Chemparts Middle East — home">
-            <img className="brand__logo" src="/assets/images/logo.svg" alt="Chemparts Middle East FZC" width="76" height="38" />
-            <span className="brand__name"><strong>CHEMPARTS</strong><span className="brand__name-flip" aria-label="Chemparts Middle East FZC and Chemparts Medical &amp; Laboratory Supplies"><span className="brand__name-flip__opt">MIDDLE EAST FZC</span><span className="brand__name-flip__opt">MEDICAL &amp; LABORATORY SUPPLIES</span></span></span>
-          </a>
-          <nav className="nav" aria-label="Primary">
-            <a href="/" aria-current="page">Home</a>
-            <a href="/about">About</a>
-            <a href="/products">Products</a>
-            <a href="/application">Application</a>
-            <a href="/partners">Partners</a>
-            <a href="/contact">Contact</a>
-            <div className="nav__cta">
-              <span className="nav__cta-label">— Take action</span>
-              <button type="button" className="btn btn--accent" data-quote="">Get a quote <span className="arrow">&rarr;</span></button>
-              <a className="btn btn--whatsapp" href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp +971 55 756 6123 <span className="arrow">&rarr;</span></a>
-            </div>
-          </nav>
-          <div className="header-cta">
-            {user ? (
-              <a className="btn btn--ghost btn--sm" href={homePathFor(user.role)} aria-label={`Signed in as ${firstName} — go to dashboard`}>{firstName}</a>
-            ) : (
-              <>
-                <a className="btn btn--ghost btn--sm" href="/login">Sign in</a>
-                <a className="btn btn--primary btn--sm" href="/register">Register</a>
-              </>
-            )}
-            <a className="btn btn--ghost btn--sm header-cta__phone" href="tel:+97165574047">+971 6 5574047</a>
-            <button type="button" className="btn btn--primary btn--sm" data-quote="">Get a quote <span className="arrow">→</span></button>
-            <button className="btn menu-toggle" aria-expanded="false" aria-label="Open menu"><span></span></button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader activeNav="home" />
 
       <main id="main">
 
@@ -99,14 +34,14 @@ export default async function HomePage() {
               <span className="word">and</span>
               <span className="word">labs.</span>
             </h1>
-            <p className="body-lg hero-banner__lede">Authorized partner for <strong>Hitachi · Tanaka · Oxford · KEM</strong> and 12 more specialist brands. <strong>120 analytical instruments</strong> in stock — XRF, flash point, distillation, NMR, FTIR — plus OEM spares, consumables and turnkey lab fit-outs. <strong>Same-day quotes. Working-day response.</strong></p>
+            <p className="body-lg hero-banner__lede">Authorized partner for <strong>Hitachi · Tanaka · Oxford · KEM</strong> and 12 more specialist brands. <strong>{instrumentCount} analytical instruments</strong> in stock — XRF, flash point, distillation, NMR, FTIR — plus OEM spares, consumables and turnkey lab fit-outs. <strong>Same-day quotes. Working-day response.</strong></p>
             <div className="hero-banner__cta hero-banner__fade-in">
-              <a className="btn btn--accent btn--lg" href="/products">Browse 120 instruments <span className="arrow">→</span></a>
+              <a className="btn btn--accent btn--lg" href="/products">Browse {instrumentCount} instruments <span className="arrow">→</span></a>
               <a className="btn btn--inverse btn--lg" href="/contact">Talk to an expert</a>
             </div>
             <div className="banner-section__stats hero-banner__fade-in">
               <div><span className="num num-display">500+</span><span className="lbl">Active clients</span></div>
-              <div><span className="num num-display">120+</span><span className="lbl">Instruments shipped/yr</span></div>
+              <div><span className="num num-display" data-target={instrumentCount}>{instrumentCount}+</span><span className="lbl">Instruments shipped/yr</span></div>
               <div><span className="num num-display">20+</span><span className="lbl">Years operating</span></div>
             </div>
           </div>
@@ -227,7 +162,7 @@ export default async function HomePage() {
 
               <aside className="hero__feature" data-reveal data-hero-rotator data-hero-tilt style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
                 <div className="hero__feature-glow" aria-hidden="true"></div>
-                <a className="hero__feature-img" data-hero-link href="/products?slug=lab-x5000" aria-label="View featured instrument">
+                <a className="hero__feature-img" data-hero-link href="/product?slug=lab-x5000" aria-label="View featured instrument">
                   <img data-hero-img src="/assets/images/products/LAB-X5000.png" alt="Hitachi LAB-X5000 benchtop XRF analyzer" fetchPriority="high" />
                 </a>
                 <div className="hero__feature-meta">
@@ -368,7 +303,7 @@ export default async function HomePage() {
                 </div>
                 <h3>Analytical instruments</h3>
                 <p>Authorized distribution for 16 specialist brands — XRF, flash point, distillation, mercury, NMR, FTIR, viscosity, RoHS and more. Full manufacturer warranty, factory-certified service.</p>
-                <a className="capability__link" href="/products">Browse 120 instruments <span className="arrow">→</span></a>
+                <a className="capability__link" href="/products">Browse {instrumentCount} instruments <span className="arrow">→</span></a>
               </article>
 
               <article className="capability">
@@ -1048,82 +983,9 @@ export default async function HomePage() {
 
       </main>
 
-      <footer className="site-footer">
-        <div className="site-footer__cta">
-          <h2>Need analytical <em>instruments?</em><br />Or service for one you already have?</h2>
-          <div className="site-footer__cta-actions">
-            <a className="btn btn--whatsapp" href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp our team <span className="arrow">→</span></a>
-            <a className="btn btn--ghost" style={{ color: 'white', borderColor: 'rgba(255,255,255,0.2)' }} href="mailto:info@chemparts-me.com">Email info@chemparts-me.com</a>
-          </div>
-        </div>
+      <SiteFooter />
 
-        <div className="site-footer__cols">
-          <div>
-            <h4>Chemparts ME</h4>
-            <p>Two decades supplying analytical instruments, OEM spare parts, lab consumables and turnkey lab solutions across the Middle East. Authorized partner for Hitachi, Tanaka, Oxford and 14 more leading brands.</p>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.06em', color: '#6B7588', textTransform: 'uppercase', marginTop: 16 }}>[ ISO 9001 · ISO 14001 ]</p>
-          </div>
-          <div>
-            <h4>Navigation</h4>
-            <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/about">About</a></li>
-              <li><a href="/products">Products</a></li>
-              <li><a href="/application">Application</a></li>
-              <li><a href="/partners">Partners</a></li>
-              <li><a href="/contact">Contact</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4>Head Office</h4>
-            <address>A2-96, SAIF Zone<br />P.O. Box 9681<br />Sharjah, UAE</address>
-            <p style={{ fontFamily: 'var(--font-mono)', marginTop: 12 }}>+971 6 5574047</p>
-          </div>
-          <div>
-            <h4>Branches</h4>
-            <address style={{ marginBottom: 16 }}>Abu Dhabi, UAE<br /><span style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>02-5527185</span></address>
-            <address>Doha, Qatar<br /><span style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>New Souq Al Haraj</span></address>
-          </div>
-        </div>
-
-        <div className="site-footer__bottom">
-          <span>© <span data-year>2026</span> CHEMPARTS MIDDLE EAST FZC · CHEMPARTS MEDICAL &amp; LABORATORY SUPPLIES LLC</span>
-          <span>[ BUILT ON STANDARDS · ISO 9001 · 14001 ]</span>
-        </div>
-      </footer>
-
-      {/* Quote modal */}
-      <div className="modal-backdrop" data-open="false">
-        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="quote-title" data-quote-modal>
-          <div className="modal__head">
-            <span className="eyebrow">Request a quote</span>
-            <button type="button" className="modal__close" data-modal-close aria-label="Close dialog">
-              <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.25" /></svg>
-            </button>
-          </div>
-          <form className="modal__body" data-quote-form>
-            <h3 id="quote-title">Tell us what you need</h3>
-            <p className="lede">Submit and we&apos;ll open WhatsApp pre-filled with your details. Or email <a href="mailto:info@chemparts-me.com" style={{ color: 'var(--crimson)' }}>info@chemparts-me.com</a>.</p>
-            <div className="field"><label htmlFor="qf-name">Name</label><input id="qf-name" name="name" type="text" required /></div>
-            <div className="field"><label htmlFor="qf-company">Company</label><input id="qf-company" name="company" type="text" required /></div>
-            <div className="field"><label htmlFor="qf-email">Email</label><input id="qf-email" name="email" type="email" required /></div>
-            <div className="field"><label htmlFor="qf-instrument">Instrument</label><input id="qf-instrument" name="instrument" type="text" placeholder="e.g. LAB-X5000" /></div>
-            <div className="field"><label htmlFor="qf-message">Message</label><textarea id="qf-message" name="message" rows={3} placeholder="Standards, sample type, throughput..."></textarea></div>
-            <div className="actions">
-              <button type="submit" className="btn btn--accent">Open in WhatsApp <span className="arrow">→</span></button>
-              <button type="button" className="btn btn--ghost" data-modal-close>Cancel</button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <div className="mobile-bar" role="region" aria-label="Quick actions">
-        <button type="button" className="btn btn--accent" data-quote="">Get a quote <span className="arrow">&rarr;</span></button>
-        <a className="btn btn--whatsapp" href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp</a>
-      </div>
-
-      <Script src="/assets/js/products.js" strategy="afterInteractive" />
-      <Script src="/assets/js/app.js" strategy="afterInteractive" />
+      <SiteChrome />
     </>
   )
 }
