@@ -18,6 +18,7 @@ const NAV: Record<Portal, NavItem[]> = {
     { href: '/staff/enquiries', label: 'Enquiries' },
     { href: '/staff/quotations', label: 'Quotations' },
     { href: '/staff/products', label: 'Products' },
+    { href: '/staff/brands', label: 'Brands' },
     { href: '/staff/customers', label: 'Customers' },
     { href: '/staff/stock', label: 'Stock' },
   ],
