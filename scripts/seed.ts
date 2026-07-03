@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { createClient } from '@supabase/supabase-js'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient, type Role } from '../src/generated/prisma/client'
-import { databaseUrl, supabaseServiceRoleKey, supabaseUrl } from '../src/lib/env'
+import { databaseUrl, env, supabaseServiceRoleKey, supabaseUrl } from '../src/lib/env'
 
 const db = new PrismaClient({
   adapter: new PrismaPg({ connectionString: databaseUrl() }),
@@ -35,12 +35,10 @@ async function ensureUser(email: string, password: string, fullName: string, rol
 }
 
 async function main() {
-  await ensureUser(
-    process.env.ADMIN_SEED_EMAIL!,
-    process.env.ADMIN_SEED_PASSWORD!,
-    'Razin Ahmed',
-    'ADMIN',
-  )
+  const adminEmail = env('ADMIN_SEED_EMAIL')
+  const adminPassword = env('ADMIN_SEED_PASSWORD')
+  if (!adminEmail || !adminPassword) throw new Error('ADMIN_SEED_EMAIL / ADMIN_SEED_PASSWORD not set')
+  await ensureUser(adminEmail, adminPassword, 'Razin Ahmed', 'ADMIN')
   await ensureUser('staff.demo@chemparts-me.com', 'Demo-staff-123', 'Demo Staff', 'STAFF')
   await db.setting.upsert({
     where: { key: 'company' },
