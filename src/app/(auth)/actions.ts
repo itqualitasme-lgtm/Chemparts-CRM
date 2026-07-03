@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { db } from '@/lib/db'
 import { canAccessPortal, homePathFor, portalFromPath } from '@/lib/auth/rbac'
+import { markOtpVerified } from '@/lib/auth/otp-grace'
 
 export type LoginState = { error?: string }
 
@@ -45,6 +46,14 @@ export async function requestOtp(_prev: OtpState, formData: FormData): Promise<O
   const profile = await db.profile.findUnique({ where: { email } })
   if (!profile) return { error: 'No account found for that email.' }
   if (profile.status !== 'ACTIVE') return { error: 'Account is not active. Contact info@chemparts-me.com.' }
+  // One-time email codes are a customer convenience only. Staff/vendor/manager
+  // accounts must use a password (higher-assurance) or contact the IT admin.
+  if (profile.role !== 'CUSTOMER') {
+    return {
+      error:
+        'One-time codes are for customers only. Staff and vendors: sign in with your password, or contact it.admin@chemparts-me.com.',
+    }
+  }
 
   const supabase = await createClient()
   const { error } = await supabase.auth.signInWithOtp({
@@ -71,6 +80,10 @@ export async function verifyOtp(_prev: LoginState, formData: FormData): Promise<
     await supabase.auth.signOut()
     return { error: 'Account is not active. Contact info@chemparts-me.com.' }
   }
+
+  // Mark a fresh OTP verification so the customer can change their password
+  // within the grace window without re-verifying.
+  await markOtpVerified()
 
   const nextPortal = next ? portalFromPath(next) : null
   if (next && nextPortal && canAccessPortal(profile.role, nextPortal)) {

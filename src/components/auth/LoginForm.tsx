@@ -128,7 +128,7 @@ export default function LoginForm({ next }: { next?: string }) {
         <h1 className="mb-1 text-xl font-semibold text-slate-900">Sign in</h1>
         <p className="mb-6 text-sm text-slate-500">
           {mode === 'password'
-            ? 'Welcome back — access your quotations, orders and account.'
+            ? 'Sign in to your Chemparts account.'
             : 'Enter your email and we’ll send you a one-time sign-in code.'}
         </p>
 
@@ -143,9 +143,6 @@ export default function LoginForm({ next }: { next?: string }) {
           <Link href="/register" className="font-medium text-[#0E7490] underline">
             Create an account
           </Link>
-        </p>
-        <p className="mt-2 text-center text-xs text-slate-400">
-          Staff, vendor and manager accounts are created by your administrator.
         </p>
       </div>
     </main>
