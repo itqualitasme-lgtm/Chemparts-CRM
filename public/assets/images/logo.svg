@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 110" role="img" aria-label="Chemparts">
+  <defs>
+    <style>
+      .cp-letter {
+        fill: #ffffff;
+        font-family: "Swiss721 Blk BT", "Swiss721BT-Black", "Helvetica Neue Black", "Arial Black", "Inter", system-ui, sans-serif;
+        font-weight: 900;
+      }
+      .cp-c { font-size: 88.26px; }
+      .cp-p { font-size: 92.63px; }
+      .cp-fill { fill: #35769e; }
+    </style>
+  </defs>
+  <rect class="cp-fill" x="7"   y="2"   width="100" height="100" rx="3" ry="3"/>
+  <rect class="cp-fill" x="113" y="2"   width="100" height="100" rx="3" ry="3"/>
+  <rect class="cp-fill" x="7"   y="106" width="206" height="2"/>
+  <circle class="cp-fill" cx="163" cy="42" r="10"/>
+  <text class="cp-letter cp-c" transform="translate(18.3 83.26) scale(1.1 1)"><tspan x="0" y="0">C</tspan></text>
+  <text class="cp-letter cp-p" transform="translate(128.59 86.06)"><tspan x="0" y="0">P</tspan></text>
+</svg>

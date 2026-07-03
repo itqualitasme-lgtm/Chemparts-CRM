@@ -51,7 +51,10 @@ export default function RegisterPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-10">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm">
-        <p className="mb-1 text-xs font-bold tracking-[0.2em] text-[#0A2540]">CHEMPARTS</p>
+        <Link href="/" className="mb-4 inline-flex items-center gap-2">
+          <img src="/images/logo.svg" alt="Chemparts" width={44} height={22} />
+          <span className="text-xs font-bold tracking-[0.2em] text-[#0A2540]">CHEMPARTS</span>
+        </Link>
         <h1 className="mb-1 text-xl font-semibold text-slate-900">Create your account</h1>
         <p className="mb-6 text-sm text-slate-500">
           Browse the store, request quotations and track your orders.

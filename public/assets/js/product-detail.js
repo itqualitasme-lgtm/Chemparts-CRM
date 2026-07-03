@@ -1,0 +1,161 @@
+/* Product detail page — reads ?slug= and hydrates product.html */
+(function () {
+  'use strict';
+  if (!window.PRODUCTS) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('slug');
+  const product = window.PRODUCTS.find(p => p.slug === slug) || window.PRODUCTS[0];
+  if (!product) return;
+
+  const escape = window.__escapeHtml || (s => String(s));
+
+  // Title + meta
+  document.title = `${product.name} · ${product.brand} — Chemparts Middle East`;
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.setAttribute('content', product.desc);
+
+  // Breadcrumb
+  const crumb = document.querySelector('[data-pdp-breadcrumb]');
+  if (crumb) crumb.textContent = product.name;
+
+  // Brand / title / desc
+  setText('[data-pdp-brand]', product.brand);
+  setText('[data-pdp-title]', product.name);
+  setText('[data-pdp-desc]', product.desc);
+
+  // Spec quick table
+  const quickSpec = document.querySelector('[data-pdp-quick-spec]');
+  if (quickSpec) {
+    const s = product.specs || {};
+    const rows = [
+      ['Type', s.type],
+      ['Sample', s.sample],
+      ['Standards', s.standards],
+      ['Output', s.output]
+    ].filter(r => r[1]);
+    quickSpec.innerHTML = rows.map(([k, v]) =>
+      `<tr><th>${escape(k)}</th><td>${escape(v)}</td></tr>`
+    ).join('');
+  }
+
+  // Quote button slug binding
+  document.querySelectorAll('[data-pdp-quote]').forEach(b => b.dataset.quote = product.slug);
+
+  // Mailto datasheet button
+  const dsBtn = document.querySelector('[data-pdp-datasheet]');
+  if (dsBtn) {
+    dsBtn.setAttribute('href', `mailto:info@chemparts-me.com?subject=Datasheet request — ${product.name}`);
+  }
+
+  // Gallery
+  const main = document.querySelector('[data-pdp-main]');
+  const thumbs = document.querySelector('[data-pdp-thumbs]');
+  const images = (product.images && product.images.length) ? product.images : [product.image];
+  if (main) main.innerHTML = `<img src="${images[0]}" alt="${escape(product.name)}">`;
+  if (thumbs) {
+    thumbs.innerHTML = images.map((src, i) =>
+      `<button type="button" aria-label="View image ${i + 1}" aria-pressed="${i === 0 ? 'true' : 'false'}"><img src="${src}" alt=""></button>`
+    ).join('');
+    thumbs.querySelectorAll('button').forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        thumbs.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+        btn.setAttribute('aria-pressed', 'true');
+        if (main) main.innerHTML = `<img src="${images[i]}" alt="${escape(product.name)}">`;
+      });
+    });
+  }
+
+  // Tab content
+  const overview = document.querySelector('[data-pdp-overview]');
+  if (overview) overview.innerHTML = `<p class="body-lg">${escape(product.overview || product.desc)}</p>`;
+
+  const specs = document.querySelector('[data-pdp-specs]');
+  if (specs) {
+    const s = product.specs || {};
+    const all = [
+      ['Type', s.type],
+      ['Sample compatibility', s.sample],
+      ['Standards', s.standards],
+      ['Output / measurement', s.output],
+      ['Brand', product.brand],
+      ['Industry application', (product.industries || []).join(', ')]
+    ].filter(r => r[1]);
+    specs.innerHTML = `<table class="spec-table">${all.map(([k, v]) =>
+      `<tr><th>${escape(k)}</th><td>${escape(v)}</td></tr>`
+    ).join('')}</table>`;
+  }
+
+  const standards = document.querySelector('[data-pdp-standards]');
+  if (standards) {
+    const list = (product.standards || []).map(st =>
+      `<li class="pill" style="margin-right:8px; margin-bottom:8px;">${escape(st)}</li>`
+    ).join('');
+    standards.innerHTML = `<ul style="list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; gap:8px;">${list}</ul>
+      <p class="body-lg" style="margin-top:24px;">All listed standards are supported by this instrument's current configuration. For verification of a specific revision or calibration certificate, please <a href="contact.html" style="color:var(--crimson); text-decoration:underline;">contact our team</a>.</p>`;
+  }
+
+  const docs = document.querySelector('[data-pdp-docs]');
+  if (docs) {
+    const items = (product.docs || []).map(d =>
+      `<li><a href="${d.href}" class="btn btn--ghost btn--sm">${escape(d.title)} <span class="arrow">→</span></a></li>`
+    ).join('');
+    docs.innerHTML = `<ul style="list-style:none; padding:0; margin:0; display:grid; gap:12px;">${items || '<li class="text-muted">No public documentation. Contact us for application notes and SOPs.</li>'}</ul>`;
+  }
+
+  // Related products
+  const related = document.querySelector('[data-pdp-related]');
+  if (related) {
+    const rel = window.PRODUCTS
+      .filter(p => p.slug !== product.slug)
+      .filter(p => p.brand === product.brand || (p.industries || []).some(i => (product.industries || []).includes(i)))
+      .slice(0, 3);
+    if (rel.length && window.__productCard) {
+      related.innerHTML = rel.map(window.__productCard).join('');
+    }
+  }
+
+  function setText(sel, val) {
+    document.querySelectorAll(sel).forEach(el => el.textContent = val);
+  }
+
+  // Inject Schema.org Product JSON-LD
+  try {
+    const origin = window.location.origin || 'https://chemparts-me.com';
+    const url = origin + '/product.html?slug=' + encodeURIComponent(product.slug);
+    const imgUrl = origin + '/' + (product.image || '').replace(/^\/+/, '');
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": product.name,
+      "description": product.overview || product.desc,
+      "image": imgUrl,
+      "url": url,
+      "sku": product.slug,
+      "brand": { "@type": "Brand", "name": product.brand },
+      "category": (product.industries || []).join(', '),
+      "offers": {
+        "@type": "Offer",
+        "url": url,
+        "availability": "https://schema.org/InStock",
+        "priceCurrency": "AED",
+        "priceSpecification": { "@type": "PriceSpecification", "price": "0", "priceCurrency": "AED", "valueAddedTaxIncluded": false },
+        "seller": {
+          "@type": "Organization",
+          "name": "Chemparts Middle East FZC",
+          "url": "https://chemparts-me.com/",
+          "telephone": "+971-6-5574047"
+        }
+      },
+      "additionalProperty": Object.entries(product.specs || {}).map(([k, v]) => ({
+        "@type": "PropertyValue",
+        "name": k.charAt(0).toUpperCase() + k.slice(1),
+        "value": v
+      }))
+    };
+    const tag = document.createElement('script');
+    tag.type = 'application/ld+json';
+    tag.textContent = JSON.stringify(schema);
+    document.head.appendChild(tag);
+  } catch (e) { /* graceful no-op */ }
+})();
