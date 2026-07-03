@@ -27,17 +27,28 @@ async function ensureUser(email: string, password: string, fullName: string, rol
   await db.profile.upsert({
     where: { id: user!.id },
     create: { id: user!.id, email, fullName, role },
-    update: { role },
+    update: { role, fullName },
   })
-  console.log(`OK ${role} ${email}`)
+  console.log(`OK ${role} ${email} (${fullName})`)
 }
 
 async function main() {
+  // Super admin — the primary IT/administrator account.
+  const superEmail = env('SUPER_ADMIN_EMAIL') || 'it.admin@chemparts-me.com'
+  const superName = env('SUPER_ADMIN_NAME') || 'System Administrator'
+  const superPassword = env('SUPER_ADMIN_PASSWORD')
+  if (!superPassword) throw new Error('SUPER_ADMIN_PASSWORD not set')
+  await ensureUser(superEmail, superPassword, superName, 'ADMIN')
+
+  // Optional secondary admin from ADMIN_SEED_* (kept for the original owner login).
   const adminEmail = env('ADMIN_SEED_EMAIL')
   const adminPassword = env('ADMIN_SEED_PASSWORD')
-  if (!adminEmail || !adminPassword) throw new Error('ADMIN_SEED_EMAIL / ADMIN_SEED_PASSWORD not set')
-  await ensureUser(adminEmail, adminPassword, 'Razin Ahmed', 'ADMIN')
+  if (adminEmail && adminPassword) {
+    await ensureUser(adminEmail, adminPassword, 'Razin Ahmed', 'ADMIN')
+  }
+
   await ensureUser('staff.demo@chemparts-me.com', 'Demo-staff-123', 'Demo Staff', 'STAFF')
+
   await db.setting.upsert({
     where: { key: 'company' },
     create: {
