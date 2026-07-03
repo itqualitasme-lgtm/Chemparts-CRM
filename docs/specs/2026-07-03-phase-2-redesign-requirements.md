@@ -47,6 +47,22 @@ Plus:
 ### E. Missing modules (currently 404 in staff nav)
 Build out: **Enquiries, Quotations, Customers, Stock** (nav links exist but pages 404). These were planned for later phases but the owner wants them real, not dead links.
 
+### F2. Equipment ↔ spare parts bundling (BOM) — NEW
+- Each **equipment** has a list of **related spare parts** (many-to-many).
+- Each link is **REQUIRED** or **OPTIONAL**.
+- When staff add an equipment to an enquiry/quotation, the related spares are **suggested**: required ones **auto-fill**, optional ones are offered to **add or ignore**.
+- Some spares are **zero-cost when bought with the equipment** (bundled/included) — a per-link "bundled free" flag / price override.
+- Each link has a **default quantity**.
+
+### F3. Lot / batch number — NEW
+- **All products carry a lot/batch number** ("or something"). Simple `lotNumber` on the product now; proper multi-batch tracking (lot, qty, expiry) lives in the Stock module.
+
+### F4. Stock visibility for staff — NEW
+- Staff must see **in stock / not available** status per product (and per lot later). Add a staff-settable `stockStatus` now (IN_STOCK / OUT_OF_STOCK / ON_ORDER); full quantity tracking (StockItem/StockMovement) in the Stock module. Not shown to customers except as a subtle "available / lead-time" hint.
+
+### F5. Consumables — dedicated section — NEW (reaffirmed)
+- Consumables get their **own store section** (separate from instruments and spare parts), with pricing and Add-to-Enquiry.
+
 ### F. Quotation tool (expanded)
 - **AMC / service quotations** — the company provides AMC (annual maintenance contracts) and services; the quotation tool must support service/AMC line items, not just products.
 - **Multiple quotation types**, chosen/customized at creation time:
@@ -100,10 +116,22 @@ Build out: **Enquiries, Quotations, Customers, Stock** (nav links exist but page
 ### PriceHistory (new)
 `productId, oldPrice, newPrice, currency, changedBy, changedAt` — powers "last changed" + audit + easy updates.
 
-### Quotation (expanded for types + AMC) — Phase 3 detail
-- `type`: PROJECT (detailed/image-rich) | STANDARD | AMC
-- `showImages`, `sections[]` (customizable), line items of kind PRODUCT | SERVICE | AMC | CUSTOM.
-- Everything from the original spec (revisions, PDF, letterhead) still applies.
+### Product — additional fields (from new feedback)
+- `lotNumber` string? — lot/batch identifier.
+- `stockStatus` enum — IN_STOCK | OUT_OF_STOCK | ON_ORDER (staff-settable; drives the staff availability badge).
+
+### EquipmentSpare (BOM junction) — NEW
+`equipmentId → Product(EQUIPMENT)`, `sparePartId → Product(SPARE_PART)`, `requirement` (REQUIRED | OPTIONAL), `defaultQty` int, `bundledFree` bool (zero-cost with equipment), `notes`. Unique on (equipment, spare). Replaces the simple parent-equipment self-link. Powers: on the product page "required/optional spare parts", and in the quotation builder auto-suggesting spares when equipment is added.
+
+### Quotation (expanded for types + AMC + lifecycle) — Phase 3 detail
+- `type`: PROJECT (detailed/image-rich) | STANDARD | AMC.
+- `showImages`, `sections[]` (customizable), line items of kind PRODUCT | SPARE | SERVICE | AMC | CUSTOM, each with qty, unit price, discount, `bundledFree` (for included spares), lead time.
+- **Spare suggestion on build:** adding an equipment line pulls its EquipmentSpare list — required auto-added (bundled ones at 0), optional shown to add/ignore.
+- **Lifecycle:** DRAFT → SENT → ACCEPTED → **converted to Order/PO** | REJECTED (**with `rejectReason`**) | EXPIRED | REVISED. Accepted quote generates a customer **Order** (a.k.a. their PO); the acceptance/PO reference and reject reason are stored.
+- Everything from the original spec (revisions, immutable PDF snapshots, letterhead) still applies.
+
+### Order (customer PO from accepted quote)
+`number (CPO-YYYY-####)`, `quotationId`, `customerPoRef` (their PO number/upload), line items copied from quote, status pipeline (§6 of main spec), `rejectReason?` if the quote was rejected instead.
 
 ---
 
@@ -140,7 +168,8 @@ Full research reports retained in this session's agent outputs.
 2. **Design system** — tokens (color/type/spacing), layout primitives (full-width sections), header/footer, motion helpers.
 3. **Public store redesign** — homepage (SGS/GEICP-style), catalog, product detail (all fields, gallery, datasheet, spec table), auth header.
 4. **Auth polish** — remember-me, persistent sessions, avatar menu.
-5. **Staff modules** — richer brand form, product form (all fields + gallery + datasheet + inline price update), then Customers, Enquiries, Stock pages (kill the 404s).
-6. **Quotation tool** (Phase 3) — types (project/standard/AMC), customizable sections, images, AMC/service lines, PDF.
+5. **Staff modules** — richer brand form; product form (all fields + gallery + datasheet + inline price update + lot number + stock status + **spare-parts BOM editor** to attach required/optional/bundled spares); then Customers, Enquiries, Stock pages (kill the 404s).
+6. **Enquiry basket + Quotation tool** (Phase 3) — "Add to Enquiry" basket; quotation types (project/standard/AMC), customizable sections, images, AMC/service lines, **auto-suggest spares from equipment BOM** (required auto-fill, optional add/ignore, bundled at zero cost), PDF, and the **accept→Order/PO** + **reject-with-reason** lifecycle.
+7. **Stock module** — StockItem/StockMovement, lot/batch tracking, low-stock alerts, vendor-PO linkage.
 
 Each ships as its own reviewed increment.
