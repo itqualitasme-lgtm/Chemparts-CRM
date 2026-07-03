@@ -9,37 +9,46 @@ const inputCls =
 const btnCls =
   'w-full rounded-lg bg-[#0E7490] py-2.5 font-medium text-white transition hover:bg-[#0b5f77] disabled:opacity-60'
 
-function PasswordForm({ next }: { next?: string }) {
+function PasswordForm({ next, onUseOtp }: { next?: string; onUseOtp: () => void }) {
   const [state, formAction, pending] = useActionState<LoginState, FormData>(login, {})
   return (
-    <form action={formAction} className="space-y-4">
-      {next && <input type="hidden" name="next" value={next} />}
-      {state.error && (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
-      )}
-      <label className="block">
-        <span className="mb-1 block text-sm font-medium text-slate-700">Email</span>
-        <input name="email" type="email" required className={inputCls} placeholder="you@company.com" />
-      </label>
-      <label className="block">
-        <span className="mb-1 block text-sm font-medium text-slate-700">Password</span>
-        <input name="password" type="password" required className={inputCls} />
-      </label>
-      <button type="submit" disabled={pending} className={btnCls}>
-        {pending ? 'Signing in…' : 'Sign in'}
+    <>
+      <form action={formAction} className="space-y-4">
+        {next && <input type="hidden" name="next" value={next} />}
+        {state.error && (
+          <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
+        )}
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium text-slate-700">Email</span>
+          <input name="email" type="email" required className={inputCls} placeholder="you@company.com" />
+        </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium text-slate-700">Password</span>
+          <input name="password" type="password" required className={inputCls} />
+        </label>
+        <button type="submit" disabled={pending} className={btnCls}>
+          {pending ? 'Signing in…' : 'Sign in'}
+        </button>
+      </form>
+      <button
+        type="button"
+        onClick={onUseOtp}
+        className="mt-4 block w-full text-center text-sm font-medium text-[#0E7490] hover:underline"
+      >
+        Sign in with a one-time email code instead
       </button>
-    </form>
+    </>
   )
 }
 
-function OtpForm({ next }: { next?: string }) {
+function OtpForm({ next, onUsePassword }: { next?: string; onUsePassword: () => void }) {
   const [reqState, requestAction, requesting] = useActionState<OtpState, FormData>(requestOtp, {})
   const [verState, verifyAction, verifying] = useActionState<LoginState, FormData>(verifyOtp, {})
   const [email, setEmail] = useState('')
   const sent = reqState.sent
 
   return (
-    <div className="space-y-4">
+    <>
       {!sent ? (
         <form action={requestAction} className="space-y-4">
           {reqState.error && (
@@ -87,7 +96,7 @@ function OtpForm({ next }: { next?: string }) {
               {verifying ? 'Verifying…' : 'Verify & sign in'}
             </button>
           </form>
-          <form action={requestAction} className="text-center">
+          <form action={requestAction} className="mt-2 text-center">
             <input type="hidden" name="email" value={reqState.email ?? email} />
             <button type="submit" className="text-xs text-[#0E7490] underline">
               Resend code
@@ -95,7 +104,14 @@ function OtpForm({ next }: { next?: string }) {
           </form>
         </>
       )}
-    </div>
+      <button
+        type="button"
+        onClick={onUsePassword}
+        className="mt-4 block w-full text-center text-sm font-medium text-[#0E7490] hover:underline"
+      >
+        Back to password sign-in
+      </button>
+    </>
   )
 }
 
@@ -110,28 +126,17 @@ export default function LoginForm({ next }: { next?: string }) {
           <span className="text-xs font-bold tracking-[0.2em] text-[#0A2540]">CHEMPARTS</span>
         </Link>
         <h1 className="mb-1 text-xl font-semibold text-slate-900">Sign in</h1>
-        <p className="mb-5 text-sm text-slate-500">
-          Welcome back — access your quotations, orders and account.
+        <p className="mb-6 text-sm text-slate-500">
+          {mode === 'password'
+            ? 'Welcome back — access your quotations, orders and account.'
+            : 'Enter your email and we’ll send you a one-time sign-in code.'}
         </p>
 
-        <div className="mb-5 grid grid-cols-2 gap-1 rounded-lg bg-slate-100 p-1 text-sm">
-          <button
-            type="button"
-            onClick={() => setMode('password')}
-            className={`rounded-md py-1.5 font-medium transition ${mode === 'password' ? 'bg-white text-[#0A2540] shadow-sm' : 'text-slate-500'}`}
-          >
-            Password
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode('otp')}
-            className={`rounded-md py-1.5 font-medium transition ${mode === 'otp' ? 'bg-white text-[#0A2540] shadow-sm' : 'text-slate-500'}`}
-          >
-            Email code (OTP)
-          </button>
-        </div>
-
-        {mode === 'password' ? <PasswordForm next={next} /> : <OtpForm next={next} />}
+        {mode === 'password' ? (
+          <PasswordForm next={next} onUseOtp={() => setMode('otp')} />
+        ) : (
+          <OtpForm next={next} onUsePassword={() => setMode('password')} />
+        )}
 
         <p className="mt-6 text-center text-sm text-slate-500">
           New customer?{' '}
