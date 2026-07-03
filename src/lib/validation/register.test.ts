@@ -8,6 +8,7 @@ const valid = {
   phone: '+97455512345',
   country: 'QA',
   password: 'Str0ng-password',
+  agreeTerms: 'yes',
 }
 
 describe('registerSchema', () => {

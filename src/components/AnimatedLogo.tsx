@@ -45,7 +45,6 @@ function markup(variant: 'light' | 'dark', width: number, showWordmark: boolean)
     <g clip-path="url(#cpR)">
       <text x="158" y="58" text-anchor="middle" dominant-baseline="central" fill="var(--cp-ink)" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:82px;transform-box:fill-box;animation:cpLetP var(--cp-dur) cubic-bezier(.2,.9,.2,1) infinite both">P</text>
     </g>
-    <circle cx="163" cy="20" r="6.5" fill="var(--cp-accent)" style="transform-box:fill-box;animation:cpDrop var(--cp-dur) cubic-bezier(.3,1.4,.5,1) infinite both"></circle>
     <rect x="7" y="107" width="206" height="2.5" fill="var(--cp-surface)" style="transform-box:fill-box;transform-origin:left center;animation:cpBase var(--cp-dur) cubic-bezier(.65,0,.35,1) infinite both"></rect>
     <circle cx="7" cy="108.2" r="3.2" fill="var(--cp-accent)" style="transform-box:fill-box;animation:cpScan var(--cp-dur) cubic-bezier(.65,0,.35,1) infinite both"></circle>
     <line x1="7" y1="115" x2="213" y2="115" stroke="var(--cp-tick)" stroke-width="6" stroke-dasharray="1.5 18.1" style="animation:cpTick var(--cp-dur) ease-out infinite both"></line>
