@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getBrands, getIndustries, getProducts } from '@/lib/catalog'
 
 export const metadata = { title: 'Products — Chemparts Store' }
+export const dynamic = 'force-dynamic'
 
 const INDUSTRY_LABELS: Record<string, string> = {
   petroleum: 'Petroleum',
@@ -19,9 +20,11 @@ export default async function ProductsPage({
   searchParams: Promise<{ q?: string; brand?: string; industry?: string }>
 }) {
   const { q, brand, industry } = await searchParams
-  const products = getProducts({ q, brand, industry })
-  const brands = getBrands()
-  const industries = getIndustries()
+  const [products, brands, industries] = await Promise.all([
+    getProducts({ q, brand, industry }),
+    getBrands(),
+    getIndustries(),
+  ])
 
   const filterHref = (next: { brand?: string; industry?: string }) => {
     const params = new URLSearchParams()

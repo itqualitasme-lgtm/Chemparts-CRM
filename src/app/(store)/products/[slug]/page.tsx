@@ -1,22 +1,20 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getProduct, getProducts } from '@/lib/catalog'
+import { getProduct } from '@/lib/catalog'
 import { getSessionUser } from '@/lib/auth/session'
 
-export async function generateStaticParams() {
-  return getProducts({}).map((p) => ({ slug: p.slug }))
-}
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const product = getProduct(slug)
+  const product = await getProduct(slug)
   return { title: product ? `${product.name} — Chemparts Store` : 'Product — Chemparts Store' }
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const product = getProduct(slug)
+  const product = await getProduct(slug)
   if (!product) notFound()
 
   const user = await getSessionUser()
