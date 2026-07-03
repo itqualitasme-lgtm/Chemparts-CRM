@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { db } from '@/lib/db'
 import ProductForm from '../ProductForm'
+import ProductImages from '../ProductImages'
 import { updateProduct } from '../actions'
 
 export const metadata = { title: 'Edit product — Chemparts Staff' }
@@ -35,6 +36,8 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
           View in store ↗
         </Link>
       </div>
+      <ProductImages productId={product.id} image={product.image} images={product.images} />
+
       <ProductForm
         action={updateWithId}
         brands={brands}

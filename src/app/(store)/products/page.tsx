@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { getBrands, getIndustries, getProducts } from '@/lib/catalog'
+import { productImageUrl } from '@/lib/product-image'
 
 export const metadata = { title: 'Products — Chemparts Store' }
 export const dynamic = 'force-dynamic'
@@ -109,9 +110,9 @@ export default async function ProductsPage({
             className="group flex flex-col rounded-xl border border-slate-200 bg-white p-4 transition hover:border-[#0A2540]/40 hover:shadow-md"
           >
             <div className="relative mb-3 h-44 w-full overflow-hidden rounded-lg bg-slate-50">
-              {p.image && (
+              {productImageUrl(p.image) && (
                 <Image
-                  src={`/images/products/${p.image}`}
+                  src={productImageUrl(p.image)!}
                   alt={p.name}
                   fill
                   sizes="(max-width: 640px) 100vw, 33vw"

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getProduct } from '@/lib/catalog'
 import { getSessionUser } from '@/lib/auth/session'
+import { productImageUrl } from '@/lib/product-image'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,9 +35,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
           <div className="relative h-80 w-full">
-            {product.image && (
+            {productImageUrl(product.image) && (
               <Image
-                src={`/images/products/${product.image}`}
+                src={productImageUrl(product.image)!}
                 alt={product.name}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
