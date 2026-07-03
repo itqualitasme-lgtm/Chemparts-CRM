@@ -80,20 +80,28 @@ model Brand {
   defaultCurrency String    @default("AED")
   description     String?
   featured        Boolean   @default(false)
+  sortOrder       Int       @default(0)
   products        Product[]
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 }
 
 model Category {
-  id       String     @id @default(cuid())
-  name     String
-  slug     String     @unique
-  type     ProductType
-  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
-  parentId String?
-  children Category[] @relation("CategoryTree")
-  products Product[]
+  id        String      @id @default(cuid())
+  name      String
+  slug      String      @unique
+  type      ProductType
+  image     String?
+  sortOrder Int         @default(0)
+  parent    Category?   @relation("CategoryTree", fields: [parentId], references: [id])
+  parentId  String?
+  children  Category[]  @relation("CategoryTree")
+  products  Product[]
+}
+
+enum SaleMode {
+  CART_ENABLED
+  QUOTE_ONLY
 }
 
 model Product {
@@ -132,6 +140,10 @@ model Product {
   costPrice  Decimal?    @db.Decimal(12, 2)
   currency   String      @default("AED")
   priceUpdatedAt DateTime?
+  // commerce mode: whether this product can be added to cart or is quote-only
+  saleMode    SaleMode   @default(QUOTE_ONLY)
+  minOrderQty Int        @default(1)
+  sortOrder   Int        @default(0)
   // stock / inventory
   lotNumber   String?
   stockStatus StockStatus @default(IN_STOCK)

@@ -61,8 +61,9 @@ You already run Supabase + Prisma + an admin panel + Storage; a headless CMS (Sa
 ## 7. Also carried from earlier scope (unchanged, still in)
 Two letterheads (FZC + LLC/ICV), multi-currency (AED default + USD/QAR/EUR), quotation types (project/standard/AMC) with customizable sections + images + auto-suggested spares, quote revisions with immutable PDF snapshots, order status pipeline with customer-visible timeline + customs/lead-time, vendor portal + bill submission, low-stock alerts, noreply email templates, security (RBAC, rate-limit, backups).
 
-## 8. Open decisions for the owner
-1. Consumables/spares online **payment** from day one, or PO/on-account first (recommended) with Telr added later?
-2. **Company accounts**: allow multiple buyer users per company with roles now, or single-user customers first?
-3. Guest cart + enquiry allowed, or account required to even build a cart?
-4. Which product families have **real online prices** ready to load (consumables? spares?) vs quote-only for now?
+## 8. Decisions — LOCKED (owner, 2026-07-03)
+1. **Payment:** PO / on-account first (PO number + bank transfer / on-account). Online card (Telr) added in Phase 6.
+2. **Company accounts:** multi-user companies with roles (OWNER/BUYER/APPROVER/VIEWER), shared addresses + history.
+3. **Guest cart:** guests may browse, build a cart and submit an enquiry; account required only at the order/checkout step.
+4. **Build order:** start with **Phase 1 — three-section catalog + type-aware CTAs + BOM tab.**
+5. (Still to gather as data is prepared: which product families have real online prices ready to load.)
