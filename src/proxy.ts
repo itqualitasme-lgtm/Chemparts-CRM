@@ -3,13 +3,6 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { portalFromPath } from '@/lib/auth/rbac'
 import { supabaseAnonKey, supabaseUrl } from '@/lib/env'
 
-const LOGIN: Record<string, string> = {
-  store: '/login',
-  staff: '/staff/login',
-  vendor: '/vendor/login',
-  admin: '/staff/login',
-}
-
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request })
   const supabase = createServerClient(supabaseUrl(), supabaseAnonKey(), {
@@ -28,10 +21,11 @@ export async function proxy(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname
   const portal = portalFromPath(pathname)
-  const isLoginPage = pathname.endsWith('/login')
+  const isLoginPage = pathname === '/login'
   if (portal && !user && !isLoginPage) {
+    // One universal login page for every account type.
     const url = request.nextUrl.clone()
-    url.pathname = LOGIN[portal]
+    url.pathname = '/login'
     url.searchParams.set('next', pathname)
     return NextResponse.redirect(url)
   }

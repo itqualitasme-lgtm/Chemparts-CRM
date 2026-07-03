@@ -22,4 +22,12 @@ describe('registerSchema', () => {
   it('rejects phone without country code', () => {
     expect(registerSchema.safeParse({ ...valid, phone: '055123456' }).success).toBe(false)
   })
+  it('rejects free/personal email providers (official email required)', () => {
+    expect(registerSchema.safeParse({ ...valid, email: 'ali@gmail.com' }).success).toBe(false)
+    expect(registerSchema.safeParse({ ...valid, email: 'ali@yahoo.com' }).success).toBe(false)
+    expect(registerSchema.safeParse({ ...valid, email: 'ali@hotmail.com' }).success).toBe(false)
+  })
+  it('accepts an official company email', () => {
+    expect(registerSchema.safeParse({ ...valid, email: 'ali@gulflabs.com' }).success).toBe(true)
+  })
 })

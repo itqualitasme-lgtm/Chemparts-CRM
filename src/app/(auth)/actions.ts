@@ -3,13 +3,17 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { db } from '@/lib/db'
-import { canAccessPortal, homePathFor, type Portal } from '@/lib/auth/rbac'
+import { canAccessPortal, homePathFor, portalFromPath } from '@/lib/auth/rbac'
 
 export type LoginState = { error?: string }
 
-export async function login(portal: Portal, _prev: LoginState, formData: FormData): Promise<LoginState> {
+// One universal login for every account type. After authenticating we route the
+// user to their own portal by role — customers self-register, everyone else is
+// created by an admin, but they all sign in here.
+export async function login(_prev: LoginState, formData: FormData): Promise<LoginState> {
   const email = String(formData.get('email') ?? '').trim()
   const password = String(formData.get('password') ?? '')
+  const next = String(formData.get('next') ?? '').trim()
   if (!email || !password) return { error: 'Enter your email and password.' }
 
   const supabase = await createClient()
@@ -21,9 +25,11 @@ export async function login(portal: Portal, _prev: LoginState, formData: FormDat
     await supabase.auth.signOut()
     return { error: 'Account is not active. Contact info@chemparts-me.com.' }
   }
-  if (!canAccessPortal(profile.role, portal)) {
-    await supabase.auth.signOut()
-    return { error: 'This login page is not for your account type.' }
+
+  // Honour a ?next= target only if this user's role may access it.
+  const nextPortal = next ? portalFromPath(next) : null
+  if (next && nextPortal && canAccessPortal(profile.role, nextPortal)) {
+    redirect(next)
   }
   redirect(homePathFor(profile.role))
 }

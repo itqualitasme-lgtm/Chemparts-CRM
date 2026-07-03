@@ -1,13 +1,6 @@
-import LoginForm from '@/components/auth/LoginForm'
+import { redirect } from 'next/navigation'
 
-export const metadata = { title: 'Vendor sign in — Chemparts' }
-
-export default function VendorLoginPage() {
-  return (
-    <LoginForm
-      portal="vendor"
-      title="Vendor sign in"
-      subtitle="View purchase orders and submit your bills."
-    />
-  )
+// Consolidated into the single universal /login page.
+export default function VendorLoginRedirect() {
+  redirect('/login')
 }
