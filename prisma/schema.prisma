@@ -132,14 +132,43 @@ model Product {
   costPrice  Decimal?    @db.Decimal(12, 2)
   currency   String      @default("AED")
   priceUpdatedAt DateTime?
-  stockTracked Boolean   @default(false)
-  // link spare parts to their parent equipment
-  parentEquipment   Product?  @relation("EquipmentSpares", fields: [parentEquipmentId], references: [id])
-  parentEquipmentId String?
-  spares            Product[] @relation("EquipmentSpares")
+  // stock / inventory
+  lotNumber   String?
+  stockStatus StockStatus @default(IN_STOCK)
+  stockTracked Boolean    @default(false)
+  // BOM: this equipment's spare parts, and (reverse) the equipment this spare belongs to
+  sparesForThis     EquipmentSpare[] @relation("EquipmentToSpare")
+  usedInEquipment   EquipmentSpare[] @relation("SpareToEquipment")
   priceHistory      PriceHistory[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+}
+
+enum StockStatus {
+  IN_STOCK
+  OUT_OF_STOCK
+  ON_ORDER
+}
+
+enum SpareRequirement {
+  REQUIRED
+  OPTIONAL
+}
+
+// Bill-of-materials link between an equipment product and a spare-part product.
+model EquipmentSpare {
+  id           String           @id @default(cuid())
+  equipment    Product          @relation("EquipmentToSpare", fields: [equipmentId], references: [id], onDelete: Cascade)
+  equipmentId  String
+  sparePart    Product          @relation("SpareToEquipment", fields: [sparePartId], references: [id], onDelete: Cascade)
+  sparePartId  String
+  requirement  SpareRequirement @default(OPTIONAL)
+  defaultQty   Int              @default(1)
+  bundledFree  Boolean          @default(false) // zero-cost when bought with the equipment
+  notes        String?
+  createdAt    DateTime         @default(now())
+
+  @@unique([equipmentId, sparePartId])
 }
 
 model PriceHistory {
