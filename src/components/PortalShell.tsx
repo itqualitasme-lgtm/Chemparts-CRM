@@ -8,6 +8,7 @@ type NavItem = { href: string; label: string }
 const NAV: Record<Portal, NavItem[]> = {
   store: [
     { href: '/account', label: 'Overview' },
+    { href: '/products', label: 'Store' },
     { href: '/account/enquiries', label: 'Enquiries' },
     { href: '/account/quotations', label: 'Quotations' },
     { href: '/account/orders', label: 'Orders' },

@@ -26,12 +26,12 @@ export default function LandingPage() {
         </p>
 
         <div className="flex flex-wrap gap-3">
-          <span
-            className="cursor-not-allowed rounded-lg border border-white/20 px-5 py-3 text-sm text-slate-400"
-            title="Coming in Phase 2"
+          <Link
+            href="/products"
+            className="rounded-lg bg-sky-400 px-5 py-3 text-sm font-medium text-[#0A2540] transition hover:bg-sky-300"
           >
-            Browse products — coming soon
-          </span>
+            Browse products
+          </Link>
           <Link
             href="/login"
             className="rounded-lg bg-white px-5 py-3 text-sm font-medium text-[#0A2540] transition hover:bg-slate-200"
