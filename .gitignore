@@ -39,3 +39,6 @@ next-env.d.ts
 
 # app uploads (local dev)
 /uploads
+
+# prisma generated client
+/src/generated

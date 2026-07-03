@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  CUSTOMER
+  VENDOR
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  DISABLED
+}
+
+model Profile {
+  id         String     @id @db.Uuid // = auth.users.id
+  email      String     @unique
+  fullName   String
+  phone      String?
+  role       Role
+  status     UserStatus @default(ACTIVE)
+  customer   Customer?  @relation(fields: [customerId], references: [id])
+  customerId String?
+  vendor     Vendor?    @relation(fields: [vendorId], references: [id])
+  vendorId   String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Customer {
+  id          String    @id @default(cuid())
+  companyName String
+  country     String // ISO 3166-1 alpha-2
+  city        String?
+  address     String?
+  trn         String? // VAT/TRN number
+  industry    String?
+  source      String    @default("SELF") // SELF | STAFF
+  notes       String?
+  profiles    Profile[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Vendor {
+  id           String    @id @default(cuid())
+  companyName  String
+  country      String
+  currency     String    @default("USD")
+  paymentTerms String?
+  bankDetails  String?
+  profiles     Profile[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model EmailLog {
+  id        String   @id @default(cuid())
+  to        String
+  subject   String
+  template  String
+  status    String   @default("SENT") // SENT | FAILED
+  error     String?
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String?
+  detail    Json?
+  createdAt DateTime @default(now())
+}
