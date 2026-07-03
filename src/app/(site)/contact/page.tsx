@@ -1,15 +1,10 @@
-import Script from 'next/script'
-import SiteHeader from '@/components/site/SiteHeader'
-import SiteFooter from '@/components/site/SiteFooter'
-import SiteChrome from '@/components/site/SiteChrome'
+import ContactSuccessBanner from './ContactSuccessBanner'
 
 export const dynamic = 'force-dynamic'
 
 export default function ContactPage() {
   return (
     <>
-      <SiteHeader activeNav="contact" />
-
       <div id="success-banner" hidden>
         <div className="container" style={{ paddingTop: 24 }}>
           <div style={{ border: '1px solid var(--rule)', padding: '16px 20px', background: '#F0FDF4', borderColor: '#86EFAC', fontSize: 14, color: '#065F46' }}>
@@ -197,19 +192,7 @@ export default function ContactPage() {
 
       </main>
 
-      <SiteFooter />
-
-      <SiteChrome />
-
-      {/* Reveal success banner when redirected back with ?sent=1 */}
-      <Script id="contact-success-banner" strategy="afterInteractive">{`
-(function(){
-  if (new URLSearchParams(location.search).get('sent') === '1') {
-    var b = document.getElementById('success-banner');
-    if (b) b.removeAttribute('hidden');
-  }
-})();
-  `}</Script>
+      <ContactSuccessBanner />
     </>
   )
 }

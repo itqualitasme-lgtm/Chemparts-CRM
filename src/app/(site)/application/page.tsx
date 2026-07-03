@@ -1,15 +1,8 @@
-import SiteHeader from '@/components/site/SiteHeader'
-import SiteFooter from '@/components/site/SiteFooter'
-import SiteChrome from '@/components/site/SiteChrome'
-
 export const dynamic = 'force-dynamic'
 
 export default function ApplicationPage() {
   return (
-    <>
-      <SiteHeader activeNav="application" />
-
-      <main id="main">
+    <main id="main">
         <section className="section">
           <div className="container">
             <div className="coord">
@@ -218,11 +211,6 @@ export default function ApplicationPage() {
             </div>
           </div>
         </section>
-      </main>
-
-      <SiteFooter />
-
-      <SiteChrome />
-    </>
+    </main>
   )
 }

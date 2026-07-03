@@ -1,6 +1,3 @@
-import SiteHeader from '@/components/site/SiteHeader'
-import SiteFooter from '@/components/site/SiteFooter'
-import SiteChrome from '@/components/site/SiteChrome'
 import { getInstrumentCount } from '@/lib/counts'
 
 export const dynamic = 'force-dynamic'
@@ -9,10 +6,7 @@ export default async function HomePage() {
   const instrumentCount = await getInstrumentCount()
 
   return (
-    <>
-      <SiteHeader activeNav="home" />
-
-      <main id="main">
+    <main id="main">
 
         {/* OPENING HERO BANNER */}
         <section className="hero-banner banner-section" aria-label="Chemparts at work across the UAE and Qatar">
@@ -981,11 +975,6 @@ export default async function HomePage() {
           </div>
         </section>
 
-      </main>
-
-      <SiteFooter />
-
-      <SiteChrome />
-    </>
+    </main>
   )
 }

@@ -1,15 +1,10 @@
-import Script from 'next/script'
-import SiteHeader from '@/components/site/SiteHeader'
-import SiteFooter from '@/components/site/SiteFooter'
-import SiteChrome from '@/components/site/SiteChrome'
+import AboutMapSync from './AboutMapSync'
 
 export const dynamic = 'force-dynamic'
 
 export default function AboutPage() {
   return (
     <>
-      <SiteHeader activeNav="about" />
-
       <main id="main">
 
         {/* HERO */}
@@ -236,29 +231,7 @@ export default function AboutPage() {
 
       </main>
 
-      <SiteFooter />
-
-      <SiteChrome />
-
-      {/* Map pin <-> office card hover sync */}
-      <Script id="about-map-sync" strategy="afterInteractive">{`
-    (function () {
-      const pins = document.querySelectorAll('[data-city]');
-      const cards = document.querySelectorAll('[data-city-card]');
-      function setActive(city, on) {
-        pins.forEach(p => p.classList.toggle('is-active', on && p.dataset.city === city));
-        cards.forEach(c => c.classList.toggle('is-active', on && c.dataset.cityCard === city));
-      }
-      pins.forEach(p => {
-        p.addEventListener('mouseenter', () => setActive(p.dataset.city, true));
-        p.addEventListener('mouseleave', () => setActive(p.dataset.city, false));
-      });
-      cards.forEach(c => {
-        c.addEventListener('mouseenter', () => setActive(c.dataset.cityCard, true));
-        c.addEventListener('mouseleave', () => setActive(c.dataset.cityCard, false));
-      });
-    })();
-  `}</Script>
+      <AboutMapSync />
     </>
   )
 }

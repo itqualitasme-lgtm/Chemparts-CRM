@@ -4,13 +4,7 @@
    that collide with Tailwind utilities. Exclude that markup and the site's own
    stylesheet/scripts from Tailwind's scanning so it doesn't generate clashing
    utilities like `.h-1 { height: 4px }`. */
-@source not "./page.tsx";
-@source not "./about/**";
-@source not "./application/**";
-@source not "./partners/**";
-@source not "./contact/**";
-@source not "./products/**";
-@source not "./product/**";
+@source not "./(site)/**";
 @source not "../components/site/**";
 @source not "../../public/assets";
 

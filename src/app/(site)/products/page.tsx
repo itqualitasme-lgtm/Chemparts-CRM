@@ -1,6 +1,3 @@
-import SiteHeader from '@/components/site/SiteHeader'
-import SiteFooter from '@/components/site/SiteFooter'
-import SiteChrome from '@/components/site/SiteChrome'
 import { getInstrumentCount } from '@/lib/counts'
 
 export const dynamic = 'force-dynamic'
@@ -9,10 +6,7 @@ export default async function ProductsPage() {
   const instrumentCount = await getInstrumentCount()
 
   return (
-    <>
-      <SiteHeader activeNav="products" />
-
-      <main id="main">
+    <main id="main">
         <section className="section">
           <div className="container">
             <p className="breadcrumb">
@@ -101,11 +95,6 @@ export default async function ProductsPage() {
           </div>
         </section>
 
-      </main>
-
-      <SiteFooter />
-
-      <SiteChrome extraScripts={['/assets/js/products-page.js']} />
-    </>
+    </main>
   )
 }

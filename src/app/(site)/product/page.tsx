@@ -1,17 +1,10 @@
-import SiteHeader from '@/components/site/SiteHeader'
-import SiteFooter from '@/components/site/SiteFooter'
-import SiteChrome from '@/components/site/SiteChrome'
-
 export const dynamic = 'force-dynamic'
 
 // Ported from product.html. The original reads ?slug= from the query and
 // product-detail.js hydrates this static markup client-side from window.PRODUCTS.
 export default function ProductPage() {
   return (
-    <>
-      <SiteHeader activeNav="products" />
-
-      <main id="main">
+    <main id="main">
         <section className="section">
           <div className="container">
 
@@ -79,13 +72,6 @@ export default function ProductPage() {
           </div>
         </section>
 
-      </main>
-
-      <SiteFooter />
-
-      {/* product-detail.js reads ?slug= and hydrates the markup above; it depends on
-          window.__productCard from app.js, so it loads after the base scripts. */}
-      <SiteChrome extraScripts={['/assets/js/product-detail.js']} />
-    </>
+    </main>
   )
 }

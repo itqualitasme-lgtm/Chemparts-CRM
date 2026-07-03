@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from 'react'
 import Link from 'next/link'
+import AnimatedLogo from '@/components/AnimatedLogo'
 import { login, requestOtp, verifyOtp, type LoginState, type OtpState } from '@/app/(auth)/actions'
 
 const inputCls =
@@ -120,13 +121,12 @@ export default function LoginForm({ next }: { next?: string }) {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm">
-        <Link href="/" className="mb-4 inline-flex items-center gap-2">
-          <img src="/images/logo.svg" alt="Chemparts" width={44} height={22} />
-          <span className="text-xs font-bold tracking-[0.2em] text-[#0A2540]">CHEMPARTS</span>
+      <div className="w-full max-w-md rounded-2xl border border-slate-100 bg-white p-8 shadow-[0_10px_40px_-12px_rgba(10,37,64,0.18)]">
+        <Link href="/" className="mb-5 flex justify-center" aria-label="Chemparts — home">
+          <AnimatedLogo />
         </Link>
-        <h1 className="mb-1 text-xl font-semibold text-slate-900">Sign in</h1>
-        <p className="mb-6 text-sm text-slate-500">
+        <h1 className="mb-1 text-center text-xl font-semibold text-slate-900">Sign in</h1>
+        <p className="mb-6 text-center text-sm text-slate-500">
           {mode === 'password'
             ? 'Sign in to your Chemparts account.'
             : 'Enter your email and we’ll send you a one-time sign-in code.'}

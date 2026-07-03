@@ -1,5 +1,10 @@
-/* Products listing page — search, filter, sort, hash-state */
-(function () {
+/* Products listing page — search, filter, sort, hash-state
+ *
+ * Exposed as window.__cpProductsPageInit so it can be re-run after client-side
+ * navigation back to /products (RouteAnimations calls it). Guarded per-grid via
+ * a data flag: a freshly navigated page renders a new [data-products-grid], so
+ * the guard resets naturally and we never double-bind the same element. */
+window.__cpProductsPageInit = function () {
   'use strict';
   if (!window.PRODUCTS) return;
 
@@ -9,6 +14,8 @@
   const sortSelect = document.querySelector('[data-products-sort]');
   const sidebar = document.querySelector('[data-products-sidebar]');
   if (!grid) return;
+  if (grid.dataset.cpProductsInit === 'true') return;
+  grid.dataset.cpProductsInit = 'true';
 
   const state = {
     q: '',
@@ -247,4 +254,8 @@
 
   readHash();
   render();
-})();
+};
+
+// Self-run on initial load (in case the user lands directly on /products before
+// RouteAnimations mounts). Harmless if the grid isn't present.
+window.__cpProductsPageInit();

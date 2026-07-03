@@ -1,5 +1,11 @@
-/* Product detail page — reads ?slug= and hydrates product.html */
-(function () {
+/* Product detail page — reads ?slug= and hydrates product.html
+ *
+ * Exposed as window.__cpProductDetailInit so RouteAnimations can re-run it after
+ * client-side navigation — both when arriving on /product and when moving
+ * between products (?slug= changes without a full reload). Every write is
+ * idempotent (innerHTML / textContent / recreated gallery buttons), so re-runs
+ * simply re-hydrate against the current slug. */
+window.__cpProductDetailInit = function () {
   'use strict';
   if (!window.PRODUCTS) return;
 
@@ -153,9 +159,19 @@
         "value": v
       }))
     };
-    const tag = document.createElement('script');
-    tag.type = 'application/ld+json';
+    // Reuse a single JSON-LD tag so navigating between products doesn't stack
+    // duplicate schema blocks in <head>.
+    let tag = document.head.querySelector('script[type="application/ld+json"][data-pdp-schema]');
+    if (!tag) {
+      tag = document.createElement('script');
+      tag.type = 'application/ld+json';
+      tag.setAttribute('data-pdp-schema', '');
+      document.head.appendChild(tag);
+    }
     tag.textContent = JSON.stringify(schema);
-    document.head.appendChild(tag);
   } catch (e) { /* graceful no-op */ }
-})();
+};
+
+// Self-run on initial load (direct landing on /product before RouteAnimations
+// mounts). Harmless if the PDP markup isn't present.
+window.__cpProductDetailInit();
