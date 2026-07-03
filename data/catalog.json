@@ -1,0 +1,3606 @@
+[
+  {
+    "slug": "antifreeze-freezing-point",
+    "name": "Antifreeze Freezing Point Tester",
+    "brand": "Tanaka",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "Antifreeze-freezing-point.png",
+    "images": [
+      "Antifreeze-freezing-point.png"
+    ],
+    "desc": "Automatic determination of freezing point of antifreeze coolants per ASTM D1177.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "freezing-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Automatic determination of freezing point of antifreeze coolants per ASTM D1177. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "atmospheric-distillation-2",
+    "name": "Atmospheric Distillation 2",
+    "brand": "Chemparts",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "atmospheric_distillation-2.png",
+    "images": [
+      "atmospheric_distillation-2.png"
+    ],
+    "desc": "Chemparts Atmospheric Distillation 2 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "distillation"
+    ],
+    "specs": {
+      "type": "Analytical Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Chemparts Atmospheric Distillation 2 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "automated-cleveland-open-cup",
+    "name": "Automated Cleveland Open-Cup ACO-8",
+    "brand": "Tanaka",
+    "type": "EQUIPMENT",
+    "featured": true,
+    "image": "Automated-Cleveland-Open-Cup.png",
+    "images": [
+      "Automated-Cleveland-Open-Cup.png"
+    ],
+    "desc": "Open-cup flash and fire point tester for lubricants, asphalts and other heavy petroleum streams.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "flash-point",
+      "fire-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Open-cup flash and fire point tester for lubricants, asphalts and other heavy petroleum streams. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "automated-distillation-tester-01",
+    "name": "Automated Distillation Tester AD-7",
+    "brand": "Tanaka",
+    "type": "EQUIPMENT",
+    "featured": true,
+    "image": "Automated-Distillation-Tester-01.png",
+    "images": [
+      "Automated-Distillation-Tester-01.png"
+    ],
+    "desc": "Atmospheric distillation analyzer that automates the full ASTM D86 workflow with peltier-cooled condenser.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "distillation"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Atmospheric distillation analyzer that automates the full ASTM D86 workflow with peltier-cooled condenser. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "automated-pensky-martens",
+    "name": "Automated Pensky-Martens APM-100",
+    "brand": "Tanaka",
+    "type": "EQUIPMENT",
+    "featured": true,
+    "image": "Automated-Pensky-Martens.png",
+    "images": [
+      "Automated-Pensky-Martens.png"
+    ],
+    "desc": "Automated closed-cup flash point tester for ranges from ambient to 400°C with safety-first design.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "flash-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Automated closed-cup flash point tester for ranges from ambient to 400°C with safety-first design. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "automated-small-scale-closed-cup-flash-point-tester",
+    "name": "Small-Scale Closed-Cup Flash Point Tester",
+    "brand": "Tanaka",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "Automated-Small-Scale-Closed-Cup-Flash-Point-Tester.png",
+    "images": [
+      "Automated-Small-Scale-Closed-Cup-Flash-Point-Tester.png"
+    ],
+    "desc": "Compact, fully automated small-scale closed-cup flash point tester for low-volume samples.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "flash-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Compact, fully automated small-scale closed-cup flash point tester for low-volume samples. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "automatic-aniline-point-tester",
+    "name": "Automatic Aniline Point Tester AAP-6",
+    "brand": "Tanaka",
+    "type": "EQUIPMENT",
+    "featured": true,
+    "image": "Automatic-Aniline-Point-Tester.png",
+    "images": [
+      "Automatic-Aniline-Point-Tester.png"
+    ],
+    "desc": "Determines aniline point of petroleum products through automatic light-transmission detection.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "aniline-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Determines aniline point of petroleum products through automatic light-transmission detection. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "automatic-pour-01",
+    "name": "Automatic Pour Point Tester",
+    "brand": "Tanaka",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "Automatic-Pour-01.png",
+    "images": [
+      "Automatic-Pour-01.png"
+    ],
+    "desc": "Automatic pour-point and cloud-point determination using a tilt-method optical detection cell.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "pour-point",
+      "cloud-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Automatic pour-point and cloud-point determination using a tilt-method optical detection cell. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-ager6p",
+    "name": "Ager6p",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-ager6p.png",
+    "images": [
+      "biolab-ager6p.png"
+    ],
+    "desc": "Biolab Ager6p — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Ager6p — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-clora",
+    "name": "Clora",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-clora.png",
+    "images": [
+      "biolab-clora.png"
+    ],
+    "desc": "Biolab Clora — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "chlorine"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Clora — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-crystallux",
+    "name": "Crystallux",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-crystallux.png",
+    "images": [
+      "biolab-crystallux.png"
+    ],
+    "desc": "Biolab Crystallux — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Crystallux — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-cutie",
+    "name": "Cutie",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-cutie.png",
+    "images": [
+      "biolab-cutie.png"
+    ],
+    "desc": "Biolab Cutie — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "corrosion"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Cutie — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-d86",
+    "name": "D86",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-d86.png",
+    "images": [
+      "biolab-d86.png"
+    ],
+    "desc": "Biolab D86 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "distillation"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab D86 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-d892",
+    "name": "D892",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-d892.png",
+    "images": [
+      "biolab-d892.png"
+    ],
+    "desc": "Biolab D892 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "foaming"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab D892 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-fbt3",
+    "name": "Fbt3",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-fbt3.png",
+    "images": [
+      "biolab-fbt3.png"
+    ],
+    "desc": "Biolab Fbt3 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "wear"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Fbt3 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-fluidscan",
+    "name": "Fluidscan",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-fluidscan.png",
+    "images": [
+      "biolab-fluidscan.png"
+    ],
+    "desc": "Biolab Fluidscan — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "oil-condition"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Fluidscan — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-foamer",
+    "name": "Foamer",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-foamer.png",
+    "images": [
+      "biolab-foamer.png"
+    ],
+    "desc": "Biolab Foamer — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "foaming"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Foamer — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-minilab",
+    "name": "Minilab",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-minilab.png",
+    "images": [
+      "biolab-minilab.png"
+    ],
+    "desc": "Biolab Minilab — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "oil-condition"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Minilab — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-minivap",
+    "name": "Minivap",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-minivap.png",
+    "images": [
+      "biolab-minivap.png"
+    ],
+    "desc": "Biolab Minivap — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "vapor-pressure"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Minivap — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-odol",
+    "name": "Odol",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-odol.png",
+    "images": [
+      "biolab-odol.png"
+    ],
+    "desc": "Biolab Odol — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "carbon-residue"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Odol — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-ol500",
+    "name": "Ol500",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-ol500.png",
+    "images": [
+      "biolab-ol500.png"
+    ],
+    "desc": "Biolab Ol500 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Ol500 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-ol670",
+    "name": "Ol670",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-ol670.png",
+    "images": [
+      "biolab-ol670.png"
+    ],
+    "desc": "Biolab Ol670 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Ol670 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-pasol",
+    "name": "Pasol",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-pasol.png",
+    "images": [
+      "biolab-pasol.png"
+    ],
+    "desc": "Biolab Pasol — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "oxidation"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Pasol — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-rtfot",
+    "name": "Rtfot",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-rtfot.png",
+    "images": [
+      "biolab-rtfot.png"
+    ],
+    "desc": "Biolab Rtfot — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "oxidation"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Rtfot — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-sindie",
+    "name": "Sindie",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-sindie.png",
+    "images": [
+      "biolab-sindie.png"
+    ],
+    "desc": "Biolab Sindie — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "sulphur"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Sindie — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-tl7500",
+    "name": "Tl7500",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-tl7500.png",
+    "images": [
+      "biolab-tl7500.png"
+    ],
+    "desc": "Biolab Tl7500 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "moisture"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Tl7500 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-vapol10",
+    "name": "Vapol10",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-vapol10.png",
+    "images": [
+      "biolab-vapol10.png"
+    ],
+    "desc": "Biolab Vapol10 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "evaporation"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Vapol10 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-viscol-10p",
+    "name": "Viscol 10p",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-viscol-10p.png",
+    "images": [
+      "biolab-viscol-10p.png"
+    ],
+    "desc": "Biolab Viscol 10p — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "viscosity"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Viscol 10p — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-viscol10a",
+    "name": "Viscol10a",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-viscol10a.png",
+    "images": [
+      "biolab-viscol10a.png"
+    ],
+    "desc": "Biolab Viscol10a — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "viscosity"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Viscol10a — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-viscol10as",
+    "name": "Viscol10as",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-viscol10as.png",
+    "images": [
+      "biolab-viscol10as.png"
+    ],
+    "desc": "Biolab Viscol10as — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "viscosity"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Viscol10as — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-viscol10j",
+    "name": "Viscol10j",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-viscol10j.png",
+    "images": [
+      "biolab-viscol10j.png"
+    ],
+    "desc": "Biolab Viscol10j — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "viscosity"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Viscol10j — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "biolab-viscol20as",
+    "name": "Viscol20as",
+    "brand": "Biolab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "biolab-viscol20as.png",
+    "images": [
+      "biolab-viscol20as.png"
+    ],
+    "desc": "Biolab Viscol20as — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "viscosity"
+    ],
+    "specs": {
+      "type": "Petroleum Test System",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Biolab Viscol20as — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "chromos-gc-system",
+    "name": "Gc System",
+    "brand": "Chromos",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "chromos-gc-system.png",
+    "images": [
+      "chromos-gc-system.png"
+    ],
+    "desc": "Chromos Gc System — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "environmental"
+    ],
+    "testTypes": [
+      "gas-chromatography"
+    ],
+    "specs": {
+      "type": "Gas Chromatograph",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM"
+    ],
+    "overview": "Chromos Gc System — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "chromos-pgc7",
+    "name": "Pgc7",
+    "brand": "Chromos",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "chromos-pgc7.png",
+    "images": [
+      "chromos-pgc7.png"
+    ],
+    "desc": "Chromos Pgc7 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "environmental"
+    ],
+    "testTypes": [
+      "gas-chromatography"
+    ],
+    "specs": {
+      "type": "Gas Chromatograph",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM"
+    ],
+    "overview": "Chromos Pgc7 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "cloud-and-pour-point-bath",
+    "name": "Cloud & Pour Point Bath",
+    "brand": "Tanaka",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "Cloud-and-pour-point-bath.png",
+    "images": [
+      "Cloud-and-pour-point-bath.png"
+    ],
+    "desc": "Multi-station cooling bath for manual cloud and pour-point determination with precise temperature control.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "cloud-point",
+      "pour-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Multi-station cooling bath for manual cloud and pour-point determination with precise temperature control. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "combustion-analyzer-03",
+    "name": "Combustion Analyzer",
+    "brand": "Mitsubishi",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "Combustion-Analyzer-03.png",
+    "images": [
+      "Combustion-Analyzer-03.png"
+    ],
+    "desc": "Multi-parameter combustion analyzer for total sulphur, nitrogen and halogen determination.",
+    "industries": [
+      "petroleum",
+      "environmental"
+    ],
+    "testTypes": [
+      "sulphur",
+      "nitrogen",
+      "halogen"
+    ],
+    "specs": {
+      "type": "Combustion Analyzer",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM"
+    ],
+    "overview": "Multi-parameter combustion analyzer for total sulphur, nitrogen and halogen determination. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "ea1400",
+    "name": "EA-1400",
+    "brand": "Hitachi",
+    "type": "EQUIPMENT",
+    "featured": true,
+    "image": "EA1400.png",
+    "images": [
+      "EA1400.png"
+    ],
+    "desc": "Compact WDXRF spectrometer for trace elemental analysis with superior peak resolution.",
+    "industries": [
+      "petroleum",
+      "plastics",
+      "materials"
+    ],
+    "testTypes": [
+      "xrf",
+      "elemental"
+    ],
+    "specs": {
+      "type": "Analyzer",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Compact WDXRF spectrometer for trace elemental analysis with superior peak resolution. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "easier-faster-more-accurate-qaqc",
+    "name": "QA/QC Multi-Parameter Tester",
+    "brand": "Tanaka",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "Easier-Faster-More-Accurate-QAQC.png",
+    "images": [
+      "Easier-Faster-More-Accurate-QAQC.png"
+    ],
+    "desc": "Multi-method analytical platform for petroleum QA/QC laboratories.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "multi"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Multi-method analytical platform for petroleum QA/QC laboratories. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "ft150",
+    "name": "FT-150 Flash Point Tester",
+    "brand": "Tanaka",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "FT150.png",
+    "images": [
+      "FT150.png"
+    ],
+    "desc": "Compact closed-cup flash point tester suitable for diesel, biodiesel and aviation fuels.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "flash-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Compact closed-cup flash point tester suitable for diesel, biodiesel and aviation fuels. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "ftir-spectrophotometer",
+    "name": "FTIR Spectrophotometer",
+    "brand": "PG Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "FTIR-Spectrophotometer.png",
+    "images": [
+      "FTIR-Spectrophotometer.png"
+    ],
+    "desc": "Mid-infrared FTIR spectrometer with high signal-to-noise and modular accessory support.",
+    "industries": [
+      "materials",
+      "plastics",
+      "food"
+    ],
+    "testTypes": [
+      "ftir"
+    ],
+    "specs": {
+      "type": "Spectrometer",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM"
+    ],
+    "overview": "Mid-infrared FTIR spectrometer with high signal-to-noise and modular accessory support. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "lab-x5000",
+    "name": "LAB-X5000",
+    "brand": "Hitachi",
+    "type": "EQUIPMENT",
+    "featured": true,
+    "image": "LAB-X5000.png",
+    "images": [
+      "LAB-X5000.png"
+    ],
+    "desc": "The ultimate elemental analysis tool, engineered for swift and reliable quality control across petroleum, materials, and plastics applications.",
+    "industries": [
+      "petroleum",
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "xrf",
+      "elemental"
+    ],
+    "specs": {
+      "type": "Benchtop XRF Analyzer",
+      "sample": "Solids, liquids, powders, pellets",
+      "standards": "ASTM D4294, ISO 8754",
+      "output": "Sulphur, chlorine, multi-element"
+    },
+    "standards": [
+      "ASTM D4294",
+      "ISO 8754",
+      "IP 336"
+    ],
+    "overview": "The ultimate elemental analysis tool, engineered for swift and reliable quality control across petroleum, materials, and plastics applications. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-nl100",
+    "name": "Nl100",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-nl100.png",
+    "images": [
+      "linetronics-nl100.png"
+    ],
+    "desc": "Linetronics Nl100 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Nl100 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-nl200",
+    "name": "Nl200",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-nl200.png",
+    "images": [
+      "linetronics-nl200.png"
+    ],
+    "desc": "Linetronics Nl200 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Nl200 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-nl225",
+    "name": "Nl225",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-nl225.png",
+    "images": [
+      "linetronics-nl225.png"
+    ],
+    "desc": "Linetronics Nl225 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Nl225 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-nl300",
+    "name": "Nl300",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-nl300.png",
+    "images": [
+      "linetronics-nl300.png"
+    ],
+    "desc": "Linetronics Nl300 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Nl300 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-nl410",
+    "name": "Nl410",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-nl410.png",
+    "images": [
+      "linetronics-nl410.png"
+    ],
+    "desc": "Linetronics Nl410 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Nl410 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-oillab-500",
+    "name": "Oillab 500",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-oillab-500.png",
+    "images": [
+      "linetronics-oillab-500.png"
+    ],
+    "desc": "Linetronics Oillab 500 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Oillab 500 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-oillab-510",
+    "name": "Oillab 510",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-oillab-510.png",
+    "images": [
+      "linetronics-oillab-510.png"
+    ],
+    "desc": "Linetronics Oillab 510 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Oillab 510 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-oillab-560",
+    "name": "Oillab 560",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-oillab-560.png",
+    "images": [
+      "linetronics-oillab-560.png"
+    ],
+    "desc": "Linetronics Oillab 560 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Oillab 560 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-ol525",
+    "name": "Ol525",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-ol525.png",
+    "images": [
+      "linetronics-ol525.png"
+    ],
+    "desc": "Linetronics Ol525 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Ol525 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-ol570",
+    "name": "Ol570",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-ol570.png",
+    "images": [
+      "linetronics-ol570.png"
+    ],
+    "desc": "Linetronics Ol570 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Ol570 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-ol580",
+    "name": "Ol580",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-ol580.png",
+    "images": [
+      "linetronics-ol580.png"
+    ],
+    "desc": "Linetronics Ol580 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Ol580 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-ol600",
+    "name": "Ol600",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-ol600.png",
+    "images": [
+      "linetronics-ol600.png"
+    ],
+    "desc": "Linetronics Ol600 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Ol600 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-ol611",
+    "name": "Ol611",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-ol611.png",
+    "images": [
+      "linetronics-ol611.png"
+    ],
+    "desc": "Linetronics Ol611 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Ol611 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-ol650",
+    "name": "Ol650",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-ol650.png",
+    "images": [
+      "linetronics-ol650.png"
+    ],
+    "desc": "Linetronics Ol650 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Ol650 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-ol670",
+    "name": "Ol670",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-ol670.png",
+    "images": [
+      "linetronics-ol670.png"
+    ],
+    "desc": "Linetronics Ol670 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Ol670 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-ol715",
+    "name": "Ol715",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-ol715.png",
+    "images": [
+      "linetronics-ol715.png"
+    ],
+    "desc": "Linetronics Ol715 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Ol715 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-ol880",
+    "name": "Ol880",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-ol880.png",
+    "images": [
+      "linetronics-ol880.png"
+    ],
+    "desc": "Linetronics Ol880 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Ol880 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "linetronics-ol900",
+    "name": "Ol900",
+    "brand": "Linetronics",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "linetronics-ol900.png",
+    "images": [
+      "linetronics-ol900.png"
+    ],
+    "desc": "Linetronics Ol900 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Linetronics Ol900 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "mpc-product-img",
+    "name": "MPC Varnish Potential Tester",
+    "brand": "Tanaka",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "mpc-Product-img.png",
+    "images": [
+      "mpc-Product-img.png"
+    ],
+    "desc": "Membrane patch colorimetry analyzer for hydraulic and turbine oil varnish potential per ASTM D7843.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "varnish"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Membrane patch colorimetry analyzer for hydraulic and turbine oil varnish potential per ASTM D7843. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "nabertherm-chamber-furnaces",
+    "name": "Chamber Furnaces",
+    "brand": "Nabertherm",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "nabertherm-chamber-furnaces.svg",
+    "images": [
+      "nabertherm-chamber-furnaces.svg"
+    ],
+    "desc": "Nabertherm Chamber Furnaces — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Furnace / Oven",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "DIN, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "DIN",
+      "ISO"
+    ],
+    "overview": "Nabertherm Chamber Furnaces — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "nabertherm-high-temp",
+    "name": "High Temp",
+    "brand": "Nabertherm",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "nabertherm-high-temp.svg",
+    "images": [
+      "nabertherm-high-temp.svg"
+    ],
+    "desc": "Nabertherm High Temp — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Furnace / Oven",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "DIN, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "DIN",
+      "ISO"
+    ],
+    "overview": "Nabertherm High Temp — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "nabertherm-ht-series",
+    "name": "Ht Series",
+    "brand": "Nabertherm",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "nabertherm-ht-series.svg",
+    "images": [
+      "nabertherm-ht-series.svg"
+    ],
+    "desc": "Nabertherm Ht Series — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Furnace / Oven",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "DIN, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "DIN",
+      "ISO"
+    ],
+    "overview": "Nabertherm Ht Series — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "nabertherm-l-series",
+    "name": "L Series",
+    "brand": "Nabertherm",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "nabertherm-l-series.svg",
+    "images": [
+      "nabertherm-l-series.svg"
+    ],
+    "desc": "Nabertherm L Series — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Furnace / Oven",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "DIN, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "DIN",
+      "ISO"
+    ],
+    "overview": "Nabertherm L Series — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "nabertherm-muffle-furnaces",
+    "name": "Muffle Furnaces",
+    "brand": "Nabertherm",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "nabertherm-muffle-furnaces.svg",
+    "images": [
+      "nabertherm-muffle-furnaces.svg"
+    ],
+    "desc": "Nabertherm Muffle Furnaces — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Furnace / Oven",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "DIN, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "DIN",
+      "ISO"
+    ],
+    "overview": "Nabertherm Muffle Furnaces — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "nabertherm-n-series",
+    "name": "N Series",
+    "brand": "Nabertherm",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "nabertherm-n-series.svg",
+    "images": [
+      "nabertherm-n-series.svg"
+    ],
+    "desc": "Nabertherm N Series — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Furnace / Oven",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "DIN, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "DIN",
+      "ISO"
+    ],
+    "overview": "Nabertherm N Series — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "nabertherm-ovens",
+    "name": "Ovens",
+    "brand": "Nabertherm",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "nabertherm-ovens.svg",
+    "images": [
+      "nabertherm-ovens.svg"
+    ],
+    "desc": "Nabertherm Ovens — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Furnace / Oven",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "DIN, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "DIN",
+      "ISO"
+    ],
+    "overview": "Nabertherm Ovens — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "nabertherm-special",
+    "name": "Special",
+    "brand": "Nabertherm",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "nabertherm-special.svg",
+    "images": [
+      "nabertherm-special.svg"
+    ],
+    "desc": "Nabertherm Special — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Furnace / Oven",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "DIN, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "DIN",
+      "ISO"
+    ],
+    "overview": "Nabertherm Special — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "nabertherm-tr-series",
+    "name": "Tr Series",
+    "brand": "Nabertherm",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "nabertherm-tr-series.svg",
+    "images": [
+      "nabertherm-tr-series.svg"
+    ],
+    "desc": "Nabertherm Tr Series — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Furnace / Oven",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "DIN, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "DIN",
+      "ISO"
+    ],
+    "overview": "Nabertherm Tr Series — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "nabertherm-tube-furnaces",
+    "name": "Tube Furnaces",
+    "brand": "Nabertherm",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "nabertherm-tube-furnaces.svg",
+    "images": [
+      "nabertherm-tube-furnaces.svg"
+    ],
+    "desc": "Nabertherm Tube Furnaces — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Furnace / Oven",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "DIN, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "DIN",
+      "ISO"
+    ],
+    "overview": "Nabertherm Tube Furnaces — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "normalab-nab-110",
+    "name": "Nab 110",
+    "brand": "Normalab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "normalab-nab-110.png",
+    "images": [
+      "normalab-nab-110.png"
+    ],
+    "desc": "Normalab Nab 110 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Normalab Nab 110 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "normalab-nab-440",
+    "name": "Nab 440",
+    "brand": "Normalab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "normalab-nab-440.png",
+    "images": [
+      "normalab-nab-440.png"
+    ],
+    "desc": "Normalab Nab 440 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Normalab Nab 440 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "normalab-nab-tech",
+    "name": "Nab Tech",
+    "brand": "Normalab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "normalab-nab-tech.png",
+    "images": [
+      "normalab-nab-tech.png"
+    ],
+    "desc": "Normalab Nab Tech — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Normalab Nab Tech — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "normalab-ncl-120",
+    "name": "Ncl 120",
+    "brand": "Normalab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "normalab-ncl-120.png",
+    "images": [
+      "normalab-ncl-120.png"
+    ],
+    "desc": "Normalab Ncl 120 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Normalab Ncl 120 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "normalab-ncl-440",
+    "name": "Ncl 440",
+    "brand": "Normalab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "normalab-ncl-440.png",
+    "images": [
+      "normalab-ncl-440.png"
+    ],
+    "desc": "Normalab Ncl 440 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Normalab Ncl 440 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "normalab-npm-131",
+    "name": "Npm 131",
+    "brand": "Normalab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "normalab-npm-131.png",
+    "images": [
+      "normalab-npm-131.png"
+    ],
+    "desc": "Normalab Npm 131 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Normalab Npm 131 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "normalab-npm-450",
+    "name": "Npm 450",
+    "brand": "Normalab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "normalab-npm-450.png",
+    "images": [
+      "normalab-npm-450.png"
+    ],
+    "desc": "Normalab Npm 450 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Normalab Npm 450 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "normalab-npm-tech",
+    "name": "Npm Tech",
+    "brand": "Normalab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "normalab-npm-tech.png",
+    "images": [
+      "normalab-npm-tech.png"
+    ],
+    "desc": "Normalab Npm Tech — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Normalab Npm Tech — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "normalab-npv-tech",
+    "name": "Npv Tech",
+    "brand": "Normalab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "normalab-npv-tech.png",
+    "images": [
+      "normalab-npv-tech.png"
+    ],
+    "desc": "Normalab Npv Tech — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Normalab Npv Tech — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "normalab-nta-440",
+    "name": "Nta 440",
+    "brand": "Normalab",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "normalab-nta-440.png",
+    "images": [
+      "normalab-nta-440.png"
+    ],
+    "desc": "Normalab Nta 440 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "refineries"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Normalab Nta 440 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "oxford-x-pulse",
+    "name": "X-Pulse Broadband NMR",
+    "brand": "Oxford Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "oxford-x-pulse.png",
+    "images": [
+      "oxford-x-pulse.png"
+    ],
+    "desc": "Multinuclear benchtop NMR for QC and academic labs.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "nmr"
+    ],
+    "specs": {
+      "type": "Spectrometer",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM"
+    ],
+    "overview": "Multinuclear benchtop NMR for QC and academic labs. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "oxidation-of-distillate-fuel-oil",
+    "name": "Oxidation Stability Tester",
+    "brand": "Tanaka",
+    "type": "EQUIPMENT",
+    "featured": true,
+    "image": "Oxidation-of-distillate-fuel-oil.png",
+    "images": [
+      "Oxidation-of-distillate-fuel-oil.png"
+    ],
+    "desc": "Determines oxidation stability of distillate fuel oils per ASTM D2274 with automated insolubles measurement.",
+    "industries": [
+      "petroleum",
+      "environmental"
+    ],
+    "testTypes": [
+      "oxidation"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO, IP",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO",
+      "IP"
+    ],
+    "overview": "Determines oxidation stability of distillate fuel oils per ASTM D2274 with automated insolubles measurement. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-aas",
+    "name": "Aas",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-aas.png",
+    "images": [
+      "peak-aas.png"
+    ],
+    "desc": "Peak Instruments Aas — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Aas — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-analytical-balance",
+    "name": "Analytical Balance",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-analytical-balance.png",
+    "images": [
+      "peak-analytical-balance.png"
+    ],
+    "desc": "Peak Instruments Analytical Balance — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "weighing"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Analytical Balance — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-conductivity-meter",
+    "name": "Conductivity Meter",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-conductivity-meter.png",
+    "images": [
+      "peak-conductivity-meter.png"
+    ],
+    "desc": "Peak Instruments Conductivity Meter — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "conductivity"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Conductivity Meter — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-digital-multiparameter",
+    "name": "Digital Multiparameter",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-digital-multiparameter.png",
+    "images": [
+      "peak-digital-multiparameter.png"
+    ],
+    "desc": "Peak Instruments Digital Multiparameter — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Digital Multiparameter — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-dissolved-oxygen-meter",
+    "name": "Dissolved Oxygen Meter",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-dissolved-oxygen-meter.png",
+    "images": [
+      "peak-dissolved-oxygen-meter.png"
+    ],
+    "desc": "Peak Instruments Dissolved Oxygen Meter — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Dissolved Oxygen Meter — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-gas-chromatograph",
+    "name": "Gas Chromatograph",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-gas-chromatograph.png",
+    "images": [
+      "peak-gas-chromatograph.png"
+    ],
+    "desc": "Peak Instruments Gas Chromatograph — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "gas-chromatography"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Gas Chromatograph — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-ion-meter",
+    "name": "Ion Meter",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-ion-meter.png",
+    "images": [
+      "peak-ion-meter.png"
+    ],
+    "desc": "Peak Instruments Ion Meter — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Ion Meter — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-laboratory-stirrer",
+    "name": "Laboratory Stirrer",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-laboratory-stirrer.png",
+    "images": [
+      "peak-laboratory-stirrer.png"
+    ],
+    "desc": "Peak Instruments Laboratory Stirrer — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "ftir"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Laboratory Stirrer — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-ph-meter",
+    "name": "Ph Meter",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-ph-meter.png",
+    "images": [
+      "peak-ph-meter.png"
+    ],
+    "desc": "Peak Instruments Ph Meter — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "ph"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Ph Meter — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-smart-colorimeter",
+    "name": "Smart Colorimeter",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-smart-colorimeter.png",
+    "images": [
+      "peak-smart-colorimeter.png"
+    ],
+    "desc": "Peak Instruments Smart Colorimeter — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Smart Colorimeter — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-spectrophotometer-cuvette",
+    "name": "Spectrophotometer Cuvette",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-spectrophotometer-cuvette.png",
+    "images": [
+      "peak-spectrophotometer-cuvette.png"
+    ],
+    "desc": "Peak Instruments Spectrophotometer Cuvette — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "spectroscopy",
+      "uv-vis"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Spectrophotometer Cuvette — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-turbidity-meter",
+    "name": "Turbidity Meter",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-turbidity-meter.png",
+    "images": [
+      "peak-turbidity-meter.png"
+    ],
+    "desc": "Peak Instruments Turbidity Meter — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Turbidity Meter — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-uv-spectrophotometer",
+    "name": "Uv Spectrophotometer",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-uv-spectrophotometer.png",
+    "images": [
+      "peak-uv-spectrophotometer.png"
+    ],
+    "desc": "Peak Instruments Uv Spectrophotometer — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "spectroscopy",
+      "uv-vis"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Uv Spectrophotometer — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "peak-visible-spectrophotometer",
+    "name": "Visible Spectrophotometer",
+    "brand": "Peak Instruments",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "peak-visible-spectrophotometer.png",
+    "images": [
+      "peak-visible-spectrophotometer.png"
+    ],
+    "desc": "Peak Instruments Visible Spectrophotometer — analytical instrument for laboratory testing.",
+    "industries": [
+      "materials",
+      "food",
+      "environmental"
+    ],
+    "testTypes": [
+      "spectroscopy"
+    ],
+    "specs": {
+      "type": "Lab Instrument",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Peak Instruments Visible Spectrophotometer — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "portable-and-laboratory-mercury-analyzers",
+    "name": "Mercury Analyzer (Portable & Lab)",
+    "brand": "Lumex",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "Portable-and-Laboratory-Mercury-Analyzers.png",
+    "images": [
+      "Portable-and-Laboratory-Mercury-Analyzers.png"
+    ],
+    "desc": "Direct atomic-absorption mercury analysis for soils, water, ores, biological tissues and atmospheric measurements.",
+    "industries": [
+      "environmental",
+      "food",
+      "materials"
+    ],
+    "testTypes": [
+      "mercury"
+    ],
+    "specs": {
+      "type": "Atomic Spectrometer",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "EPA, ASTM",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "EPA",
+      "ASTM"
+    ],
+    "overview": "Direct atomic-absorption mercury analysis for soils, water, ores, biological tissues and atmospheric measurements. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "pruler-img-01",
+    "name": "PRuler Antioxidant Monitor",
+    "brand": "Pruler",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "pruler-img-01.png",
+    "images": [
+      "pruler-img-01.png"
+    ],
+    "desc": "Linear sweep voltammetry analyzer for measuring remaining antioxidants in lubricating oils.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "antioxidant"
+    ],
+    "specs": {
+      "type": "Antioxidant Monitor",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "RULER ASTM D6971",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "RULER ASTM D6971"
+    ],
+    "overview": "Linear sweep voltammetry analyzer for measuring remaining antioxidants in lubricating oils. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-auto-viscosity",
+    "name": "Auto Viscosity",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-auto-viscosity.png",
+    "images": [
+      "scavini-auto-viscosity.png"
+    ],
+    "desc": "Scavini Auto Viscosity — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "viscosity"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Auto Viscosity — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-baths",
+    "name": "Baths",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-baths.png",
+    "images": [
+      "scavini-baths.png"
+    ],
+    "desc": "Scavini Baths — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Baths — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-cloud-point",
+    "name": "Cloud Point",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-cloud-point.png",
+    "images": [
+      "scavini-cloud-point.png"
+    ],
+    "desc": "Scavini Cloud Point — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "cloud-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Cloud Point — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-distillation-unit",
+    "name": "Distillation Unit",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-distillation-unit.png",
+    "images": [
+      "scavini-distillation-unit.png"
+    ],
+    "desc": "Scavini Distillation Unit — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "distillation"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Distillation Unit — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-distillation",
+    "name": "Distillation",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-distillation.png",
+    "images": [
+      "scavini-distillation.png"
+    ],
+    "desc": "Scavini Distillation — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "distillation"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Distillation — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-flash-point",
+    "name": "Flash Point",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-flash-point.png",
+    "images": [
+      "scavini-flash-point.png"
+    ],
+    "desc": "Scavini Flash Point — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "flash-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Flash Point — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-general",
+    "name": "General",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-general.png",
+    "images": [
+      "scavini-general.png"
+    ],
+    "desc": "Scavini General — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini General — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-oxidation",
+    "name": "Oxidation",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-oxidation.png",
+    "images": [
+      "scavini-oxidation.png"
+    ],
+    "desc": "Scavini Oxidation — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "oxidation"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Oxidation — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-penetration",
+    "name": "Penetration",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-penetration.png",
+    "images": [
+      "scavini-penetration.png"
+    ],
+    "desc": "Scavini Penetration — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Penetration — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-pensky-martens",
+    "name": "Pensky Martens",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-pensky-martens.png",
+    "images": [
+      "scavini-pensky-martens.png"
+    ],
+    "desc": "Scavini Pensky Martens — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "flash-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Pensky Martens — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-petroleum-testing",
+    "name": "Petroleum Testing",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-petroleum-testing.png",
+    "images": [
+      "scavini-petroleum-testing.png"
+    ],
+    "desc": "Scavini Petroleum Testing — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Petroleum Testing — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-pour-point-auto",
+    "name": "Pour Point Auto",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-pour-point-auto.png",
+    "images": [
+      "scavini-pour-point-auto.png"
+    ],
+    "desc": "Scavini Pour Point Auto — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "pour-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Pour Point Auto — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-pour-point",
+    "name": "Pour Point",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-pour-point.png",
+    "images": [
+      "scavini-pour-point.png"
+    ],
+    "desc": "Scavini Pour Point — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "pour-point"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Pour Point — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-viscosity",
+    "name": "Viscosity",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-viscosity.png",
+    "images": [
+      "scavini-viscosity.png"
+    ],
+    "desc": "Scavini Viscosity — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "viscosity"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Viscosity — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "scavini-water-sediment",
+    "name": "Water Sediment",
+    "brand": "Scavini",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "scavini-water-sediment.png",
+    "images": [
+      "scavini-water-sediment.png"
+    ],
+    "desc": "Scavini Water Sediment — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Petroleum Tester",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Scavini Water Sediment — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "tamson-copper-corrosion",
+    "name": "Copper Corrosion",
+    "brand": "Tamson",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "tamson-copper-corrosion.png",
+    "images": [
+      "tamson-copper-corrosion.png"
+    ],
+    "desc": "Tamson Copper Corrosion — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "materials"
+    ],
+    "testTypes": [
+      "corrosion"
+    ],
+    "specs": {
+      "type": "Lab Bath",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Tamson Copper Corrosion — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "tamson-tv4000",
+    "name": "Tv4000",
+    "brand": "Tamson",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "tamson-tv4000.png",
+    "images": [
+      "tamson-tv4000.png"
+    ],
+    "desc": "Tamson Tv4000 — analytical instrument for laboratory testing.",
+    "industries": [
+      "petroleum",
+      "materials"
+    ],
+    "testTypes": [
+      "analytical"
+    ],
+    "specs": {
+      "type": "Lab Bath",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "Tamson Tv4000 — analytical instrument for laboratory testing. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "tn-ts-tx-6000",
+    "name": "TN/TS/TX-6000",
+    "brand": "Mitsubishi",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "TN-TS-TX-6000.png",
+    "images": [
+      "TN-TS-TX-6000.png"
+    ],
+    "desc": "Total nitrogen, total sulphur and total halogen analyzer for petroleum, chemical and pharmaceutical samples.",
+    "industries": [
+      "petroleum",
+      "environmental"
+    ],
+    "testTypes": [
+      "sulphur",
+      "nitrogen",
+      "halogen"
+    ],
+    "specs": {
+      "type": "Combustion Analyzer",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM"
+    ],
+    "overview": "Total nitrogen, total sulphur and total halogen analyzer for petroleum, chemical and pharmaceutical samples. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "vp-total-nitrogen",
+    "name": "VP Total Nitrogen Analyzer",
+    "brand": "Mitsubishi",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "VP-Total-Nitrogen.png",
+    "images": [
+      "VP-Total-Nitrogen.png"
+    ],
+    "desc": "Vertical pyrolysis total nitrogen analyzer with chemiluminescence detection.",
+    "industries": [
+      "petroleum",
+      "environmental"
+    ],
+    "testTypes": [
+      "nitrogen"
+    ],
+    "specs": {
+      "type": "Combustion Analyzer",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM"
+    ],
+    "overview": "Vertical pyrolysis total nitrogen analyzer with chemiluminescence detection. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "x-pulse-broadband-benchtop-nmr",
+    "name": "X-Pulse Benchtop NMR",
+    "brand": "Oxford Instruments",
+    "type": "EQUIPMENT",
+    "featured": true,
+    "image": "X-Pulse-Broadband-Benchtop-NMR.png",
+    "images": [
+      "X-Pulse-Broadband-Benchtop-NMR.png"
+    ],
+    "desc": "High-resolution broadband benchtop NMR spectrometer with multinuclear capability.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "nmr"
+    ],
+    "specs": {
+      "type": "Spectrometer",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM"
+    ],
+    "overview": "High-resolution broadband benchtop NMR spectrometer with multinuclear capability. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "x-strata920",
+    "name": "X-Strata 920",
+    "brand": "Hitachi",
+    "type": "EQUIPMENT",
+    "featured": false,
+    "image": "X-Strata920.png",
+    "images": [
+      "X-Strata920.png"
+    ],
+    "desc": "XRF coating thickness and composition analyzer for plating and finishing applications.",
+    "industries": [
+      "materials",
+      "plastics"
+    ],
+    "testTypes": [
+      "xrf",
+      "coating"
+    ],
+    "specs": {
+      "type": "Analyzer",
+      "sample": "Liquids, solids (verify per method)",
+      "standards": "ASTM, ISO",
+      "output": "Per method specification"
+    },
+    "standards": [
+      "ASTM",
+      "ISO"
+    ],
+    "overview": "XRF coating thickness and composition analyzer for plating and finishing applications. Contact our team for full specification, sample-suitability assessment, and quote."
+  },
+  {
+    "slug": "x-supreme-8000",
+    "name": "X-Supreme 8000",
+    "brand": "Hitachi",
+    "type": "EQUIPMENT",
+    "featured": true,
+    "image": "X-Supreme-8000.png",
+    "images": [
+      "X-Supreme-8000.png"
+    ],
+    "desc": "High-performance EDXRF analyzer for low-level sulfur, chlorine and multi-element measurement in fuels and lubricants.",
+    "industries": [
+      "petroleum",
+      "refineries",
+      "environmental"
+    ],
+    "testTypes": [
+      "xrf",
+      "sulphur"
+    ],
+    "specs": {
+      "type": "Benchtop EDXRF Analyzer",
+      "sample": "Liquids, solids, films",
+      "standards": "ASTM D4294, ISO 20847",
+      "output": "Multi-element, sub-ppm sulphur"
+    },
+    "standards": [
+      "ASTM D4294",
+      "ISO 20847"
+    ],
+    "overview": "High-performance EDXRF analyzer for low-level sulfur, chlorine and multi-element measurement in fuels and lubricants. Contact our team for full specification, sample-suitability assessment, and quote."
+  }
+]

@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Biolab",
+    "count": 24
+  },
+  {
+    "name": "Chemparts",
+    "count": 1
+  },
+  {
+    "name": "Chromos",
+    "count": 2
+  },
+  {
+    "name": "Hitachi",
+    "count": 4
+  },
+  {
+    "name": "Linetronics",
+    "count": 18
+  },
+  {
+    "name": "Lumex",
+    "count": 1
+  },
+  {
+    "name": "Mitsubishi",
+    "count": 3
+  },
+  {
+    "name": "Nabertherm",
+    "count": 10
+  },
+  {
+    "name": "Normalab",
+    "count": 10
+  },
+  {
+    "name": "Oxford Instruments",
+    "count": 2
+  },
+  {
+    "name": "Peak Instruments",
+    "count": 14
+  },
+  {
+    "name": "PG Instruments",
+    "count": 1
+  },
+  {
+    "name": "Pruler",
+    "count": 1
+  },
+  {
+    "name": "Scavini",
+    "count": 15
+  },
+  {
+    "name": "Tamson",
+    "count": 2
+  },
+  {
+    "name": "Tanaka",
+    "count": 12
+  }
+]
