@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { db } from '@/lib/db'
+import { appUrl } from '@/lib/env'
 import { registerSchema } from '@/lib/validation/register'
 
 export type RegisterState = {
@@ -23,7 +24,7 @@ export async function registerCustomer(_prev: RegisterState, formData: FormData)
     email: input.email,
     password: input.password,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/account`,
+      emailRedirectTo: `${appUrl()}/auth/callback?next=/account`,
       data: { full_name: input.fullName },
     },
   })

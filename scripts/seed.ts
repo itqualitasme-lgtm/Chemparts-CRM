@@ -2,16 +2,15 @@ import 'dotenv/config'
 import { createClient } from '@supabase/supabase-js'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient, type Role } from '../src/generated/prisma/client'
+import { databaseUrl, supabaseServiceRoleKey, supabaseUrl } from '../src/lib/env'
 
 const db = new PrismaClient({
-  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
+  adapter: new PrismaPg({ connectionString: databaseUrl() }),
 })
 
-const admin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } },
-)
+const admin = createClient(supabaseUrl(), supabaseServiceRoleKey(), {
+  auth: { autoRefreshToken: false, persistSession: false },
+})
 
 async function ensureUser(email: string, password: string, fullName: string, role: Role) {
   const { data: list, error: listError } = await admin.auth.admin.listUsers()
