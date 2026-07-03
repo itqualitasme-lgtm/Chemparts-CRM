@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  CUSTOMER
+  VENDOR
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  DISABLED
+}
+
+model Profile {
+  id         String     @id @db.Uuid // = auth.users.id
+  email      String     @unique
+  fullName   String
+  phone      String?
+  role       Role
+  status     UserStatus @default(ACTIVE)
+  customer   Customer?  @relation(fields: [customerId], references: [id])
+  customerId String?
+  vendor     Vendor?    @relation(fields: [vendorId], references: [id])
+  vendorId   String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Customer {
+  id          String    @id @default(cuid())
+  companyName String
+  country     String // ISO 3166-1 alpha-2
+  city        String?
+  address     String?
+  trn         String? // VAT/TRN number
+  industry    String?
+  source      String    @default("SELF") // SELF | STAFF
+  notes       String?
+  profiles    Profile[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Vendor {
+  id           String    @id @default(cuid())
+  companyName  String
+  country      String
+  currency     String    @default("USD")
+  paymentTerms String?
+  bankDetails  String?
+  profiles     Profile[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+enum ProductType {
+  EQUIPMENT
+  SPARE_PART
+  CONSUMABLE
+}
+
+model Brand {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  logo        String?
+  description String?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Category {
+  id       String     @id @default(cuid())
+  name     String
+  slug     String     @unique
+  type     ProductType
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  parentId String?
+  children Category[] @relation("CategoryTree")
+  products Product[]
+}
+
+model Product {
+  id         String      @id @default(cuid())
+  slug       String      @unique
+  name       String
+  type       ProductType @default(EQUIPMENT)
+  brand      Brand       @relation(fields: [brandId], references: [id])
+  brandId    String
+  category   Category?   @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  featured   Boolean     @default(false)
+  active     Boolean     @default(true)
+  image      String?
+  images     String[]
+  desc       String
+  overview   String?
+  industries String[]
+  testTypes  String[]
+  standards  String[]
+  specs      Json?
+  modelNo    String?
+  hsCode     String?
+  unit       String      @default("pc")
+  // pricing (spares/consumables; equipment stays enquiry-only)
+  listPrice  Decimal?    @db.Decimal(12, 2)
+  costPrice  Decimal?    @db.Decimal(12, 2)
+  currency   String      @default("AED")
+  stockTracked Boolean   @default(false)
+  // link spare parts to their parent equipment
+  parentEquipment   Product?  @relation("EquipmentSpares", fields: [parentEquipmentId], references: [id])
+  parentEquipmentId String?
+  spares            Product[] @relation("EquipmentSpares")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model EmailLog {
+  id        String   @id @default(cuid())
+  to        String
+  subject   String
+  template  String
+  status    String   @default("SENT") // SENT | FAILED
+  error     String?
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String?
+  detail    Json?
+  createdAt DateTime @default(now())
+}

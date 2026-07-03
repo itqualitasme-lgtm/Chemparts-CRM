@@ -133,11 +133,10 @@ You create `noreply@chemparts-me.com` in the hosting panel; I'll walk you throug
 
 Each phase ends with a working deploy you can review at `store.chemparts-me.com`.
 
-## 10. Open questions (answer before Phase 1)
+## 10. Resolved decisions (2026-07-03, owner approved "go with recommendations")
 
-1. Show prices publicly for consumables/spares, or only after login? (Equipment stays enquiry-only.)
-2. New customer self-registration: instantly active, or admin approval required?
-3. Default currency AED — correct? Which others must appear on quotes?
-4. Payment gateway preference when we get there (Telr, Network International, Stripe, PayTabs)?
-
-*(Resolved: hosting = Vercel + Supabase, decided 2026-07-03.)*
+1. **Consumables/spares pricing: visible after customer login only.** Public visitors see the catalog with "Sign in to see prices". Standard B2B practice — keeps pricing away from competitors. A settings toggle can flip this later.
+2. **Self-registration: active immediately after email verification.** Keeps registration friction low for global customers; admin-approval toggle exists in settings if abuse appears.
+3. **Currency: AED default; USD, QAR, EUR selectable per quotation** with admin-managed exchange rates.
+4. **Payment gateway (future phase): Stripe** — available in the UAE, best developer experience; revisit if the bank pushes Telr/Network International.
+5. **Hosting: Vercel + Supabase.**
