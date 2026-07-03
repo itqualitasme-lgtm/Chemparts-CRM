@@ -19,9 +19,15 @@ const CSS = `
 }
 `
 
-const MARKUP = `
-<div class="cp-logo" style="--cp-dur:7s;--cp-surface:#1273BE;--cp-ink:#FFFFFF;--cp-accent:#38A9F0;--cp-tick:rgba(18,115,190,0.28);--cp-word:#0A2540;display:flex;flex-direction:column;align-items:center;gap:14px;font-family:'Space Grotesk','Geist',system-ui,sans-serif;animation:cpStage var(--cp-dur) ease-in-out infinite both">
-  <svg viewBox="0 0 220 128" style="width:158px;height:auto;overflow:visible;display:block" aria-label="Chemparts">
+const THEME = {
+  light: '--cp-surface:#1273BE;--cp-ink:#FFFFFF;--cp-accent:#38A9F0;--cp-tick:rgba(18,115,190,0.28);--cp-word:#0A2540',
+  dark: '--cp-surface:#EAF2F8;--cp-ink:#0A2540;--cp-accent:#38A9F0;--cp-tick:rgba(255,255,255,0.18);--cp-word:#EAF2F8',
+}
+
+function markup(variant: 'light' | 'dark', width: number, showWordmark: boolean) {
+  return `
+<div class="cp-logo" style="--cp-dur:7s;${THEME[variant]};display:flex;flex-direction:column;align-items:center;gap:14px;font-family:'Space Grotesk','Geist',system-ui,sans-serif;animation:cpStage var(--cp-dur) ease-in-out infinite both">
+  <svg viewBox="0 0 220 128" style="width:${width}px;height:auto;overflow:visible;display:block" aria-label="Chemparts">
     <defs>
       <clipPath id="cpL"><rect x="7" y="2" width="100" height="100" rx="4" ry="4"></rect></clipPath>
       <clipPath id="cpR"><rect x="113" y="2" width="100" height="100" rx="4" ry="4"></rect></clipPath>
@@ -50,15 +56,24 @@ const MARKUP = `
       <rect x="-46" y="0" width="46" height="104" fill="url(#cpSweepGrad)" style="transform-box:view-box;animation:cpSweep var(--cp-dur) ease-in-out infinite both"></rect>
     </g>
   </svg>
-  <div style="font-weight:700;font-size:18px;letter-spacing:0.34em;padding-left:0.34em;color:var(--cp-word)">CHEMPARTS</div>
+  ${showWordmark ? `<div style="font-weight:700;font-size:${Math.round(width * 0.12)}px;letter-spacing:0.34em;padding-left:0.34em;color:var(--cp-word)">CHEMPARTS</div>` : ''}
 </div>
 `
+}
 
-export default function AnimatedLogo() {
+export default function AnimatedLogo({
+  variant = 'light',
+  width = 130,
+  showWordmark = true,
+}: {
+  variant?: 'light' | 'dark'
+  width?: number
+  showWordmark?: boolean
+}) {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
-      <span dangerouslySetInnerHTML={{ __html: MARKUP }} />
+      <span dangerouslySetInnerHTML={{ __html: markup(variant, width, showWordmark) }} />
     </>
   )
 }
