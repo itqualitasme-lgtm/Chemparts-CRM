@@ -75,7 +75,6 @@ export function PublicFooter() {
           <div>
             <h3 className="text-sm font-semibold">Contact</h3>
             <address className="mt-4 space-y-2.5 text-sm not-italic text-white/70">
-              <p>SAIF Zone, Sharjah, United Arab Emirates</p>
               <p>
                 <a href="tel:+97165574047" className="transition hover:text-[#0E7490]">
                   +971-6-5574047
