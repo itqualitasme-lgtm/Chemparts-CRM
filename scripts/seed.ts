@@ -1,12 +1,10 @@
 import 'dotenv/config'
 import { createClient } from '@supabase/supabase-js'
-import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient, type Role } from '../src/generated/prisma/client'
-import { databaseUrl, env, supabaseServiceRoleKey, supabaseUrl } from '../src/lib/env'
+import { env, supabaseServiceRoleKey, supabaseUrl } from '../src/lib/env'
+import { createPgAdapter } from '../src/lib/pg'
 
-const db = new PrismaClient({
-  adapter: new PrismaPg({ connectionString: databaseUrl() }),
-})
+const db = new PrismaClient({ adapter: createPgAdapter() })
 
 const admin = createClient(supabaseUrl(), supabaseServiceRoleKey(), {
   auth: { autoRefreshToken: false, persistSession: false },

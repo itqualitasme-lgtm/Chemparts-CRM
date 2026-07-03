@@ -1,13 +1,10 @@
 import 'dotenv/config'
 import fs from 'node:fs'
 import path from 'node:path'
-import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '../src/generated/prisma/client'
-import { databaseUrl } from '../src/lib/env'
+import { createPgAdapter } from '../src/lib/pg'
 
-const db = new PrismaClient({
-  adapter: new PrismaPg({ connectionString: databaseUrl() }),
-})
+const db = new PrismaClient({ adapter: createPgAdapter() })
 
 type CatalogItem = {
   slug: string
