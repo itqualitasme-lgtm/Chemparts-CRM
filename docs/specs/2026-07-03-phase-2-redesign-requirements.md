@@ -107,14 +107,32 @@ Build out: **Enquiries, Quotations, Customers, Stock** (nav links exist but page
 
 ---
 
-## 3. Store redesign direction (finalized after competitor research)
+## 3. Store redesign direction — FINALIZED (research + owner decisions)
 
-Placeholder — the SGS/GEICP research agent's findings (layout width strategy, color/typography, homepage sections, mega-menu, catalog UX, product-detail template, auth header) get folded in here, then this becomes the build plan.
+**Owner decisions:** Hybrid (SGS-style authoritative homepage/nav + GEICP/instrument-style catalog & detail). Commercial flow: **enquiry/quote-first** with an "Add to Enquiry" basket (no checkout yet).
 
-Known now:
-- **Fluid, full-bleed sections** with inner content max-width per section (not one narrow column) — hero, category grid, brand wall, industries, services/AMC, stats, CTA.
-- **Auth-aware sticky header** with mega-menu, search, and Login/Register ↔ avatar menu.
-- **Interactive**: scroll reveals, hover states, motion (Framer Motion), fast (RSC + image optimization), strong SEO (metadata, JSON-LD, semantic headings, clean URLs).
+**Layout width (fixes the wide-monitor complaint):** two-tier system — section *backgrounds* run full-bleed (100vw), *content* sits in a centered `max-w-screen-2xl` (~1440px) wrapper with `px-6`. Responsive grids **add columns** on wide screens (`grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4`) instead of leaving gutters. Section vertical padding 96–128px desktop.
+
+**Color system** (refines the existing Chemparts navy, one accent only):
+- Ink navy `#0A2540` — dark hero/footer/CTA bands (existing brand color).
+- Accent `#0E7490` (deep analytical teal) — the single CTA/action color.
+- Grey `#5B6670` text/borders · section tint `#F4F6F8` · surface `#FFFFFF` · verified green `#2E9E5B` (Authorized Partner / in-stock / AMC-active badges).
+
+**Typography:** one grotesk sans (Inter/Manrope), fixed scale 12/14/16/20/28/40/56, headings 600–700 tight tracking, body 16–18/1.6.
+
+**Homepage order:** full-width hero → "In numbers" trust bar (since 2003, authorized partner of Hitachi/Tanaka/Oxford, N instruments, AMC contracts) → product category grid (Instruments / Consumables / Spare Parts) → services block (Testing / AMC / Calibration / Repair) → **authorized-partners logo wall** (real brand logos now in DB) → industries grid → resources/news → dark CTA band → rich footer.
+
+**Header (two rows, auth-aware):** utility bar (language · region · **Sign in / Register** ↔ **avatar chip + dropdown** when logged in · Request-a-Quote accent button) + main bar (logo · nav: Products/Services/Industries/Resources/About/Contact · search). Avatar dropdown: My Quotes/Enquiries, Devices & AMC, Documents, Settings, Sign out. Mobile: accordion+slide drawer.
+
+**Catalog (GEICP dual-axis):** browse by Category AND by Brand; faceted sticky left-rail filters (brand, category, industry, standard, availability) + active-filter chips + result count; cards with image, brand tag, part no., "Request Quote / Add to Enquiry".
+
+**Product detail:** gallery left (multi-image); right = title, brand + Authorized-Partner badge, part no., quick specs, Request-Quote/Add-to-Enquiry; tabs: Overview · Specifications (full table incl. Type/Sample/Standards/Output) · Downloads (datasheet PDF, manuals, certificates) · Compatible items · Applicable AMC/services. Per-product partner/warranty/service strip.
+
+**Interactivity:** Framer Motion `whileInView` reveals + staggered grids, hero parallax, sticky shrinking header, stat count-up, card hover lift — all respecting `prefers-reduced-motion`. RSC for catalog/detail, `next/image`, minimal client JS.
+
+**SEO:** Metadata API per page, JSON-LD (Organization foundingDate 2003 / Product / Service / BreadcrumbList / WebSite+SearchAction), clean hierarchical URLs (`/products/instruments/[brand]/[slug]`, `/services/amc`, `/industries/[x]`), sitemap/robots, Core Web Vitals.
+
+Full research reports retained in this session's agent outputs.
 
 ## 4. Build order (proposed)
 
