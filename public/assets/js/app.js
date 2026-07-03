@@ -3,7 +3,7 @@
   'use strict';
 
   /* ===== Preloader: hide on window load ===== */
-  window.addEventListener('load', () => {
+  (function(__run){ if (document.readyState === 'complete') { __run(); } else { window.addEventListener('load', __run); } })(() => {
     const p = document.getElementById('preloader');
     if (p) {
       setTimeout(() => p.classList.add('is-loaded'), 200);
