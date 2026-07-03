@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Chemparts Store & Portal",
+  title: "Chemparts Middle East — Analytical instruments, lab supplies & services",
   description:
-    "Chemparts Middle East — analytical instruments, spare parts and lab consumables. Quotations, orders and tracking online.",
+    "Chemparts Middle East FZC — an authorized partner supplying, installing and servicing analytical instruments, laboratory consumables and OEM spare parts across the Gulf since 2003.",
   robots: { index: false, follow: false }, // noindex until public launch
 };
 
