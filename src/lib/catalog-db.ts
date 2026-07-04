@@ -65,6 +65,7 @@ export type SectionProduct = {
   saleMode: 'CART_ENABLED' | 'QUOTE_ONLY'
   stockStatus: 'IN_STOCK' | 'OUT_OF_STOCK' | 'ON_ORDER'
   featured: boolean
+  isNew: boolean
 }
 
 export type SectionFilters = {
@@ -120,10 +121,12 @@ export async function getSectionProducts(
       saleMode: true,
       stockStatus: true,
       featured: true,
+      newUntil: true,
       brand: { select: { name: true, slug: true } },
     },
   })
 
+  const now = new Date()
   const products: SectionProduct[] = rows.map((r) => ({
     id: r.id,
     slug: r.slug,
@@ -143,6 +146,7 @@ export async function getSectionProducts(
     saleMode: r.saleMode,
     stockStatus: r.stockStatus,
     featured: r.featured,
+    isNew: r.newUntil != null && r.newUntil > now,
   }))
 
   // A #hashtag typed into search is treated as a tag filter.
@@ -151,7 +155,7 @@ export async function getSectionProducts(
   const q = rawQ.toLowerCase()
   const tag = filters.tag?.toLowerCase()
 
-  return products.filter((p) => {
+  const filtered = products.filter((p) => {
     if (filters.brand && p.brandSlug !== filters.brand) return false
     if (filters.industry && !p.industries.includes(filters.industry)) return false
     if (tag && !p.tags.includes(tag)) return false
@@ -164,6 +168,10 @@ export async function getSectionProducts(
     }
     return true
   })
+
+  // New arrivals surface first (isNew auto-expires when newUntil passes),
+  // keeping the underlying featured/name order within each group (stable sort).
+  return filtered.sort((a, b) => Number(b.isNew) - Number(a.isNew))
 }
 
 export type Facet = { value: string; label: string; count: number }

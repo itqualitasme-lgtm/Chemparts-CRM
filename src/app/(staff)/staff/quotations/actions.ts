@@ -117,6 +117,7 @@ export async function updateQuotation(
   const validUntil = validUntilRaw ? new Date(validUntilRaw) : null
   const notes = (formData.get('notes') as string | null)?.trim() || null
   const terms = (formData.get('terms') as string | null)?.trim() || null
+  const deliveryTerms = (formData.get('deliveryTerms') as string | null)?.trim() || null
   const lines = parseLines(formData.get('itemsJson') as string | null)
   if (lines.length === 0) return { error: 'A quotation needs at least one line item.' }
 
@@ -131,6 +132,7 @@ export async function updateQuotation(
         validUntil: validUntil && !Number.isNaN(validUntil.getTime()) ? validUntil : null,
         notes,
         terms,
+        deliveryTerms,
         items: {
           create: lines.map((l, i) => ({
             productId: l.productId ?? null,

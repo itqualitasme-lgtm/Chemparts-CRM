@@ -11,6 +11,7 @@ type Header = {
   validUntil: string // yyyy-mm-dd
   notes: string
   terms: string
+  deliveryTerms: string
 }
 
 const STATUSES = ['DRAFT', 'SENT', 'ACCEPTED', 'REJECTED', 'EXPIRED']
@@ -153,9 +154,13 @@ export default function QuotationEditor({
           <span className="mb-1 block text-sm font-medium text-slate-700">Valid until</span>
           <input type="date" name="validUntil" defaultValue={header.validUntil} className={inputCls} />
         </label>
-        <label className="block sm:col-span-2">
-          <span className="mb-1 block text-sm font-medium text-slate-700">Payment / delivery terms</span>
-          <input name="terms" defaultValue={header.terms} placeholder="50% advance · delivery 4–6 weeks · prices ex-works" className={inputCls} />
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium text-slate-700">Delivery</span>
+          <input name="deliveryTerms" defaultValue={header.deliveryTerms} placeholder="2–4 weeks from order confirmation" className={inputCls} />
+        </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium text-slate-700">Payment terms</span>
+          <input name="terms" defaultValue={header.terms} placeholder="50% advance, balance before delivery · prices ex-works" className={inputCls} />
         </label>
         <label className="block sm:col-span-2">
           <span className="mb-1 block text-sm font-medium text-slate-700">Notes (shown to customer)</span>

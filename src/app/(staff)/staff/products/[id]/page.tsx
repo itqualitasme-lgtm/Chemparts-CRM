@@ -55,6 +55,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
           standards: product.standards,
           industries: product.industries,
           tags: product.tags,
+          newUntil: product.newUntil ? product.newUntil.toISOString().slice(0, 10) : '',
           modelNo: product.modelNo ?? '',
           unit: product.unit,
           listPrice: product.listPrice != null ? Number(product.listPrice) : null,

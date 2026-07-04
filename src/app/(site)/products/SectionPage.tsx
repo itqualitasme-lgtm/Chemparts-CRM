@@ -51,7 +51,7 @@ function ProductCard({ p, loggedIn, section }: { p: SectionProduct; loggedIn: bo
         style={{ display: 'flex', flexDirection: 'column', flex: 1, color: 'inherit', textDecoration: 'none' }}
       >
         <div className="card__media">
-          {p.featured ? <span className="pill pill--crimson">Featured</span> : null}
+          {p.isNew ? <span className="pill pill--new">New</span> : p.featured ? <span className="pill pill--crimson">Featured</span> : null}
           {src ? <img src={src} alt={p.name} loading="lazy" decoding="async" /> : null}
         </div>
         <div className="card__body" style={{ paddingBottom: 8 }}>
@@ -96,16 +96,6 @@ function ProductCard({ p, loggedIn, section }: { p: SectionProduct; loggedIn: bo
             <RequestPrice productId={p.id} loggedIn={loggedIn} variant="secondary" label="Request current price" />
           </div>
         )}
-
-        {p.tags.length > 0 ? (
-          <div className="card__tags">
-            {p.tags.slice(0, 3).map((t) => (
-              <a key={t} className="tag-chip" href={buildHref(section, { tag: t })}>
-                #{t}
-              </a>
-            ))}
-          </div>
-        ) : null}
       </div>
     </div>
   )

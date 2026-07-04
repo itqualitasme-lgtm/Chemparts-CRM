@@ -190,6 +190,7 @@ model Product {
   priceMode   PriceMode  @default(ON_REQUEST)
   minOrderQty Int        @default(1)
   sortOrder   Int        @default(0)
+  newUntil    DateTime?  // "new arrival" badge shows until this date, then auto-expires
   priceRequests PriceRequest[]
   cartItems     CartItem[]
   enquiryItems  EnquiryItem[]
@@ -373,7 +374,8 @@ model Quotation {
   vatPercent       Decimal         @default(5) @db.Decimal(5, 2)
   validUntil       DateTime?
   notes            String? // customer-facing notes
-  terms            String? // payment / delivery terms
+  terms            String? // payment terms
+  deliveryTerms    String? // e.g. "2–4 weeks from order confirmation"
   items            QuotationItem[]
   order            Order?
   createdAt        DateTime        @default(now())

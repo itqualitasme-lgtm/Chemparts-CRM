@@ -46,6 +46,14 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
         <Link href="/staff/quotations" className="text-sm text-slate-500 underline">← Back to quotations</Link>
         <div className="mt-2 flex flex-wrap items-center gap-3">
           <h1 className="font-mono text-2xl font-semibold text-slate-900">{q.quotationNo}</h1>
+          <a
+            href={`/print/quotation/${q.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          >
+            Print / PDF ↗
+          </a>
         </div>
         <p className="text-slate-500">
           {q.customer ? q.customer.companyName : 'No customer'} ·{' '}
@@ -62,6 +70,7 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
           validUntil: toDateInput(q.validUntil),
           notes: q.notes ?? '',
           terms: q.terms ?? '',
+          deliveryTerms: q.deliveryTerms ?? '',
         }}
         lines={lines}
       />

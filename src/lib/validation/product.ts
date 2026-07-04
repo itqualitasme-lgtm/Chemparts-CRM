@@ -21,6 +21,7 @@ export const productSchema = z.object({
   modelNo: z.string().trim().optional().or(z.literal('')),
   unit: z.string().trim().optional().or(z.literal('')),
   tags: z.string().trim().optional().or(z.literal('')), // hashtags: "#xrf #petroleum" or "xrf, petroleum"
+  newUntil: z.string().trim().optional().or(z.literal('')), // "new arrival" badge expiry (yyyy-mm-dd)
   listPrice: optionalPrice,
   currency: z.string().trim().min(1).default('AED'),
   featured: z.coerce.boolean().optional(),

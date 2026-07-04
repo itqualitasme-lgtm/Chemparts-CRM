@@ -30,12 +30,6 @@ export default async function ProductsPage() {
 
             {/* Catalog section entry points (DB-driven section pages) */}
             <SectionCards />
-
-            {/* Brand quick-jump strip */}
-            <div className="brand-strip" data-reveal>
-              <span className="brand-strip__label">— By brand</span>
-              <div className="brand-strip__logos" data-brand-strip></div>
-            </div>
           </div>
         </section>
 

@@ -14,6 +14,7 @@ type Initial = {
   standards?: string[]
   industries?: string[]
   tags?: string[]
+  newUntil?: string
   modelNo?: string
   unit?: string
   listPrice?: number | null
@@ -119,7 +120,15 @@ export default function ProductForm({
           className={inputCls}
         />
         <span className="mt-1 block text-xs text-slate-400">
-          Space or comma separated. Tags power search and let customers browse recent items by tag (e.g. #new-arrival).
+          Space or comma separated. Tags are a hidden search index (not shown on the card).
+        </span>
+      </label>
+
+      <label className="block">
+        <span className="mb-1 block text-sm font-medium text-slate-700">New arrival until (optional)</span>
+        <input name="newUntil" type="date" defaultValue={initial.newUntil} className="w-56 rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-[#0A2540] focus:outline-none focus:ring-2 focus:ring-[#0A2540]/20" />
+        <span className="mt-1 block text-xs text-slate-400">
+          Shows a “New” badge and lists the product first until this date, then auto-expires. Leave blank for none.
         </span>
       </label>
 

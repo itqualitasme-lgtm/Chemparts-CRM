@@ -1583,6 +1583,11 @@ figure[data-reveal][data-shown="true"] img,
   color: var(--crimson);
   border-color: #FFD2D8;
 }
+.pill--new {
+  background: #0E7490;
+  color: #fff;
+  border-color: #0E7490;
+}
 
 /* Coordinate label */
 .coord {
