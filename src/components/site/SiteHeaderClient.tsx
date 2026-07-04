@@ -43,32 +43,32 @@ export default function SiteHeaderClient({
 
       <header className="site-header" data-scrolled="false">
         <div className="site-header__top" aria-hidden="true">
-          <span className="topticker__live mono">LIVE · UAE</span>
+          <span className="topticker__live mono">LIVE · GLOBAL</span>
           <div className="topticker__scroll">
             <div className="topticker__scroll-track">
               <span>AUTHORIZED PARTNER · Hitachi · Tanaka · Oxford Instruments · KEM</span>
-              <span>ICV CERTIFIED · Approved for ADNOC group procurement</span>
+              <span>WORLDWIDE SHIPPING · export-packed · insured · fully documented</span>
               <span>{instrumentCount} ANALYTICAL INSTRUMENTS · 16 brand partners · in stock</span>
               <span>STANDARDS · ASTM · ISO · IP · referenced on every quote</span>
-              <span>SAME WORKING-DAY RESPONSE · UAE · Qatar · across the Gulf</span>
-              <span>OEM SPARE PARTS · held in regional stock · no 6-week waits</span>
+              <span>SAME WORKING-DAY RESPONSE · enquiries answered worldwide</span>
+              <span>OEM SPARE PARTS · genuine parts · shipped worldwide</span>
               <span>TURNKEY LAB SOLUTIONS · design · install · calibrate · service</span>
               <span>ISO 9001 · 14001 · NABL traceable calibrations</span>
-              <span>SHARJAH · ABU DHABI · DOHA · since 2003</span>
+              <span>EXPORTS WORLDWIDE · handled with care · since 2003</span>
               <span>WHATSAPP +971 55 756 6123 · Get a quote in under 24 hours</span>
               <span>AUTHORIZED PARTNER · Hitachi · Tanaka · Oxford Instruments · KEM</span>
-              <span>ICV CERTIFIED · Approved for ADNOC group procurement</span>
+              <span>WORLDWIDE SHIPPING · export-packed · insured · fully documented</span>
               <span>{instrumentCount} ANALYTICAL INSTRUMENTS · 16 brand partners · in stock</span>
               <span>STANDARDS · ASTM · ISO · IP · referenced on every quote</span>
-              <span>SAME WORKING-DAY RESPONSE · UAE · Qatar · across the Gulf</span>
-              <span>OEM SPARE PARTS · held in regional stock · no 6-week waits</span>
+              <span>SAME WORKING-DAY RESPONSE · enquiries answered worldwide</span>
+              <span>OEM SPARE PARTS · genuine parts · shipped worldwide</span>
               <span>TURNKEY LAB SOLUTIONS · design · install · calibrate · service</span>
               <span>ISO 9001 · 14001 · NABL traceable calibrations</span>
-              <span>SHARJAH · ABU DHABI · DOHA · since 2003</span>
+              <span>EXPORTS WORLDWIDE · handled with care · since 2003</span>
               <span>WHATSAPP +971 55 756 6123 · Get a quote in under 24 hours</span>
             </div>
           </div>
-          <span className="topticker__right mono">ISO 9001 · 14001 · ICV CERTIFIED</span>
+          <span className="topticker__right mono">ISO 9001 · 14001 · WORLDWIDE EXPORT</span>
         </div>
         <div className="site-header__main">
           <Link className="brand" href="/" aria-label="Chemparts Middle East — home">

@@ -11,8 +11,8 @@ export default function SiteFooter() {
 
       <div className="site-footer__cols">
         <div>
-          <h4>Chemparts ME</h4>
-          <p>Two decades supplying analytical instruments, OEM spare parts, lab consumables and turnkey lab solutions across the Middle East. Authorized partner for Hitachi, Tanaka, Oxford and 14 more leading brands.</p>
+          <h4>Chemparts</h4>
+          <p>Two decades supplying analytical instruments, OEM spare parts, lab consumables and turnkey lab solutions to laboratories worldwide. Authorized partner for Hitachi, Tanaka, Oxford and 14 more leading brands.</p>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.06em', color: '#6B7588', textTransform: 'uppercase', marginTop: 16 }}>[ ISO 9001 · ISO 14001 ]</p>
         </div>
         <div>
@@ -27,14 +27,17 @@ export default function SiteFooter() {
           </ul>
         </div>
         <div>
-          <h4>Head Office</h4>
-          <address>A2-96, SAIF Zone<br />P.O. Box 9681<br />Sharjah, UAE</address>
-          <p style={{ fontFamily: 'var(--font-mono)', marginTop: 12 }}>+971 6 5574047</p>
+          <h4>Worldwide shipping</h4>
+          <p>We export internationally — instruments, spares and consumables shipped anywhere, professionally packed, insured and fully documented for customs. Installation and service arranged on request.</p>
         </div>
         <div>
-          <h4>Branches</h4>
-          <address style={{ marginBottom: 16 }}>Abu Dhabi, UAE<br /><span style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>02-5527185</span></address>
-          <address>Doha, Qatar<br /><span style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>New Souq Al Haraj</span></address>
+          <h4>Get in touch</h4>
+          <ul>
+            <li><a href="mailto:info@chemparts-me.com">info@chemparts-me.com</a></li>
+            <li><a href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp our team</a></li>
+            <li><a href="/contact">Request a quote</a></li>
+          </ul>
+          <p style={{ fontFamily: 'var(--font-mono)', marginTop: 12 }}>+971 6 5574047</p>
         </div>
       </div>
 
