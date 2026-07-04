@@ -1,11 +1,11 @@
 'use server'
 
-import { createHash, randomBytes, randomInt } from 'node:crypto'
+import { randomBytes } from 'node:crypto'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { db } from '@/lib/db'
-import { sendMail } from '@/lib/mail/send'
+import { hashCode, issueOtpCode } from '@/lib/auth/otp'
 import { canAccessPortal, homePathFor, portalFromPath } from '@/lib/auth/rbac'
 import { markOtpVerified } from '@/lib/auth/otp-grace'
 
@@ -47,12 +47,6 @@ function isCompanyEmail(email: string): boolean {
   return email.toLowerCase().endsWith(`@${STAFF_DOMAIN}`)
 }
 
-const OTP_TTL_MS = 10 * 60 * 1000
-
-function hashCode(code: string): string {
-  return createHash('sha256').update(code).digest('hex')
-}
-
 // Step 1 of OTP sign-in. Works for any existing account (customer or staff);
 // a company-domain email with no account is auto-provisioned as STAFF on verify.
 // We generate our OWN 6-digit code, store its hash, and email it via Zoho — so
@@ -84,19 +78,8 @@ export async function requestOtp(_prev: OtpState, formData: FormData): Promise<O
     }
   }
 
-  const code = String(randomInt(0, 1_000_000)).padStart(6, '0')
-  const expiresAt = new Date(Date.now() + OTP_TTL_MS)
-  await db.emailOtp.upsert({
-    where: { email },
-    create: { email, codeHash: hashCode(code), expiresAt },
-    update: { codeHash: hashCode(code), expiresAt, attempts: 0, consumed: false, createdAt: new Date() },
-  })
-
-  try {
-    await sendMail(email, 'otp-code', { code })
-  } catch {
-    return { error: 'Could not send the code email. Try again shortly.' }
-  }
+  const sent = await issueOtpCode(email)
+  if (!sent) return { error: 'Could not send the code email. Try again shortly.' }
   return { sent: true, email }
 }
 

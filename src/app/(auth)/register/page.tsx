@@ -1,9 +1,11 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useActionState, useState, useTransition } from 'react'
 import Link from 'next/link'
 import { COUNTRIES } from '@/lib/countries'
-import { registerCustomer, type RegisterState } from './actions'
+import { registerCustomer, resendRegisterCode, type RegisterState } from './actions'
+import { verifyOtp } from '../actions'
+import type { LoginState } from '../actions'
 
 const initialState: RegisterState = {}
 
@@ -34,20 +36,51 @@ function Field({
 export default function RegisterPage() {
   const [state, formAction, pending] = useActionState(registerCustomer, initialState)
   const [showPw, setShowPw] = useState(false)
+  const [verState, verifyAction, verifying] = useActionState<LoginState, FormData>(verifyOtp, {})
+  const [resending, startResend] = useTransition()
+  const [resent, setResent] = useState(false)
 
-  if (state.ok) {
+  // After the account is created we email a code; verify it to finish sign-up.
+  if (state.ok && state.email) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
-        <div className="w-full max-w-md rounded-2xl border border-slate-100 bg-white p-8 text-center shadow-sm">
+        <div className="w-full max-w-md rounded-2xl border border-slate-100 bg-white p-8 shadow-sm">
           <img src="/images/logo.svg" alt="Chemparts" width={52} height={28} className="mx-auto mb-4" />
-          <h1 className="mb-2 text-xl font-semibold text-[#0A2540]">Check your email</h1>
-          <p className="text-slate-600">
-            We sent a verification link to your email address. Click it to activate your Chemparts
-            account.
+          <h1 className="mb-2 text-center text-xl font-semibold text-[#0A2540]">Enter your code</h1>
+          <p className="mb-5 text-center text-sm text-slate-600">
+            We emailed a 6-digit code to <span className="font-medium">{state.email}</span>. Enter it to
+            activate your account.
           </p>
-          <Link href="/login" className="mt-6 inline-block text-sm font-medium text-[#0E7490] underline">
-            Back to sign in
-          </Link>
+          <form action={verifyAction} className="space-y-3">
+            <input type="hidden" name="email" value={state.email} />
+            <input
+              name="token"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              required
+              placeholder="123456"
+              className={`${inputCls} text-center text-lg tracking-[0.4em]`}
+            />
+            {verState.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{verState.error}</p>}
+            <button
+              type="submit"
+              disabled={verifying}
+              className="w-full rounded-lg bg-[#0E7490] py-2.5 font-medium text-white transition hover:bg-[#0b5f77] disabled:opacity-60"
+            >
+              {verifying ? 'Verifying…' : 'Verify & sign in'}
+            </button>
+          </form>
+          <div className="mt-4 text-center text-sm text-slate-500">
+            Didn&apos;t get it?{' '}
+            <button
+              type="button"
+              disabled={resending || resent}
+              onClick={() => startResend(async () => { await resendRegisterCode(state.email!); setResent(true) })}
+              className="font-medium text-[#0E7490] underline disabled:opacity-60"
+            >
+              {resent ? 'Code resent' : resending ? 'Resending…' : 'Resend code'}
+            </button>
+          </div>
         </div>
       </main>
     )

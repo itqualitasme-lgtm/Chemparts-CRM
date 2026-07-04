@@ -1,16 +1,21 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { db } from '@/lib/db'
-import { appUrl } from '@/lib/env'
+import { issueOtpCode } from '@/lib/auth/otp'
 import { registerSchema } from '@/lib/validation/register'
 
 export type RegisterState = {
   error?: string
   fieldErrors?: Record<string, string[]>
   ok?: boolean
+  email?: string
 }
 
+// Create a customer account WITHOUT Supabase's confirmation-link email. The
+// account is created directly, then we email a numeric OTP code (via Zoho) which
+// the register page verifies to sign the customer in — no magic link, no
+// localhost redirect.
 export async function registerCustomer(_prev: RegisterState, formData: FormData): Promise<RegisterState> {
   const parsed = registerSchema.safeParse(Object.fromEntries(formData))
   if (!parsed.success) {
@@ -18,33 +23,33 @@ export async function registerCustomer(_prev: RegisterState, formData: FormData)
     return { fieldErrors: flat.fieldErrors as Record<string, string[]> }
   }
   const input = parsed.data
+  const email = input.email.trim().toLowerCase()
 
-  const supabase = await createClient()
-  const { data, error } = await supabase.auth.signUp({
-    email: input.email,
+  const admin = createAdminClient()
+  const { data, error } = await admin.auth.admin.createUser({
+    email,
     password: input.password,
-    options: {
-      emailRedirectTo: `${appUrl()}/auth/callback?next=/account`,
-      data: { full_name: input.fullName },
-    },
+    email_confirm: true,
+    user_metadata: { full_name: input.fullName },
   })
-  if (error) return { error: error.message }
+  if (error) {
+    if (/already|registered|exists/i.test(error.message)) {
+      return { error: 'An account with that email already exists — please sign in instead.' }
+    }
+    return { error: 'Sign-up failed, please try again.' }
+  }
   const userId = data.user?.id
   if (!userId) return { error: 'Sign-up failed, please try again.' }
 
   const existing = await db.profile.findUnique({ where: { id: userId } })
   if (!existing) {
     const customer = await db.customer.create({
-      data: {
-        companyName: input.companyName,
-        country: input.country,
-        source: 'SELF',
-      },
+      data: { companyName: input.companyName, country: input.country, source: 'SELF' },
     })
     await db.profile.create({
       data: {
         id: userId,
-        email: input.email,
+        email,
         fullName: input.fullName,
         phone: input.phone,
         role: 'CUSTOMER',
@@ -52,5 +57,16 @@ export async function registerCustomer(_prev: RegisterState, formData: FormData)
       },
     })
   }
-  return { ok: true }
+
+  await issueOtpCode(email)
+  return { ok: true, email }
+}
+
+// Resend the verification code (used by the register page's "resend" link).
+export async function resendRegisterCode(email: string): Promise<{ ok?: boolean; error?: string }> {
+  const clean = email.trim().toLowerCase()
+  const profile = await db.profile.findUnique({ where: { email: clean } })
+  if (!profile) return { error: 'No account found for that email.' }
+  const sent = await issueOtpCode(clean)
+  return sent ? { ok: true } : { error: 'Could not resend the code. Try again shortly.' }
 }
