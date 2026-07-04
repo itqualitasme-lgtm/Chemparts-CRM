@@ -149,7 +149,10 @@ function OtpForm({ next, onUsePassword }: { next?: string; onUsePassword: () => 
 }
 
 export default function LoginForm({ next }: { next?: string }) {
-  const [mode, setMode] = useState<'password' | 'otp'>('password')
+  // OTP-first: everyone signs in with an emailed code by default; staff/vendors
+  // can switch to password (and stay signed in on the device for ~30 days via
+  // the persistent Supabase session).
+  const [mode, setMode] = useState<'password' | 'otp'>('otp')
 
   return (
     <main className="flex min-h-screen">

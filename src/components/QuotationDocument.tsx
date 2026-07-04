@@ -82,6 +82,7 @@ export default function QuotationDocument({
   )
   const m = (n: number) => `${q.currency} ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   const contact = q.customer?.contacts[0]
+  const hasDiscount = q.items.some((i) => Number(i.discountPct) > 0)
 
   return (
     <div className="mx-auto my-0 max-w-[820px] bg-white p-10 text-[13px] leading-relaxed text-slate-800 shadow-lg print:my-0 print:max-w-none print:p-0 print:shadow-none">
@@ -148,7 +149,7 @@ export default function QuotationDocument({
             <th className="px-2 py-2 font-medium">Description</th>
             <th className="w-12 px-2 py-2 text-center font-medium">Qty</th>
             <th className="w-24 px-2 py-2 text-right font-medium">Unit price</th>
-            <th className="w-12 px-2 py-2 text-right font-medium">Disc</th>
+            {hasDiscount ? <th className="w-12 px-2 py-2 text-right font-medium">Disc</th> : null}
             <th className="w-28 px-2 py-2 text-right font-medium">Amount</th>
           </tr>
         </thead>
@@ -186,7 +187,7 @@ export default function QuotationDocument({
                 </td>
                 <td className="px-2 py-2 text-center text-slate-700">{it.qty}</td>
                 <td className="px-2 py-2 text-right font-mono text-slate-700">{m(Number(it.unitPrice))}</td>
-                <td className="px-2 py-2 text-right font-mono text-slate-600">{disc > 0 ? `${disc}%` : '—'}</td>
+                {hasDiscount ? <td className="px-2 py-2 text-right font-mono text-slate-600">{disc > 0 ? `${disc}%` : '—'}</td> : null}
                 <td className="px-2 py-2 text-right font-mono text-slate-800">{m(it.qty * Number(it.unitPrice) * (1 - disc / 100))}</td>
               </tr>
             )
