@@ -16,7 +16,7 @@ import AddToCart from './AddToCart'
 // Styling reuses the ported marketing site's own CSS classes (from
 // /assets/css/styles.css) — the (site) group is excluded from Tailwind.
 
-type RawSearchParams = { q?: string; brand?: string; industry?: string; page?: string }
+type RawSearchParams = { q?: string; brand?: string; industry?: string; tag?: string; page?: string }
 
 const PAGE_SIZE = 24
 
@@ -39,7 +39,7 @@ function formatPrice(currency: string, value: number): string {
  * (it can contain the interactive Request-price form), so the card is a plain
  * wrapper with the media/body link inside and the commerce block beneath.
  */
-function ProductCard({ p, loggedIn }: { p: SectionProduct; loggedIn: boolean }) {
+function ProductCard({ p, loggedIn, section }: { p: SectionProduct; loggedIn: boolean; section: Section }) {
   const src = productImageUrl(p.image)
   const state = priceState(p)
   const cartEligible = canAddToCart(p)
@@ -96,6 +96,16 @@ function ProductCard({ p, loggedIn }: { p: SectionProduct; loggedIn: boolean }) 
             <RequestPrice productId={p.id} loggedIn={loggedIn} variant="secondary" label="Request current price" />
           </div>
         )}
+
+        {p.tags.length > 0 ? (
+          <div className="card__tags">
+            {p.tags.slice(0, 3).map((t) => (
+              <a key={t} className="tag-chip" href={buildHref(section, { tag: t })}>
+                #{t}
+              </a>
+            ))}
+          </div>
+        ) : null}
       </div>
     </div>
   )
@@ -113,6 +123,7 @@ export default async function SectionPage({
     q: sp.q?.trim() || undefined,
     brand: sp.brand || undefined,
     industry: sp.industry || undefined,
+    tag: sp.tag || undefined,
   }
 
   const [products, facets, user] = await Promise.all([
@@ -123,7 +134,7 @@ export default async function SectionPage({
   const loggedIn = user != null
 
   const meta = SECTION_META[section]
-  const hasFilters = Boolean(filters.q || filters.brand || filters.industry)
+  const hasFilters = Boolean(filters.q || filters.brand || filters.industry || filters.tag)
 
   // Pagination over the filtered result set.
   const total = products.length
@@ -137,6 +148,7 @@ export default async function SectionPage({
       q: filters.q,
       brand: filters.brand,
       industry: filters.industry,
+      tag: filters.tag,
       page: p > 1 ? String(p) : undefined,
     })
 
@@ -261,12 +273,24 @@ export default async function SectionPage({
                   <strong>[{String(total).padStart(2, '0')}]</strong> {meta.countLabel}
                   {total > PAGE_SIZE ? <span className="text-muted"> · showing {from}–{to}</span> : ' shown'}
                 </span>
+                {filters.tag ? (
+                  <span className="tag-chip tag-chip--active">
+                    #{filters.tag}
+                    <a
+                      href={buildHref(section, { q: filters.q, brand: filters.brand, industry: filters.industry })}
+                      aria-label="Clear tag"
+                      style={{ marginLeft: 6 }}
+                    >
+                      ✕
+                    </a>
+                  </span>
+                ) : null}
               </div>
 
               {total > 0 ? (
                 <div className="products-page-grid catalog-grid">
                   {pageProducts.map((p) => (
-                    <ProductCard key={p.slug} p={p} loggedIn={loggedIn} />
+                    <ProductCard key={p.slug} p={p} loggedIn={loggedIn} section={section} />
                   ))}
                 </div>
               ) : (

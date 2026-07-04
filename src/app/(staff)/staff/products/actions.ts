@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { requirePortal, requireAdmin } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { productSchema, splitList } from '@/lib/validation/product'
+import { productSchema, splitList, splitTags } from '@/lib/validation/product'
 import { slugify } from '@/lib/slug'
 
 export type ProductState = { error?: string; fieldErrors?: Record<string, string[]> }
@@ -88,6 +88,7 @@ export async function createProduct(_prev: ProductState, formData: FormData): Pr
       overview: d.overview || null,
       standards: splitList(d.standards),
       industries: splitList(d.industries),
+      tags: splitTags(d.tags),
       testTypes: [],
       modelNo: d.modelNo || null,
       unit: d.unit || 'pc',
@@ -130,6 +131,7 @@ export async function updateProduct(id: string, _prev: ProductState, formData: F
       overview: d.overview || null,
       standards: splitList(d.standards),
       industries: splitList(d.industries),
+      tags: splitTags(d.tags),
       modelNo: d.modelNo || null,
       unit: d.unit || 'pc',
       listPrice: d.listPrice,

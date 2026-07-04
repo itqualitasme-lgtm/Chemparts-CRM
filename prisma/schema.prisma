@@ -163,6 +163,7 @@ model Product {
   industries String[]
   testTypes  String[]
   standards  String[]
+  tags       String[] // staff hashtags — power search + recent-by-tag discovery
   specs      Json? // extra arbitrary spec rows beyond the columns below
   // structured spec fields shown on the product page (from the website)
   productType String? // "Petroleum Tester", "Analytical Instrument"

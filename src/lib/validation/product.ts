@@ -20,6 +20,7 @@ export const productSchema = z.object({
   industries: z.string().trim().optional().or(z.literal('')), // comma-separated
   modelNo: z.string().trim().optional().or(z.literal('')),
   unit: z.string().trim().optional().or(z.literal('')),
+  tags: z.string().trim().optional().or(z.literal('')), // hashtags: "#xrf #petroleum" or "xrf, petroleum"
   listPrice: optionalPrice,
   currency: z.string().trim().min(1).default('AED'),
   featured: z.coerce.boolean().optional(),
@@ -32,4 +33,21 @@ export type ProductInput = z.infer<typeof productSchema>
 export function splitList(value: string | undefined | null): string[] {
   if (!value) return []
   return [...new Set(value.split(/[,\n]/).map((s) => s.trim()).filter(Boolean))]
+}
+
+/**
+ * Parse a hashtag string into normalized tags. Accepts "#xrf #petroleum",
+ * "xrf, petroleum" or newline-separated. Strips leading '#', lowercases,
+ * kebab-cases spaces, and de-duplicates. These power search + "recent by tag".
+ */
+export function splitTags(value: string | undefined | null): string[] {
+  if (!value) return []
+  return [
+    ...new Set(
+      value
+        .split(/[\s,\n]+/)
+        .map((s) => s.trim().replace(/^#+/, '').toLowerCase().replace(/\s+/g, '-'))
+        .filter(Boolean),
+    ),
+  ].slice(0, 30)
 }

@@ -13,6 +13,7 @@ type Initial = {
   overview?: string
   standards?: string[]
   industries?: string[]
+  tags?: string[]
   modelNo?: string
   unit?: string
   listPrice?: number | null
@@ -108,6 +109,19 @@ export default function ProductForm({
           <input name="industries" defaultValue={initial.industries?.join(', ')} placeholder="petroleum, materials" className={inputCls} />
         </label>
       </div>
+
+      <label className="block">
+        <span className="mb-1 block text-sm font-medium text-slate-700">Hashtags</span>
+        <input
+          name="tags"
+          defaultValue={initial.tags?.map((t) => `#${t}`).join(' ')}
+          placeholder="#xrf #petroleum #new-arrival"
+          className={inputCls}
+        />
+        <span className="mt-1 block text-xs text-slate-400">
+          Space or comma separated. Tags power search and let customers browse recent items by tag (e.g. #new-arrival).
+        </span>
+      </label>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <label className="block">

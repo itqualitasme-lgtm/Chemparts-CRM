@@ -56,6 +56,7 @@ export type SectionProduct = {
   desc: string
   industries: string[]
   standards: string[]
+  tags: string[]
   listPrice: number | null
   currency: string
   priceMode: 'LISTED' | 'INDICATIVE' | 'ON_REQUEST'
@@ -70,6 +71,7 @@ export type SectionFilters = {
   q?: string
   brand?: string
   industry?: string
+  tag?: string
 }
 
 /**
@@ -97,7 +99,10 @@ export async function getSectionProducts(
 ): Promise<SectionProduct[]> {
   const rows = await db.product.findMany({
     where: { active: true, type: SECTION_TYPE[section] },
-    orderBy: [{ featured: 'desc' }, { name: 'asc' }],
+    // Recent-first when browsing a tag (e.g. #new-arrival); otherwise featured-first.
+    orderBy: filters.tag
+      ? [{ createdAt: 'desc' }]
+      : [{ featured: 'desc' }, { name: 'asc' }],
     select: {
       id: true,
       slug: true,
@@ -106,6 +111,7 @@ export async function getSectionProducts(
       desc: true,
       industries: true,
       standards: true,
+      tags: true,
       listPrice: true,
       currency: true,
       priceMode: true,
@@ -128,6 +134,7 @@ export async function getSectionProducts(
     desc: r.desc,
     industries: r.industries,
     standards: r.standards,
+    tags: r.tags,
     listPrice: r.listPrice == null ? null : Number(r.listPrice),
     currency: r.currency,
     priceMode: r.priceMode,
@@ -138,12 +145,21 @@ export async function getSectionProducts(
     featured: r.featured,
   }))
 
-  const q = filters.q?.trim().toLowerCase()
+  // A #hashtag typed into search is treated as a tag filter.
+  const rawQ = filters.q?.trim() ?? ''
+  const qTag = rawQ.startsWith('#') ? rawQ.slice(1).toLowerCase().replace(/\s+/g, '-') : null
+  const q = rawQ.toLowerCase()
+  const tag = filters.tag?.toLowerCase()
+
   return products.filter((p) => {
     if (filters.brand && p.brandSlug !== filters.brand) return false
     if (filters.industry && !p.industries.includes(filters.industry)) return false
-    if (q) {
-      const hay = `${p.name} ${p.brand} ${p.desc} ${p.standards.join(' ')}`.toLowerCase()
+    if (tag && !p.tags.includes(tag)) return false
+    if (qTag) {
+      if (!p.tags.includes(qTag)) return false
+    } else if (q) {
+      // Tags act as a hidden search index alongside name/brand/desc/standards.
+      const hay = `${p.name} ${p.brand} ${p.desc} ${p.standards.join(' ')} ${p.tags.join(' ')}`.toLowerCase()
       if (!hay.includes(q)) return false
     }
     return true

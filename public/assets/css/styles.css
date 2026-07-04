@@ -3279,6 +3279,27 @@ figure[data-reveal][data-shown="true"] img,
   color: var(--steel);
   letter-spacing: 0.04em;
 }
+.card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+.tag-chip {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+  color: var(--steel);
+  background: var(--slate-2);
+  border: 1px solid var(--rule-c);
+  border-radius: 999px;
+  padding: 2px 8px;
+  text-decoration: none;
+  transition: color 150ms var(--ease), border-color 150ms var(--ease);
+}
+.tag-chip:hover { color: var(--navy); border-color: var(--navy); }
+.tag-chip--active { color: var(--navy); border-color: var(--navy); font-weight: 600; }
+.tag-chip--active a { color: var(--crimson); text-decoration: none; }
 
 .breadcrumb {
   font-family: var(--font-mono);
