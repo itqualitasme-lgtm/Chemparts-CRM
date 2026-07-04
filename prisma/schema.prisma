@@ -292,7 +292,7 @@ model CartItem {
   @@unique([cartId, productId])
 }
 
-// ---- Enquiry (cart submitted as an enquiry/quote request) ----
+// ---- Enquiry (from the website cart OR created by staff for any channel) ----
 enum EnquiryStatus {
   NEW
   UNDER_REVIEW
@@ -301,11 +301,26 @@ enum EnquiryStatus {
   LOST
 }
 
+// How the enquiry reached us — we get them many ways.
+enum EnquiryType {
+  WEBSITE
+  PHONE
+  EMAIL
+  WHATSAPP
+  WALK_IN
+  REFERRAL
+  EXHIBITION
+  TENDER
+  OTHER
+}
+
 model Enquiry {
   id           String        @id @default(cuid())
   enquiryNo    String        @unique
+  type         EnquiryType   @default(WEBSITE)
   customer     Customer?     @relation(fields: [customerId], references: [id])
   customerId   String?
+  contactName  String? // person who enquired (may differ from customer's primary)
   createdByProfile String?
   guestName    String?
   guestEmail   String?

@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import StatusForm from './StatusForm'
@@ -23,6 +24,18 @@ const STATUS_BADGE: Record<string, string> = {
   LOST: 'bg-slate-100 text-slate-600',
 }
 
+const TYPE_LABEL: Record<string, string> = {
+  WEBSITE: 'Website',
+  PHONE: 'Phone',
+  EMAIL: 'Email',
+  WHATSAPP: 'WhatsApp',
+  WALK_IN: 'Walk-in',
+  REFERRAL: 'Referral',
+  EXHIBITION: 'Exhibition',
+  TENDER: 'Tender',
+  OTHER: 'Other',
+}
+
 export default async function StaffEnquiriesPage() {
   await requirePortal('staff')
 
@@ -32,7 +45,9 @@ export default async function StaffEnquiriesPage() {
     select: {
       id: true,
       enquiryNo: true,
+      type: true,
       status: true,
+      contactName: true,
       guestName: true,
       guestEmail: true,
       guestCompany: true,
@@ -50,16 +65,24 @@ export default async function StaffEnquiriesPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-slate-900">Enquiries</h1>
-        <p className="text-slate-500">
-          {enquiries.length} total · {newCount} new {newCount === 1 ? 'enquiry' : 'enquiries'} awaiting review.
-        </p>
+      <div className="mb-6 flex items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900">Enquiries</h1>
+          <p className="text-slate-500">
+            {enquiries.length} total · {newCount} new {newCount === 1 ? 'enquiry' : 'enquiries'} awaiting review.
+          </p>
+        </div>
+        <Link
+          href="/staff/enquiries/new"
+          className="shrink-0 rounded-lg bg-[#0A2540] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#123a63]"
+        >
+          + New enquiry
+        </Link>
       </div>
 
       {enquiries.length === 0 ? (
         <div className="rounded-xl border border-slate-200 bg-white px-6 py-12 text-center text-slate-500">
-          No enquiries yet. Customer carts submitted from the store will appear here.
+          No enquiries yet. Website cart submissions and staff-logged enquiries will appear here.
         </div>
       ) : (
         <div className="space-y-4">
@@ -71,8 +94,11 @@ export default async function StaffEnquiriesPage() {
               <div key={e.id} className="rounded-xl border border-slate-200 bg-white p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className="font-mono text-sm font-medium text-slate-900">{e.enquiryNo}</span>
+                      <span className="rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+                        {TYPE_LABEL[e.type] ?? e.type}
+                      </span>
                       <span className={`rounded px-2 py-0.5 text-xs font-medium ${STATUS_BADGE[e.status]}`}>
                         {e.status.replace('_', ' ')}
                       </span>
@@ -80,6 +106,7 @@ export default async function StaffEnquiriesPage() {
                     </div>
                     <p className="mt-1 text-sm text-slate-700">
                       <span className="font-medium">{who}</span>
+                      {e.contactName ? <span className="text-slate-500"> · {e.contactName}</span> : null}
                       {contactBits.length ? (
                         <span className="text-slate-400"> · {contactBits.join(' · ')}</span>
                       ) : null}

@@ -5,6 +5,7 @@ import { db } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth/session'
 import { canAddToCart } from '@/lib/price'
 import { sendMail } from '@/lib/mail/send'
+import { nextEnquiryNo } from '@/lib/enquiry-no'
 import {
   ensureCart,
   getCart,
@@ -114,15 +115,6 @@ export async function removeItem(itemId: string): Promise<CartActionState> {
 
   revalidateStore()
   return { ok: true, count: await getCartCount() }
-}
-
-/** Generate ENQ-YYYY-NNNN from the count of this year's enquiries. */
-async function nextEnquiryNo(): Promise<string> {
-  const year = new Date().getFullYear()
-  const start = new Date(year, 0, 1)
-  const end = new Date(year + 1, 0, 1)
-  const count = await db.enquiry.count({ where: { createdAt: { gte: start, lt: end } } })
-  return `ENQ-${year}-${String(count + 1).padStart(4, '0')}`
 }
 
 /**
