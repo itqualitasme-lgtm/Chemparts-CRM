@@ -4,6 +4,7 @@ import { useActionState } from 'react'
 import type { CustomerState } from './actions'
 import ContactPersonsEditor, { type ContactRow } from './ContactPersonsEditor'
 import { INDUSTRY_OPTIONS, PAYMENT_TERMS_OPTIONS } from '@/lib/validation/customer'
+import CountrySelect from '@/components/CountrySelect'
 
 const inputCls =
   'w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#0A2540] focus:outline-none focus:ring-2 focus:ring-[#0A2540]/20'
@@ -65,7 +66,7 @@ export default function CustomerForm({
             </Field>
           </div>
           <Field label="Country *">
-            <input name="country" required defaultValue={defaults.country ?? 'United Arab Emirates'} className={inputCls} />
+            <CountrySelect name="country" required defaultValue={defaults.country ?? 'United Arab Emirates'} className={inputCls} />
             {fe.country && <span className="mt-1 block text-sm text-red-600">{fe.country[0]}</span>}
           </Field>
           <Field label="City">

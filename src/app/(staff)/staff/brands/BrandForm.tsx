@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useRef } from 'react'
 import { createBrand, type BrandState } from './actions'
+import CountrySelect from '@/components/CountrySelect'
 
 const inputCls =
   'w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 placeholder:text-slate-400 focus:border-[#0A2540] focus:outline-none focus:ring-2 focus:ring-[#0A2540]/20'
@@ -33,7 +34,7 @@ export default function BrandForm() {
       <div className="grid grid-cols-2 gap-3">
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-slate-700">Country</span>
-          <input name="countryOfOrigin" className={inputCls} placeholder="Japan" />
+          <CountrySelect name="countryOfOrigin" className={inputCls} />
         </label>
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-slate-700">Partner since</span>

@@ -3,6 +3,7 @@
 import { useActionState, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { createEnquiry, type CreateEnquiryState } from '../actions'
+import CountrySelect from '@/components/CountrySelect'
 
 type CustomerOpt = { id: string; companyName: string }
 type ProductOpt = { id: string; name: string; brand: string; type: string }
@@ -127,7 +128,7 @@ export default function EnquiryCreateForm({
               </label>
               <label className="block">
                 <span className={labelCls}>Country</span>
-                <input name="newCountry" defaultValue="United Arab Emirates" className={inputCls} />
+                <CountrySelect name="newCountry" defaultValue="United Arab Emirates" className={inputCls} />
               </label>
               <label className="block">
                 <span className={labelCls}>Email</span>

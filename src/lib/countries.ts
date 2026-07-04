@@ -248,3 +248,20 @@ export const COUNTRIES: { code: string; name: string }[] = [
   { code: 'ZM', name: "Zambia" },
   { code: 'ZW', name: "Zimbabwe" },
 ]
+
+// Legacy free-text abbreviations → canonical list names so old records preselect.
+const ALIASES: Record<string, string> = {
+  USA: 'United States',
+  US: 'United States',
+  UK: 'United Kingdom',
+  UAE: 'United Arab Emirates',
+  KSA: 'Saudi Arabia',
+  'THE NETHERLANDS': 'Netherlands',
+}
+
+/** Normalise a stored country value to a canonical option name. */
+export function canonicalCountry(value: string | null | undefined): string {
+  if (!value) return ''
+  const v = value.trim()
+  return ALIASES[v.toUpperCase()] ?? v
+}
