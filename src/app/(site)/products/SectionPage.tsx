@@ -149,7 +149,7 @@ export default async function SectionPage({
 
       <section className="section">
         <div className="container">
-          <div className="products-layout">
+          <div className="products-layout catalog-layout">
             <aside className="products-sidebar">
               <form className="products-sidebar__group" method="get" action={`/products/${section}`}>
                 <h4>Search</h4>
@@ -246,7 +246,7 @@ export default async function SectionPage({
               </div>
 
               {products.length > 0 ? (
-                <div className="products-page-grid">
+                <div className="products-page-grid catalog-grid">
                   {products.map((p) => (
                     <ProductCard key={p.slug} p={p} loggedIn={loggedIn} />
                   ))}
