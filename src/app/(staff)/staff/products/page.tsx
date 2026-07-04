@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { db } from '@/lib/db'
+import { productImageUrl } from '@/lib/product-image'
 import type { Prisma } from '@/generated/prisma/client'
 
 export const metadata = { title: 'Products — Chemparts Staff' }
@@ -53,7 +54,7 @@ export default async function StaffProductsPage({
       where,
       select: {
         id: true, slug: true, name: true, type: true, active: true, featured: true,
-        listPrice: true, currency: true, brand: { select: { name: true } },
+        image: true, listPrice: true, currency: true, brand: { select: { name: true } },
       },
       orderBy: [{ updatedAt: 'desc' }],
       skip: (page - 1) * PAGE_SIZE,
@@ -131,6 +132,7 @@ export default async function StaffProductsPage({
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-slate-200 bg-slate-50 text-left text-slate-600">
+              <th className="px-4 py-2.5 font-medium"></th>
               <th className="px-4 py-2.5 font-medium">Name</th>
               <th className="px-4 py-2.5 font-medium">Brand</th>
               <th className="px-4 py-2.5 font-medium">Type</th>
@@ -142,6 +144,16 @@ export default async function StaffProductsPage({
           <tbody>
             {rows.map((p) => (
               <tr key={p.id} className="border-b border-slate-100 last:border-0">
+                <td className="py-2 pl-4">
+                  <div className="flex h-11 w-14 items-center justify-center overflow-hidden rounded border border-slate-200 bg-white">
+                    {productImageUrl(p.image) ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={productImageUrl(p.image)!} alt="" className="max-h-10 max-w-full object-contain" />
+                    ) : (
+                      <span className="text-[9px] text-slate-300">no image</span>
+                    )}
+                  </div>
+                </td>
                 <td className="px-4 py-2.5 font-medium text-slate-800">{p.name}</td>
                 <td className="px-4 py-2.5 text-slate-600">{p.brand.name}</td>
                 <td className="px-4 py-2.5">
@@ -168,7 +180,7 @@ export default async function StaffProductsPage({
             ))}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
+                <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
                   No products match your filters.
                 </td>
               </tr>

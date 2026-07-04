@@ -71,8 +71,14 @@ export default function PortalShell({
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-[#0A2540] text-white">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
           <div className="flex items-center gap-3">
-            <Link href="/" className="text-sm font-bold tracking-[0.2em]">
-              CHEMPARTS
+            <Link href="/" className="flex items-center gap-2" aria-label="Chemparts — home">
+              <svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="8" y="16" width="20" height="32" rx="3" fill="#ffffff" />
+                <rect x="36" y="16" width="20" height="32" rx="3" fill="#35769e" />
+                <text x="18" y="33" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="20" fill="#0A2540" textAnchor="middle" dominantBaseline="central">C</text>
+                <text x="46" y="33" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="20" fill="#ffffff" textAnchor="middle" dominantBaseline="central">P</text>
+              </svg>
+              <span className="text-sm font-bold tracking-[0.2em]">CHEMPARTS</span>
             </Link>
             <span className="rounded bg-white/10 px-2 py-0.5 text-xs text-slate-200">
               {PORTAL_LABEL[portal]}
