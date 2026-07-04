@@ -41,15 +41,47 @@ model Customer {
   country     String // ISO 3166-1 alpha-2
   city        String?
   address     String?
-  trn         String? // VAT/TRN number
+  trn         String? // VAT / TRN number
+  tradeLicense String? // trade licence number
   industry    String?
+  paymentTerms String? // e.g. "30 days net", "Advance", "50% advance"
+  creditLimit Decimal?  @db.Decimal(12, 2)
+  currency    String    @default("AED")
+  phone       String?
+  email       String?
+  website     String?
   source      String    @default("SELF") // SELF | STAFF
   notes       String?
   profiles    Profile[]
+  contacts    ContactPerson[]
+  documents   CustomerDocument[]
   priceRequests PriceRequest[]
   enquiries   Enquiry[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+// A named contact at a customer company (many per customer).
+model ContactPerson {
+  id          String   @id @default(cuid())
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId  String
+  name        String
+  designation String? // job title / role, e.g. "Lab Manager", "Procurement"
+  email       String?
+  phone       String?
+  isPrimary   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+// An uploaded document for a customer (trade licence, VAT certificate, etc.).
+model CustomerDocument {
+  id         String   @id @default(cuid())
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId String
+  label      String // "Trade License", "VAT Certificate", "Agreement", …
+  url        String // Supabase Storage public URL
+  createdAt  DateTime @default(now())
 }
 
 model Vendor {
