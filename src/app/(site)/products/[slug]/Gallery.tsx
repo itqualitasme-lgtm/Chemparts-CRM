@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 // PDP image gallery: main image + thumbnail strip, plus a click-to-zoom
 // lightbox so customers can view the equipment at large scale. Reuses the
@@ -9,8 +10,11 @@ import { useEffect, useState } from 'react'
 export default function Gallery({ images, name }: { images: string[]; name: string }) {
   const [active, setActive] = useState(0)
   const [zoom, setZoom] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const list = images.length > 0 ? images : []
   const current = list[active] ?? list[0]
+
+  useEffect(() => setMounted(true), [])
 
   useEffect(() => {
     if (!zoom) return
@@ -84,55 +88,61 @@ export default function Gallery({ images, name }: { images: string[]; name: stri
         </div>
       ) : null}
 
-      {zoom && current ? (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${name} — enlarged`}
-          onClick={() => setZoom(false)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 300,
-            background: 'rgba(8,18,30,0.92)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '4vh 4vw',
-            cursor: 'zoom-out',
-          }}
-        >
-          <img
-            src={current}
-            alt={name}
-            onClick={(e) => e.stopPropagation()}
-            style={{ maxWidth: '92vw', maxHeight: '92vh', objectFit: 'contain', background: '#fff', padding: 12, borderRadius: 2 }}
-          />
-          <button
-            type="button"
-            onClick={() => setZoom(false)}
-            aria-label="Close"
-            style={{
-              position: 'fixed',
-              top: 20,
-              right: 24,
-              width: 40,
-              height: 40,
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fff',
-              background: 'rgba(255,255,255,0.1)',
-              border: '1px solid rgba(255,255,255,0.3)',
-              borderRadius: '50%',
-              cursor: 'pointer',
-              fontSize: 20,
-            }}
-          >
-            ✕
-          </button>
-        </div>
-      ) : null}
+      {/* Portal to <body> so the fixed overlay escapes the ported site's
+          transformed (data-reveal) ancestors and covers the whole viewport. */}
+      {mounted && zoom && current
+        ? createPortal(
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label={`${name} — enlarged`}
+              onClick={() => setZoom(false)}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                zIndex: 1000,
+                background: 'rgba(8,18,30,0.92)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '4vh 4vw',
+                cursor: 'zoom-out',
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={current}
+                alt={name}
+                onClick={(e) => e.stopPropagation()}
+                style={{ maxWidth: '92vw', maxHeight: '92vh', objectFit: 'contain', background: '#fff', padding: 12, borderRadius: 2 }}
+              />
+              <button
+                type="button"
+                onClick={() => setZoom(false)}
+                aria-label="Close"
+                style={{
+                  position: 'fixed',
+                  top: 20,
+                  right: 24,
+                  width: 40,
+                  height: 40,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  fontSize: 20,
+                }}
+              >
+                ✕
+              </button>
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   )
 }
