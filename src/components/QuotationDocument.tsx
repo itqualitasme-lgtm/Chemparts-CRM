@@ -175,7 +175,7 @@ export default function QuotationDocument({
                   <div className="flex gap-3">
                     {img ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={img} alt="" width={54} height={40} className="h-10 w-[54px] shrink-0 rounded border border-slate-200 object-contain" />
+                      <img src={img} alt="" width={112} height={84} className="h-[84px] w-28 shrink-0 rounded border border-slate-200 bg-white object-contain p-1" />
                     ) : null}
                     <div>
                       <div>{name}</div>
