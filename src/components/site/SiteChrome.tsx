@@ -3,7 +3,10 @@ import Script from 'next/script'
 export default function SiteChrome({ extraScripts = [] }: { extraScripts?: string[] }) {
   return (
     <>
-      <link rel="stylesheet" href="/assets/css/styles.css" />
+      {/* precedence makes React 19 hoist this to <head> and treat it as a
+          render-blocking stylesheet — without it the browser paints raw HTML
+          first (a flash of unstyled content) before the CSS applies. */}
+      <link rel="stylesheet" href="/assets/css/styles.css" precedence="high" />
 
       {/* Quote modal */}
       <div className="modal-backdrop" data-open="false">
