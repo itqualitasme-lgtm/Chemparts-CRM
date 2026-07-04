@@ -59,6 +59,15 @@ ${button(v.actionUrl, 'Activate account')}`,
 <p style="color:#66788a;font-size:13px">Please quote ${esc(v.enquiryNo)} in any follow-up.</p>`,
     ),
   }),
+  'otp-code': (v) => ({
+    subject: `${v.code} is your Chemparts sign-in code`,
+    html: layout(
+      'Your sign-in code',
+      `<p>Use this code to sign in to Chemparts. It expires in 10 minutes.</p>
+<p style="font-size:34px;font-weight:bold;letter-spacing:10px;color:#0A2540;margin:20px 0">${esc(v.code)}</p>
+<p style="color:#66788a;font-size:13px">If you didn't request this, you can safely ignore this email.</p>`,
+    ),
+  }),
 }
 
 export function renderEmail(template: string, vars: TemplateVars): Rendered {

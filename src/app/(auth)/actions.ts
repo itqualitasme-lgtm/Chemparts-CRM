@@ -1,8 +1,11 @@
 'use server'
 
+import { createHash, randomBytes, randomInt } from 'node:crypto'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { db } from '@/lib/db'
+import { sendMail } from '@/lib/mail/send'
 import { canAccessPortal, homePathFor, portalFromPath } from '@/lib/auth/rbac'
 import { markOtpVerified } from '@/lib/auth/otp-grace'
 
@@ -44,30 +47,56 @@ function isCompanyEmail(email: string): boolean {
   return email.toLowerCase().endsWith(`@${STAFF_DOMAIN}`)
 }
 
-// Step 1 of OTP sign-in. OTP works for any existing account (customer or staff).
-// Additionally, a company-domain email with no account yet is allowed through so
-// it can be auto-provisioned as STAFF on verify — no manual registration needed.
+const OTP_TTL_MS = 10 * 60 * 1000
+
+function hashCode(code: string): string {
+  return createHash('sha256').update(code).digest('hex')
+}
+
+// Step 1 of OTP sign-in. Works for any existing account (customer or staff);
+// a company-domain email with no account is auto-provisioned as STAFF on verify.
+// We generate our OWN 6-digit code, store its hash, and email it via Zoho — so
+// customers get a numeric CODE from noreply@chemparts-me.com, independent of any
+// Supabase email template or Site URL setting.
 export async function requestOtp(_prev: OtpState, formData: FormData): Promise<OtpState> {
-  const email = String(formData.get('email') ?? '').trim()
+  const email = String(formData.get('email') ?? '').trim().toLowerCase()
   if (!email) return { error: 'Enter your email.' }
 
   const profile = await db.profile.findUnique({ where: { email } })
   if (profile && profile.status !== 'ACTIVE') {
     return { error: 'Account is not active. Contact info@chemparts-me.com.' }
   }
-  // No account: only company-domain emails may self-provision via OTP.
   const autoProvision = !profile && isCompanyEmail(email)
   if (!profile && !autoProvision) {
     return { error: 'No account found for that email. Customers can register for an account.' }
   }
 
-  const supabase = await createClient()
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    // Existing accounts never create; a company-domain first-timer does.
-    options: { shouldCreateUser: autoProvision },
+  // Company first-timer: ensure a confirmed auth user exists (STAFF profile is
+  // created on verify).
+  if (autoProvision) {
+    const { error: createErr } = await createAdminClient().auth.admin.createUser({
+      email,
+      email_confirm: true,
+      password: randomBytes(24).toString('base64url'),
+    })
+    if (createErr && !/already|registered|exists/i.test(createErr.message)) {
+      return { error: 'Could not start sign-in. Try again shortly.' }
+    }
+  }
+
+  const code = String(randomInt(0, 1_000_000)).padStart(6, '0')
+  const expiresAt = new Date(Date.now() + OTP_TTL_MS)
+  await db.emailOtp.upsert({
+    where: { email },
+    create: { email, codeHash: hashCode(code), expiresAt },
+    update: { codeHash: hashCode(code), expiresAt, attempts: 0, consumed: false, createdAt: new Date() },
   })
-  if (error) return { error: 'Could not send a code right now. Try again shortly.' }
+
+  try {
+    await sendMail(email, 'otp-code', { code })
+  } catch {
+    return { error: 'Could not send the code email. Try again shortly.' }
+  }
   return { sent: true, email }
 }
 
@@ -85,22 +114,44 @@ function nameFromEmail(email: string): string {
 
 // Step 2 of OTP sign-in: verify the code and route by role.
 export async function verifyOtp(_prev: LoginState, formData: FormData): Promise<LoginState> {
-  const email = String(formData.get('email') ?? '').trim()
+  const email = String(formData.get('email') ?? '').trim().toLowerCase()
   const token = String(formData.get('token') ?? '').trim()
   const next = String(formData.get('next') ?? '').trim()
   if (!email || !token) return { error: 'Enter the code we emailed you.' }
 
-  const supabase = await createClient()
-  const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' })
-  if (error || !data.user) return { error: 'Invalid or expired code.' }
+  // 1) Verify OUR emailed code.
+  const otp = await db.emailOtp.findUnique({ where: { email } })
+  if (!otp || otp.consumed || otp.expiresAt < new Date()) return { error: 'Invalid or expired code. Request a new one.' }
+  if (otp.attempts >= 6) return { error: 'Too many attempts. Request a new code.' }
+  if (hashCode(token) !== otp.codeHash) {
+    await db.emailOtp.update({ where: { email }, data: { attempts: { increment: 1 } } })
+    return { error: 'Incorrect code. Check the email and try again.' }
+  }
+  await db.emailOtp.update({ where: { email }, data: { consumed: true } })
 
-  let profile = await db.profile.findUnique({ where: { id: data.user.id } })
+  // 2) Establish a Supabase session from a fresh magic-link token (token_hash).
+  const admin = createAdminClient()
+  const supabase = await createClient()
+  async function mintSession(): Promise<{ userId?: string; error?: boolean }> {
+    for (const type of ['email', 'magiclink'] as const) {
+      const { data: link } = await admin.auth.admin.generateLink({ type: 'magiclink', email })
+      const hashed = link?.properties?.hashed_token
+      if (!hashed) continue
+      const { data, error } = await supabase.auth.verifyOtp({ token_hash: hashed, type })
+      if (!error && data.user) return { userId: data.user.id }
+    }
+    return { error: true }
+  }
+  const session = await mintSession()
+  if (session.error || !session.userId) return { error: 'Could not complete sign-in. Try again.' }
+
+  let profile = await db.profile.findUnique({ where: { id: session.userId } })
 
   // Auto-provision: a verified company-domain user with no profile becomes STAFF.
   if (!profile && isCompanyEmail(email)) {
     profile = await db.profile.create({
       data: {
-        id: data.user.id,
+        id: session.userId,
         email,
         fullName: nameFromEmail(email),
         role: 'STAFF',
@@ -108,7 +159,7 @@ export async function verifyOtp(_prev: LoginState, formData: FormData): Promise<
       },
     })
     await db.auditLog.create({
-      data: { actorId: data.user.id, action: 'CREATE', entity: 'Profile', entityId: data.user.id, detail: { via: 'otp-auto-provision', role: 'STAFF' } },
+      data: { actorId: session.userId, action: 'CREATE', entity: 'Profile', entityId: session.userId, detail: { via: 'otp-auto-provision', role: 'STAFF' } },
     })
   }
 

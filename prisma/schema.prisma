@@ -469,6 +469,18 @@ model EmailLog {
   createdAt DateTime @default(now())
 }
 
+// Custom email OTP: we generate + email the code via our own Zoho SMTP (so it
+// arrives from our domain as a number), verify it here, then mint a Supabase
+// session from a fresh magic-link token. One active code per email.
+model EmailOtp {
+  email     String   @id
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  consumed  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
 model AuditLog {
   id        String   @id @default(cuid())
   actorId   String?
