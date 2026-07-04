@@ -15,6 +15,7 @@ export default async function StaffBrandsPage() {
       website: true,
       countryOfOrigin: true,
       featured: true,
+      sortOrder: true,
       _count: { select: { products: true } },
     },
     orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
@@ -32,6 +33,7 @@ export default async function StaffBrandsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50 text-left text-slate-600">
+                <th className="px-4 py-2.5 font-medium">Sort</th>
                 <th className="px-4 py-2.5 font-medium">Brand</th>
                 <th className="px-4 py-2.5 font-medium">Country</th>
                 <th className="px-4 py-2.5 font-medium">Products</th>
@@ -43,6 +45,7 @@ export default async function StaffBrandsPage() {
                 const logo = brandLogoUrl(b.logo)
                 return (
                   <tr key={b.id} className="border-b border-slate-100 last:border-0">
+                    <td className="px-4 py-2.5 font-mono text-slate-400">{b.sortOrder}</td>
                     <td className="px-4 py-2.5">
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-16 shrink-0 items-center justify-center overflow-hidden rounded border border-slate-200 bg-white">
@@ -78,7 +81,7 @@ export default async function StaffBrandsPage() {
               })}
               {brands.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-4 py-8 text-center text-slate-500">
+                  <td colSpan={5} className="px-4 py-8 text-center text-slate-500">
                     No brands yet.
                   </td>
                 </tr>

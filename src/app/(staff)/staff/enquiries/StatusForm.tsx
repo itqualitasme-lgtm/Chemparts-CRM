@@ -20,7 +20,7 @@ export default function StatusForm({ enquiryId, current }: { enquiryId: string; 
         id={`status-${enquiryId}`}
         name="status"
         defaultValue={current}
-        className="rounded-lg border border-slate-300 px-2 py-1.5 text-sm focus:border-[#0A2540] focus:outline-none focus:ring-2 focus:ring-[#0A2540]/20"
+        className="rounded-lg border border-slate-300 px-2 py-1.5 text-sm text-slate-900 focus:border-[#0A2540] focus:outline-none focus:ring-2 focus:ring-[#0A2540]/20"
       >
         {STATUSES.map((s) => (
           <option key={s} value={s}>
