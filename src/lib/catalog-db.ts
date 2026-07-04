@@ -47,6 +47,7 @@ export type CtaKind = 'CART' | 'QUOTE'
 
 /** A flattened, serializable product shape for the section pages. */
 export type SectionProduct = {
+  id: string
   slug: string
   name: string
   brand: string
@@ -57,6 +58,8 @@ export type SectionProduct = {
   standards: string[]
   listPrice: number | null
   currency: string
+  priceMode: 'LISTED' | 'INDICATIVE' | 'ON_REQUEST'
+  priceUpdatedAt: Date | null
   type: ProductType
   saleMode: 'CART_ENABLED' | 'QUOTE_ONLY'
   stockStatus: 'IN_STOCK' | 'OUT_OF_STOCK' | 'ON_ORDER'
@@ -96,6 +99,7 @@ export async function getSectionProducts(
     where: { active: true, type: SECTION_TYPE[section] },
     orderBy: [{ featured: 'desc' }, { name: 'asc' }],
     select: {
+      id: true,
       slug: true,
       name: true,
       image: true,
@@ -104,6 +108,8 @@ export async function getSectionProducts(
       standards: true,
       listPrice: true,
       currency: true,
+      priceMode: true,
+      priceUpdatedAt: true,
       type: true,
       saleMode: true,
       stockStatus: true,
@@ -113,6 +119,7 @@ export async function getSectionProducts(
   })
 
   const products: SectionProduct[] = rows.map((r) => ({
+    id: r.id,
     slug: r.slug,
     name: r.name,
     brand: r.brand.name,
@@ -123,6 +130,8 @@ export async function getSectionProducts(
     standards: r.standards,
     listPrice: r.listPrice == null ? null : Number(r.listPrice),
     currency: r.currency,
+    priceMode: r.priceMode,
+    priceUpdatedAt: r.priceUpdatedAt,
     type: r.type,
     saleMode: r.saleMode,
     stockStatus: r.stockStatus,
@@ -227,6 +236,7 @@ export type RelatedProduct = {
 
 /** The full, flattened, serializable product-detail payload for the PDP. */
 export type ProductDetail = {
+  id: string
   slug: string
   name: string
   type: ProductType
@@ -249,6 +259,8 @@ export type ProductDetail = {
   datasheetUrl: string | null
   listPrice: number | null
   currency: string
+  priceMode: 'LISTED' | 'INDICATIVE' | 'ON_REQUEST'
+  priceUpdatedAt: Date | null
   saleMode: 'CART_ENABLED' | 'QUOTE_ONLY'
   stockStatus: 'IN_STOCK' | 'OUT_OF_STOCK' | 'ON_ORDER'
   featured: boolean
@@ -265,6 +277,7 @@ export async function getProductDetail(slug: string): Promise<ProductDetail | nu
   const p = await db.product.findFirst({
     where: { slug, active: true },
     select: {
+      id: true,
       slug: true,
       name: true,
       type: true,
@@ -283,6 +296,8 @@ export async function getProductDetail(slug: string): Promise<ProductDetail | nu
       datasheetUrl: true,
       listPrice: true,
       currency: true,
+      priceMode: true,
+      priceUpdatedAt: true,
       saleMode: true,
       stockStatus: true,
       featured: true,
@@ -380,6 +395,7 @@ export async function getProductDetail(slug: string): Promise<ProductDetail | nu
   }))
 
   return {
+    id: p.id,
     slug: p.slug,
     name: p.name,
     type: p.type,
@@ -402,6 +418,8 @@ export async function getProductDetail(slug: string): Promise<ProductDetail | nu
     datasheetUrl: p.datasheetUrl,
     listPrice: p.listPrice == null ? null : Number(p.listPrice),
     currency: p.currency,
+    priceMode: p.priceMode,
+    priceUpdatedAt: p.priceUpdatedAt,
     saleMode: p.saleMode,
     stockStatus: p.stockStatus,
     featured: p.featured,

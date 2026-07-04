@@ -3,12 +3,14 @@ import { notFound } from 'next/navigation'
 import {
   getProductDetail,
   productImageUrl,
-  ctaFor,
   humanizeIndustry,
   type ProductDetail,
   type CompatibleSpare,
 } from '@/lib/catalog-db'
+import { priceState } from '@/lib/price'
+import { getSessionUser } from '@/lib/auth/session'
 import Gallery from './Gallery'
+import RequestPrice from '../RequestPrice'
 
 // DB-driven product detail page (PDP). Server component; the only client island
 // is the gallery thumbnail switcher. Styling reuses the ported marketing site's
@@ -56,17 +58,17 @@ function enquiryMailto(product: ProductDetail): string {
   return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`
 }
 
-/** Type-aware commerce block shown in the info column. */
-function InfoCta({ product }: { product: ProductDetail }) {
-  const cta = ctaFor(product)
+/** Price-state-aware commerce block shown in the info column. */
+function InfoCta({ product, loggedIn }: { product: ProductDetail; loggedIn: boolean }) {
+  const state = priceState(product)
   const mailto = enquiryMailto(product)
 
-  // Priced, cart-enabled, in-stock consumable/spare → show price + request.
-  if (cta === 'CART' && product.listPrice != null) {
+  // Listed (fresh, confirmed) → show price prominently + primary request action.
+  if (state.mode === 'listed') {
     return (
       <div className="pdp-info__cta" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 12 }}>
         <span className="mono" style={{ fontSize: 22, fontWeight: 600, color: 'var(--navy)' }}>
-          {formatPrice(product.currency, product.listPrice)}
+          {formatPrice(state.currency, state.price!)}
         </span>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <button type="button" className="btn btn--accent" data-quote={product.slug}>
@@ -83,29 +85,33 @@ function InfoCta({ product }: { product: ProductDetail }) {
     )
   }
 
-  // Unpriced spare part → "Request price".
-  if (product.type === 'SPARE_PART' && product.listPrice == null) {
+  // Indicative → show price with a "confirm current price" note + secondary request.
+  if (state.mode === 'indicative') {
     return (
-      <div className="pdp-info__cta">
-        <button type="button" className="btn btn--accent" data-quote={product.slug}>
-          Request price <span className="arrow">→</span>
-        </button>
-        <a className="btn btn--ghost" href={mailto}>
-          Email us
-        </a>
+      <div className="pdp-info__cta" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 12 }}>
+        <span className="mono" style={{ fontSize: 22, fontWeight: 600, color: 'var(--navy)' }}>
+          {formatPrice(state.currency, state.price!)}
+        </span>
+        <span className="mono text-muted" style={{ fontSize: 12 }}>
+          Indicative — confirm current price
+        </span>
+        <RequestPrice productId={product.id} loggedIn={loggedIn} variant="secondary" label="Request current price" />
       </div>
     )
   }
 
-  // Equipment / everything else → prominent "Request a quote".
+  // On request → no number; primary "Request current price".
   return (
-    <div className="pdp-info__cta">
-      <button type="button" className="btn btn--accent" data-quote={product.slug}>
-        Request a quote <span className="arrow">→</span>
-      </button>
-      <a className="btn btn--ghost" href={mailto}>
-        Email us
-      </a>
+    <div className="pdp-info__cta" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 12 }}>
+      <span className="mono" style={{ fontSize: 18, fontWeight: 600, color: 'var(--navy)' }}>
+        Price on request
+      </span>
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+        <RequestPrice productId={product.id} loggedIn={loggedIn} variant="primary" label="Request current price" />
+        <a className="btn btn--ghost" href={mailto}>
+          Email us
+        </a>
+      </div>
     </div>
   )
 }
@@ -239,8 +245,9 @@ function RelatedCard({
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const product = await getProductDetail(slug)
+  const [product, user] = await Promise.all([getProductDetail(slug), getSessionUser()])
   if (!product) notFound()
+  const loggedIn = user != null
 
   const images = galleryImages(product)
   const overviewText = product.overview || product.desc
@@ -274,7 +281,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
               <QuickSpec product={product} />
 
-              <InfoCta product={product} />
+              <InfoCta product={product} loggedIn={loggedIn} />
 
               <div className="stat-strip" style={{ marginTop: 24 }}>
                 <div>

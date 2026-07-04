@@ -3,10 +3,12 @@ import {
   SECTION_META,
   getSectionProducts,
   getSectionFacets,
-  ctaFor,
   productImageUrl,
   type SectionProduct,
 } from '@/lib/catalog-db'
+import { priceState } from '@/lib/price'
+import { getSessionUser } from '@/lib/auth/session'
+import RequestPrice from './RequestPrice'
 
 // Shared renderer for the three catalog section pages. Server component; the
 // filters are link-based (searchParams), so no client JS is needed here.
@@ -29,58 +31,65 @@ function formatPrice(currency: string, value: number): string {
   return `${currency} ${n}`
 }
 
-/** Type/price-aware primary action label + optional price line for a card. */
-function cardCommerce(p: SectionProduct): {
-  price: string | null
-  label: string
-  cartNote: boolean
-} {
-  const cta = ctaFor(p)
-  if (cta === 'CART') {
-    return {
-      price: p.listPrice != null ? formatPrice(p.currency, p.listPrice) : null,
-      label: 'Request this item',
-      cartNote: true,
-    }
-  }
-  // QUOTE-side labels: unpriced spares get "Request price"; everything else a quote.
-  if (p.type === 'SPARE_PART' && p.listPrice == null) {
-    return { price: null, label: 'Request price', cartNote: false }
-  }
-  return { price: null, label: 'Request a quote', cartNote: false }
-}
-
-function ProductCard({ p }: { p: SectionProduct }) {
+/**
+ * A card is a link to the PDP. The price-state block lives OUTSIDE the anchor
+ * (it can contain the interactive Request-price form), so the card is a plain
+ * wrapper with the media/body link inside and the commerce block beneath.
+ */
+function ProductCard({ p, loggedIn }: { p: SectionProduct; loggedIn: boolean }) {
   const src = productImageUrl(p.image)
-  const { price, label, cartNote } = cardCommerce(p)
+  const state = priceState(p)
+
   return (
-    <a className="card" href={`/products/${encodeURIComponent(p.slug)}`} data-industry={p.industries.join(',')}>
-      <div className="card__media">
-        {p.featured ? <span className="pill pill--crimson">Featured</span> : null}
-        {src ? <img src={src} alt={p.name} loading="lazy" decoding="async" /> : null}
-      </div>
-      <div className="card__body">
-        <span className="card__brand">{p.brand}</span>
-        <h3 className="card__title">{p.name}</h3>
-        <p className="card__desc">{p.desc}</p>
-        {price ? (
-          <div>
-            <span className="mono" style={{ fontSize: 16, fontWeight: 600, color: 'var(--navy)' }}>{price}</span>
-            {cartNote ? (
-              <span className="mono text-muted" style={{ display: 'block', fontSize: 11, marginTop: 4 }}>
-                Online ordering coming soon
-              </span>
-            ) : null}
-          </div>
-        ) : null}
-        <div className="card__foot">
-          <span className="mono text-muted">{label}</span>
-          <svg className="card__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M3 13L13 3M13 3H5M13 3V11" stroke="currentColor" strokeWidth="1.25" />
-          </svg>
+    <div className="card" data-industry={p.industries.join(',')} style={{ display: 'flex', flexDirection: 'column' }}>
+      <a
+        href={`/products/${encodeURIComponent(p.slug)}`}
+        style={{ display: 'flex', flexDirection: 'column', flex: 1, color: 'inherit', textDecoration: 'none' }}
+      >
+        <div className="card__media">
+          {p.featured ? <span className="pill pill--crimson">Featured</span> : null}
+          {src ? <img src={src} alt={p.name} loading="lazy" decoding="async" /> : null}
         </div>
+        <div className="card__body" style={{ paddingBottom: 8 }}>
+          <span className="card__brand">{p.brand}</span>
+          <h3 className="card__title">{p.name}</h3>
+          <p className="card__desc">{p.desc}</p>
+        </div>
+      </a>
+
+      <div className="card__body" style={{ paddingTop: 0 }}>
+        {state.mode === 'listed' ? (
+          <div style={{ display: 'grid', gap: 8 }}>
+            <span className="mono" style={{ fontSize: 16, fontWeight: 600, color: 'var(--navy)' }}>
+              {formatPrice(state.currency, state.price!)}
+            </span>
+            <div className="card__foot" style={{ marginTop: 0 }}>
+              <span className="mono text-muted">Request this item</span>
+              <svg className="card__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 13L13 3M13 3H5M13 3V11" stroke="currentColor" strokeWidth="1.25" />
+              </svg>
+            </div>
+          </div>
+        ) : state.mode === 'indicative' ? (
+          <div style={{ display: 'grid', gap: 6 }}>
+            <span className="mono" style={{ fontSize: 16, fontWeight: 600, color: 'var(--navy)' }}>
+              {formatPrice(state.currency, state.price!)}
+            </span>
+            <span className="mono text-muted" style={{ fontSize: 11 }}>
+              Indicative — confirm current price
+            </span>
+            <RequestPrice productId={p.id} loggedIn={loggedIn} variant="secondary" label="Request current price" />
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gap: 8 }}>
+            <span className="mono text-muted" style={{ fontSize: 13 }}>
+              Price on request
+            </span>
+            <RequestPrice productId={p.id} loggedIn={loggedIn} variant="secondary" label="Request current price" />
+          </div>
+        )}
       </div>
-    </a>
+    </div>
   )
 }
 
@@ -98,10 +107,12 @@ export default async function SectionPage({
     industry: sp.industry || undefined,
   }
 
-  const [products, facets] = await Promise.all([
+  const [products, facets, user] = await Promise.all([
     getSectionProducts(section, filters),
     getSectionFacets(section),
+    getSessionUser(),
   ])
+  const loggedIn = user != null
 
   const meta = SECTION_META[section]
   const hasFilters = Boolean(filters.q || filters.brand || filters.industry)
@@ -231,7 +242,7 @@ export default async function SectionPage({
               {products.length > 0 ? (
                 <div className="products-page-grid">
                   {products.map((p) => (
-                    <ProductCard key={p.slug} p={p} />
+                    <ProductCard key={p.slug} p={p} loggedIn={loggedIn} />
                   ))}
                 </div>
               ) : (

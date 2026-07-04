@@ -1,0 +1,70 @@
+'use server'
+
+import { db } from '@/lib/db'
+import { getSessionUser } from '@/lib/auth/session'
+
+export type RequestPriceState = { ok?: boolean; error?: string }
+
+/**
+ * Customer (or guest) asks staff to confirm the current price of a product.
+ * Creates an OPEN PriceRequest. If the requester is a logged-in customer we
+ * attach customerId + requestedByProfile; otherwise name + email are required.
+ *
+ * Email is NOT sent here (deferred slice) — we just record a PENDING EmailLog
+ * placeholder so the staff notification pipeline has something to pick up later.
+ */
+export async function requestPrice(
+  productId: string,
+  formData: FormData,
+): Promise<RequestPriceState> {
+  const product = await db.product.findUnique({
+    where: { id: productId },
+    select: { id: true, name: true },
+  })
+  if (!product) return { error: 'This product is no longer available.' }
+
+  const qtyRaw = Number(formData.get('qty'))
+  const qty = Number.isFinite(qtyRaw) && qtyRaw >= 1 ? Math.floor(qtyRaw) : 1
+  const message = (formData.get('message') as string | null)?.trim() || null
+
+  const user = await getSessionUser()
+
+  let guestName: string | null = null
+  let guestEmail: string | null = null
+
+  if (!user) {
+    guestName = (formData.get('guestName') as string | null)?.trim() || null
+    guestEmail = (formData.get('guestEmail') as string | null)?.trim() || null
+    if (!guestName || !guestEmail) {
+      return { error: 'Please enter your name and email so we can reply.' }
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) {
+      return { error: 'Please enter a valid email address.' }
+    }
+  }
+
+  await db.priceRequest.create({
+    data: {
+      productId: product.id,
+      customerId: user?.customerId ?? null,
+      requestedByProfile: user?.id ?? null,
+      guestName,
+      guestEmail,
+      qty,
+      message,
+      status: 'OPEN',
+    },
+  })
+
+  // Placeholder for the (deferred) staff notification email.
+  await db.emailLog.create({
+    data: {
+      to: user?.email ?? guestEmail ?? '',
+      subject: `Price request — ${product.name}`,
+      template: 'price-request-received',
+      status: 'PENDING',
+    },
+  })
+
+  return { ok: true }
+}
