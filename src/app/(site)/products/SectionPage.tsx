@@ -54,7 +54,7 @@ function ProductCard({ p }: { p: SectionProduct }) {
   const src = productImageUrl(p.image)
   const { price, label, cartNote } = cardCommerce(p)
   return (
-    <a className="card" href={`/product?slug=${encodeURIComponent(p.slug)}`} data-industry={p.industries.join(',')}>
+    <a className="card" href={`/products/${encodeURIComponent(p.slug)}`} data-industry={p.industries.join(',')}>
       <div className="card__media">
         {p.featured ? <span className="pill pill--crimson">Featured</span> : null}
         {src ? <img src={src} alt={p.name} loading="lazy" decoding="async" /> : null}

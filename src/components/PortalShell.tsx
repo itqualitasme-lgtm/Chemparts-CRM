@@ -29,6 +29,12 @@ const NAV: Record<Portal, NavItem[]> = {
   ],
   admin: [
     { href: '/admin', label: 'Dashboard' },
+    { href: '/staff/products', label: 'Products' },
+    { href: '/staff/brands', label: 'Brands' },
+    { href: '/staff/customers', label: 'Customers' },
+    { href: '/staff/enquiries', label: 'Enquiries' },
+    { href: '/staff/quotations', label: 'Quotations' },
+    { href: '/staff/stock', label: 'Stock' },
     { href: '/admin/users', label: 'Users' },
     { href: '/admin/settings', label: 'Settings' },
     { href: '/admin/reports', label: 'Reports' },
@@ -51,7 +57,9 @@ export default function PortalShell({
   user: SessionUser
   children: React.ReactNode
 }) {
-  const nav = NAV[portal]
+  // Admins see one comprehensive menu everywhere (they can reach every tool),
+  // so the sidebar stays consistent when they open a staff-area module.
+  const nav = user.role === 'ADMIN' ? NAV.admin : NAV[portal]
   const isCustomer = portal === 'store'
 
   return (

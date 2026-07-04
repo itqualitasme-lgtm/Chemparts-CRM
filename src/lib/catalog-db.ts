@@ -186,3 +186,227 @@ function humanizeIndustry(value: string): string {
     .trim()
     .replace(/\b\w/g, (c) => c.toUpperCase())
 }
+
+/** Public helper so pages can humanize industry ids consistently. */
+export { humanizeIndustry }
+
+// ---------------------------------------------------------------------------
+// Product detail (PDP) — one product plus its BOM relations and related items
+// ---------------------------------------------------------------------------
+
+/** A compatible spare/consumable listed under an equipment product's BOM. */
+export type CompatibleSpare = {
+  slug: string
+  name: string
+  brand: string
+  image: string | null
+  requirement: 'REQUIRED' | 'OPTIONAL'
+  defaultQty: number
+  bundledFree: boolean
+  listPrice: number | null
+  currency: string
+}
+
+/** An equipment product that this spare part fits / is used in. */
+export type UsedInEquipment = {
+  slug: string
+  name: string
+  brand: string
+  image: string | null
+}
+
+/** A trimmed related-product card shape (reuses the section card layout). */
+export type RelatedProduct = {
+  slug: string
+  name: string
+  brand: string
+  image: string | null
+  desc: string
+  type: ProductType
+}
+
+/** The full, flattened, serializable product-detail payload for the PDP. */
+export type ProductDetail = {
+  slug: string
+  name: string
+  type: ProductType
+  desc: string
+  overview: string | null
+  image: string | null
+  images: string[]
+  brand: string
+  brandSlug: string
+  brandLogo: string | null
+  brandCountry: string | null
+  industries: string[]
+  standards: string[]
+  productType: string | null
+  sample: string | null
+  output: string | null
+  partnerStatus: string | null
+  warranty: string | null
+  service: string | null
+  datasheetUrl: string | null
+  listPrice: number | null
+  currency: string
+  saleMode: 'CART_ENABLED' | 'QUOTE_ONLY'
+  stockStatus: 'IN_STOCK' | 'OUT_OF_STOCK' | 'ON_ORDER'
+  featured: boolean
+  compatibleSpares: CompatibleSpare[]
+  usedInEquipment: UsedInEquipment[]
+  related: RelatedProduct[]
+}
+
+/**
+ * Load a single active product by slug plus its BOM relations and up to 4
+ * related products. Returns null when there is no active product for the slug.
+ */
+export async function getProductDetail(slug: string): Promise<ProductDetail | null> {
+  const p = await db.product.findFirst({
+    where: { slug, active: true },
+    select: {
+      slug: true,
+      name: true,
+      type: true,
+      desc: true,
+      overview: true,
+      image: true,
+      images: true,
+      industries: true,
+      standards: true,
+      productType: true,
+      sample: true,
+      output: true,
+      partnerStatus: true,
+      warranty: true,
+      service: true,
+      datasheetUrl: true,
+      listPrice: true,
+      currency: true,
+      saleMode: true,
+      stockStatus: true,
+      featured: true,
+      brand: { select: { name: true, slug: true, logo: true, countryOfOrigin: true } },
+      // BOM: spares of THIS equipment
+      sparesForThis: {
+        select: {
+          requirement: true,
+          defaultQty: true,
+          bundledFree: true,
+          sparePart: {
+            select: {
+              slug: true,
+              name: true,
+              image: true,
+              listPrice: true,
+              currency: true,
+              brand: { select: { name: true } },
+            },
+          },
+        },
+      },
+      // reverse BOM: equipment THIS spare belongs to
+      usedInEquipment: {
+        select: {
+          equipment: {
+            select: {
+              slug: true,
+              name: true,
+              image: true,
+              brand: { select: { name: true } },
+            },
+          },
+        },
+      },
+    },
+  })
+
+  if (!p) return null
+
+  const requirementRank = (r: 'REQUIRED' | 'OPTIONAL') => (r === 'REQUIRED' ? 0 : 1)
+
+  const compatibleSpares: CompatibleSpare[] = p.sparesForThis
+    .map((es) => ({
+      slug: es.sparePart.slug,
+      name: es.sparePart.name,
+      brand: es.sparePart.brand.name,
+      image: es.sparePart.image,
+      requirement: es.requirement,
+      defaultQty: es.defaultQty,
+      bundledFree: es.bundledFree,
+      listPrice: es.sparePart.listPrice == null ? null : Number(es.sparePart.listPrice),
+      currency: es.sparePart.currency,
+    }))
+    // REQUIRED first, then alphabetical by name.
+    .sort(
+      (a, b) => requirementRank(a.requirement) - requirementRank(b.requirement) || a.name.localeCompare(b.name),
+    )
+
+  const usedInEquipment: UsedInEquipment[] = p.usedInEquipment
+    .map((es) => ({
+      slug: es.equipment.slug,
+      name: es.equipment.name,
+      brand: es.equipment.brand.name,
+      image: es.equipment.image,
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+
+  // Up to 4 other active products sharing the same brand or an industry.
+  const relatedRows = await db.product.findMany({
+    where: {
+      active: true,
+      slug: { not: p.slug },
+      OR: [{ brand: { slug: p.brand.slug } }, { industries: { hasSome: p.industries } }],
+    },
+    orderBy: [{ featured: 'desc' }, { name: 'asc' }],
+    take: 4,
+    select: {
+      slug: true,
+      name: true,
+      image: true,
+      desc: true,
+      type: true,
+      brand: { select: { name: true } },
+    },
+  })
+
+  const related: RelatedProduct[] = relatedRows.map((r) => ({
+    slug: r.slug,
+    name: r.name,
+    brand: r.brand.name,
+    image: r.image,
+    desc: r.desc,
+    type: r.type,
+  }))
+
+  return {
+    slug: p.slug,
+    name: p.name,
+    type: p.type,
+    desc: p.desc,
+    overview: p.overview,
+    image: p.image,
+    images: p.images,
+    brand: p.brand.name,
+    brandSlug: p.brand.slug,
+    brandLogo: p.brand.logo,
+    brandCountry: p.brand.countryOfOrigin,
+    industries: p.industries,
+    standards: p.standards,
+    productType: p.productType,
+    sample: p.sample,
+    output: p.output,
+    partnerStatus: p.partnerStatus,
+    warranty: p.warranty,
+    service: p.service,
+    datasheetUrl: p.datasheetUrl,
+    listPrice: p.listPrice == null ? null : Number(p.listPrice),
+    currency: p.currency,
+    saleMode: p.saleMode,
+    stockStatus: p.stockStatus,
+    featured: p.featured,
+    compatibleSpares,
+    usedInEquipment,
+    related,
+  }
+}
