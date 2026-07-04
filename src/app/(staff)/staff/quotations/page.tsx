@@ -32,9 +32,11 @@ export default async function StaffQuotationsPage() {
       vatPercent: true,
       validUntil: true,
       createdAt: true,
+      shipping: true,
+      otherCharges: true,
       customer: { select: { companyName: true } },
       enquiry: { select: { enquiryNo: true } },
-      items: { select: { qty: true, unitPrice: true } },
+      items: { select: { qty: true, unitPrice: true, discountPct: true } },
     },
   })
 
@@ -68,8 +70,9 @@ export default async function StaffQuotationsPage() {
             <tbody>
               {quotations.map((q) => {
                 const { total } = quoteTotals(
-                  q.items.map((i) => ({ qty: i.qty, unitPrice: Number(i.unitPrice) })),
+                  q.items.map((i) => ({ qty: i.qty, unitPrice: Number(i.unitPrice), discountPct: Number(i.discountPct) })),
                   Number(q.vatPercent),
+                  { shipping: Number(q.shipping), other: Number(q.otherCharges) },
                 )
                 return (
                   <tr key={q.id} className="border-b border-slate-100 last:border-0">

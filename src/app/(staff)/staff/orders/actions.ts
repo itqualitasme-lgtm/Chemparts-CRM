@@ -30,7 +30,7 @@ export async function createOrderFromQuotation(quotationId: string): Promise<{ e
       currency: true,
       vatPercent: true,
       order: { select: { id: true } },
-      items: { orderBy: { sortOrder: 'asc' }, select: { productId: true, productName: true, qty: true, unitPrice: true } },
+      items: { orderBy: { sortOrder: 'asc' }, select: { productId: true, productName: true, qty: true, unitPrice: true, discountPct: true } },
     },
   })
   if (!q) return { error: 'Quotation not found.' }
@@ -51,7 +51,8 @@ export async function createOrderFromQuotation(quotationId: string): Promise<{ e
           productId: it.productId,
           productName: it.productName,
           qty: it.qty,
-          unitPrice: it.unitPrice,
+          // carry the discounted (net) unit price into the order
+          unitPrice: Number(it.unitPrice) * (1 - Number(it.discountPct) / 100),
           sortOrder: i,
         })),
       },

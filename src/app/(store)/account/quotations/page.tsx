@@ -35,7 +35,10 @@ export default async function MyQuotationsPage() {
           createdAt: true,
           notes: true,
           terms: true,
-          items: { orderBy: { sortOrder: 'asc' }, select: { productName: true, qty: true, unitPrice: true, note: true } },
+          shipping: true,
+          otherCharges: true,
+          otherChargesLabel: true,
+          items: { orderBy: { sortOrder: 'asc' }, select: { productName: true, qty: true, unitPrice: true, discountPct: true, note: true } },
         },
       })
     : []
@@ -52,9 +55,10 @@ export default async function MyQuotationsPage() {
       ) : (
         <div className="space-y-4">
           {quotations.map((q) => {
-            const { subtotal, vat, total } = quoteTotals(
-              q.items.map((i) => ({ qty: i.qty, unitPrice: Number(i.unitPrice) })),
+            const t = quoteTotals(
+              q.items.map((i) => ({ qty: i.qty, unitPrice: Number(i.unitPrice), discountPct: Number(i.discountPct) })),
               Number(q.vatPercent),
+              { shipping: Number(q.shipping), other: Number(q.otherCharges) },
             )
             const m = (n: number) => `${q.currency} ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
             return (
@@ -87,8 +91,11 @@ export default async function MyQuotationsPage() {
                             {it.note ? <span className="block text-xs text-slate-400">{it.note}</span> : null}
                           </td>
                           <td className="py-1.5 px-3 text-slate-600">{it.qty}</td>
-                          <td className="py-1.5 px-3 text-right font-mono text-slate-600">{m(Number(it.unitPrice))}</td>
-                          <td className="py-1.5 pl-3 text-right font-mono text-slate-800">{m(it.qty * Number(it.unitPrice))}</td>
+                          <td className="py-1.5 px-3 text-right font-mono text-slate-600">
+                            {m(Number(it.unitPrice))}
+                            {Number(it.discountPct) > 0 ? <span className="block text-[11px] text-green-700">−{Number(it.discountPct)}%</span> : null}
+                          </td>
+                          <td className="py-1.5 pl-3 text-right font-mono text-slate-800">{m(it.qty * Number(it.unitPrice) * (1 - Number(it.discountPct) / 100))}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -96,9 +103,11 @@ export default async function MyQuotationsPage() {
                 </div>
 
                 <div className="mt-3 ml-auto max-w-xs space-y-1 text-sm">
-                  <div className="flex justify-between text-slate-600"><span>Subtotal</span><span className="font-mono">{m(subtotal)}</span></div>
-                  <div className="flex justify-between text-slate-600"><span>VAT ({Number(q.vatPercent)}%)</span><span className="font-mono">{m(vat)}</span></div>
-                  <div className="flex justify-between border-t border-slate-200 pt-1 font-semibold text-slate-900"><span>Total</span><span className="font-mono">{m(total)}</span></div>
+                  <div className="flex justify-between text-slate-600"><span>Subtotal</span><span className="font-mono">{m(t.subtotal)}</span></div>
+                  {t.shipping > 0 ? <div className="flex justify-between text-slate-600"><span>Shipping</span><span className="font-mono">{m(t.shipping)}</span></div> : null}
+                  {t.other > 0 ? <div className="flex justify-between text-slate-600"><span>{q.otherChargesLabel || 'Other charges'}</span><span className="font-mono">{m(t.other)}</span></div> : null}
+                  <div className="flex justify-between text-slate-600"><span>VAT ({Number(q.vatPercent)}%)</span><span className="font-mono">{m(t.vat)}</span></div>
+                  <div className="flex justify-between border-t border-slate-200 pt-1 font-semibold text-slate-900"><span>Total</span><span className="font-mono">{m(t.total)}</span></div>
                 </div>
 
                 {(q.terms || q.notes) && (

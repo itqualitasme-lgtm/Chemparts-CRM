@@ -376,6 +376,10 @@ model Quotation {
   notes            String? // customer-facing notes
   terms            String? // payment terms
   deliveryTerms    String? // e.g. "2–4 weeks from order confirmation"
+  shipping         Decimal  @default(0) @db.Decimal(12, 2)
+  otherCharges     Decimal  @default(0) @db.Decimal(12, 2)
+  otherChargesLabel String?
+  publicToken      String?  @unique // for the public (no-login) quotation view + QR
   items            QuotationItem[]
   order            Order?
   createdAt        DateTime        @default(now())
@@ -391,6 +395,7 @@ model QuotationItem {
   productName String // snapshot
   qty         Int       @default(1)
   unitPrice   Decimal   @default(0) @db.Decimal(12, 2)
+  discountPct Decimal   @default(0) @db.Decimal(5, 2)
   note        String?
   sortOrder   Int       @default(0)
 }

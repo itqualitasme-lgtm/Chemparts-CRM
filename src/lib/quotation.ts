@@ -10,11 +10,26 @@ export async function nextQuotationNo(): Promise<string> {
   return `QUO-${year}-${String(count + 1).padStart(4, '0')}`
 }
 
-export type QuoteLine = { qty: number; unitPrice: number }
+export type QuoteLine = { qty: number; unitPrice: number; discountPct?: number }
 
-/** Subtotal, VAT and grand total for a set of quotation lines. */
-export function quoteTotals(items: QuoteLine[], vatPercent: number) {
-  const subtotal = items.reduce((sum, l) => sum + l.qty * l.unitPrice, 0)
-  const vat = subtotal * (vatPercent / 100)
-  return { subtotal, vat, total: subtotal + vat }
+/** Net amount for a single line after its per-line discount. */
+export function lineNet(l: QuoteLine): number {
+  return l.qty * l.unitPrice * (1 - (l.discountPct ?? 0) / 100)
+}
+
+/**
+ * Subtotal (after per-line discounts), plus additional charges (shipping/other),
+ * VAT on the taxable amount, and grand total.
+ */
+export function quoteTotals(
+  items: QuoteLine[],
+  vatPercent: number,
+  charges: { shipping?: number; other?: number } = {},
+) {
+  const subtotal = items.reduce((sum, l) => sum + lineNet(l), 0)
+  const shipping = charges.shipping ?? 0
+  const other = charges.other ?? 0
+  const taxable = subtotal + shipping + other
+  const vat = taxable * (vatPercent / 100)
+  return { subtotal, shipping, other, vat, total: taxable + vat }
 }

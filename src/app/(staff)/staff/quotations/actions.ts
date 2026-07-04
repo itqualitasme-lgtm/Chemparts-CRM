@@ -1,5 +1,6 @@
 'use server'
 
+import { randomBytes } from 'node:crypto'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { requirePortal, requireAdmin } from '@/lib/auth/session'
@@ -7,11 +8,16 @@ import { db } from '@/lib/db'
 import { nextQuotationNo } from '@/lib/quotation'
 import type { QuotationStatus } from '@/generated/prisma/client'
 
+/** URL-safe token for the public (no-login) quotation view. */
+function publicToken(): string {
+  return randomBytes(18).toString('base64url')
+}
+
 export type QuotationState = { ok?: boolean; error?: string }
 
 const STATUSES: QuotationStatus[] = ['DRAFT', 'SENT', 'ACCEPTED', 'REJECTED', 'EXPIRED']
 
-type LineInput = { productId?: string | null; productName: string; qty: number; unitPrice: number; note?: string }
+type LineInput = { productId?: string | null; productName: string; qty: number; unitPrice: number; discountPct: number; note?: string }
 
 function parseLines(json: string | null): LineInput[] {
   if (!json) return []
@@ -23,18 +29,25 @@ function parseLines(json: string | null): LineInput[] {
   }
   if (!Array.isArray(raw)) return []
   const out: LineInput[] = []
-  for (const r of raw as LineInput[]) {
+  for (const r of raw as (LineInput & { discountPct?: number })[]) {
     const name = (r?.productName ?? '').trim()
     if (!name) continue
+    const dp = Number(r.discountPct)
     out.push({
       productId: r.productId || null,
       productName: name,
       qty: Math.max(1, Math.floor(Number(r.qty)) || 1),
       unitPrice: Math.max(0, Number(r.unitPrice) || 0),
+      discountPct: Number.isFinite(dp) ? Math.min(100, Math.max(0, dp)) : 0,
       note: (r.note ?? '').trim() || undefined,
     })
   }
   return out
+}
+
+function num(fd: FormData, key: string): number {
+  const n = Number(fd.get(key))
+  return Number.isFinite(n) && n >= 0 ? n : 0
 }
 
 /**
@@ -74,6 +87,7 @@ export async function createQuotationFromEnquiry(enquiryId: string): Promise<{ e
       status: 'DRAFT',
       currency,
       vatPercent: 5,
+      publicToken: publicToken(),
       items: {
         create: enquiry.items.map((it, i) => ({
           productId: it.productId,
@@ -105,7 +119,7 @@ export async function updateQuotation(
 ): Promise<QuotationState> {
   const user = await requirePortal('staff')
 
-  const existing = await db.quotation.findUnique({ where: { id: quotationId }, select: { id: true } })
+  const existing = await db.quotation.findUnique({ where: { id: quotationId }, select: { id: true, publicToken: true } })
   if (!existing) return { error: 'Quotation not found.' }
 
   const statusRaw = (formData.get('status') as string | null)?.trim() as QuotationStatus | undefined
@@ -133,12 +147,17 @@ export async function updateQuotation(
         notes,
         terms,
         deliveryTerms,
+        shipping: num(formData, 'shipping'),
+        otherCharges: num(formData, 'otherCharges'),
+        otherChargesLabel: (formData.get('otherChargesLabel') as string | null)?.trim() || null,
+        publicToken: existing.publicToken ?? publicToken(),
         items: {
           create: lines.map((l, i) => ({
             productId: l.productId ?? null,
             productName: l.productName,
             qty: l.qty,
             unitPrice: l.unitPrice,
+            discountPct: l.discountPct,
             note: l.note ?? null,
             sortOrder: i,
           })),

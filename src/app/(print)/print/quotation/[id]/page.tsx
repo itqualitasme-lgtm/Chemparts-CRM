@@ -60,9 +60,10 @@ export default async function QuotationPrintPage({ params }: { params: Promise<{
   })
   if (!q) notFound()
 
-  const { subtotal, vat, total } = quoteTotals(
-    q.items.map((i) => ({ qty: i.qty, unitPrice: Number(i.unitPrice) })),
+  const t = quoteTotals(
+    q.items.map((i) => ({ qty: i.qty, unitPrice: Number(i.unitPrice), discountPct: Number(i.discountPct) })),
     Number(q.vatPercent),
+    { shipping: Number(q.shipping), other: Number(q.otherCharges) },
   )
   const m = (n: number) => `${q.currency} ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   const contact = q.customer?.contacts[0]
@@ -127,7 +128,8 @@ export default async function QuotationPrintPage({ params }: { params: Promise<{
               <th className="w-8 px-2 py-2 font-medium">#</th>
               <th className="px-2 py-2 font-medium">Description</th>
               <th className="w-12 px-2 py-2 text-center font-medium">Qty</th>
-              <th className="w-28 px-2 py-2 text-right font-medium">Unit price</th>
+              <th className="w-24 px-2 py-2 text-right font-medium">Unit price</th>
+              <th className="w-12 px-2 py-2 text-right font-medium">Disc</th>
               <th className="w-28 px-2 py-2 text-right font-medium">Amount</th>
             </tr>
           </thead>
@@ -159,7 +161,8 @@ export default async function QuotationPrintPage({ params }: { params: Promise<{
                   </td>
                   <td className="px-2 py-2 text-center text-slate-700">{it.qty}</td>
                   <td className="px-2 py-2 text-right font-mono text-slate-700">{m(Number(it.unitPrice))}</td>
-                  <td className="px-2 py-2 text-right font-mono text-slate-800">{m(it.qty * Number(it.unitPrice))}</td>
+                  <td className="px-2 py-2 text-right font-mono text-slate-600">{Number(it.discountPct) > 0 ? `${Number(it.discountPct)}%` : '—'}</td>
+                  <td className="px-2 py-2 text-right font-mono text-slate-800">{m(it.qty * Number(it.unitPrice) * (1 - Number(it.discountPct) / 100))}</td>
                 </tr>
               )
             })}
@@ -170,9 +173,11 @@ export default async function QuotationPrintPage({ params }: { params: Promise<{
         <div className="mt-4 flex justify-end">
           <table className="text-[13px]">
             <tbody>
-              <tr><td className="pr-8 py-0.5 text-slate-500">Subtotal</td><td className="py-0.5 text-right font-mono">{m(subtotal)}</td></tr>
-              <tr><td className="pr-8 py-0.5 text-slate-500">VAT ({Number(q.vatPercent)}%)</td><td className="py-0.5 text-right font-mono">{m(vat)}</td></tr>
-              <tr className="border-t-2 border-[#0A2540]"><td className="pr-8 py-1 font-semibold text-[#0A2540]">Total</td><td className="py-1 text-right font-mono font-bold text-[#0A2540]">{m(total)}</td></tr>
+              <tr><td className="pr-8 py-0.5 text-slate-500">Subtotal</td><td className="py-0.5 text-right font-mono">{m(t.subtotal)}</td></tr>
+              {t.shipping > 0 ? <tr><td className="pr-8 py-0.5 text-slate-500">Shipping</td><td className="py-0.5 text-right font-mono">{m(t.shipping)}</td></tr> : null}
+              {t.other > 0 ? <tr><td className="pr-8 py-0.5 text-slate-500">{q.otherChargesLabel || 'Other charges'}</td><td className="py-0.5 text-right font-mono">{m(t.other)}</td></tr> : null}
+              <tr><td className="pr-8 py-0.5 text-slate-500">VAT ({Number(q.vatPercent)}%)</td><td className="py-0.5 text-right font-mono">{m(t.vat)}</td></tr>
+              <tr className="border-t-2 border-[#0A2540]"><td className="pr-8 py-1 font-semibold text-[#0A2540]">Total</td><td className="py-1 text-right font-mono font-bold text-[#0A2540]">{m(t.total)}</td></tr>
             </tbody>
           </table>
         </div>

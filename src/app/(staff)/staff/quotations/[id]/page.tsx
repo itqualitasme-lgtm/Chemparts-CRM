@@ -37,6 +37,7 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
     productName: it.productName,
     qty: it.qty,
     unitPrice: Number(it.unitPrice),
+    discountPct: Number(it.discountPct),
     note: it.note ?? '',
   }))
 
@@ -71,6 +72,9 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
           notes: q.notes ?? '',
           terms: q.terms ?? '',
           deliveryTerms: q.deliveryTerms ?? '',
+          shipping: Number(q.shipping),
+          otherCharges: Number(q.otherCharges),
+          otherChargesLabel: q.otherChargesLabel ?? '',
         }}
         lines={lines}
       />

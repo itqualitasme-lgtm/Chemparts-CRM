@@ -3,7 +3,7 @@
 import { useActionState, useState } from 'react'
 import { updateQuotation, type QuotationState } from '../actions'
 
-export type Line = { productId: string | null; productName: string; qty: number; unitPrice: number; note: string }
+export type Line = { productId: string | null; productName: string; qty: number; unitPrice: number; discountPct: number; note: string }
 type Header = {
   status: string
   currency: string
@@ -12,6 +12,9 @@ type Header = {
   notes: string
   terms: string
   deliveryTerms: string
+  shipping: number
+  otherCharges: number
+  otherChargesLabel: string
 }
 
 const STATUSES = ['DRAFT', 'SENT', 'ACCEPTED', 'REJECTED', 'EXPIRED']
@@ -35,23 +38,27 @@ export default function QuotationEditor({
     updateQuotation.bind(null, quotationId),
     {},
   )
-  const [lines, setLines] = useState<Line[]>(initialLines.length ? initialLines : [{ productId: null, productName: '', qty: 1, unitPrice: 0, note: '' }])
+  const emptyLine = (): Line => ({ productId: null, productName: '', qty: 1, unitPrice: 0, discountPct: 0, note: '' })
+  const [lines, setLines] = useState<Line[]>(initialLines.length ? initialLines : [emptyLine()])
   const [currency, setCurrency] = useState(header.currency)
   const [vat, setVat] = useState(header.vatPercent)
+  const [shipping, setShipping] = useState(header.shipping)
+  const [other, setOther] = useState(header.otherCharges)
 
   const setLine = (i: number, patch: Partial<Line>) =>
     setLines((ls) => ls.map((l, idx) => (idx === i ? { ...l, ...patch } : l)))
-  const addLine = () => setLines((ls) => [...ls, { productId: null, productName: '', qty: 1, unitPrice: 0, note: '' }])
+  const addLine = () => setLines((ls) => [...ls, emptyLine()])
   const removeLine = (i: number) => setLines((ls) => (ls.length === 1 ? ls : ls.filter((_, idx) => idx !== i)))
 
-  const subtotal = lines.reduce((s, l) => s + l.qty * l.unitPrice, 0)
-  const vatAmt = subtotal * (vat / 100)
-  const total = subtotal + vatAmt
+  const lineNet = (l: Line) => l.qty * l.unitPrice * (1 - (l.discountPct || 0) / 100)
+  const subtotal = lines.reduce((s, l) => s + lineNet(l), 0)
+  const vatAmt = (subtotal + shipping + other) * (vat / 100)
+  const total = subtotal + shipping + other + vatAmt
 
   const itemsJson = JSON.stringify(
     lines
       .filter((l) => l.productName.trim())
-      .map((l) => ({ productId: l.productId, productName: l.productName, qty: l.qty, unitPrice: l.unitPrice, note: l.note })),
+      .map((l) => ({ productId: l.productId, productName: l.productName, qty: l.qty, unitPrice: l.unitPrice, discountPct: l.discountPct, note: l.note })),
   )
 
   return (
@@ -67,8 +74,9 @@ export default function QuotationEditor({
           <thead>
             <tr className="border-b border-slate-200 bg-slate-50 text-left text-slate-600">
               <th className="px-3 py-2 font-medium">Item</th>
-              <th className="w-20 px-3 py-2 font-medium">Qty</th>
-              <th className="w-32 px-3 py-2 font-medium">Unit price</th>
+              <th className="w-16 px-3 py-2 font-medium">Qty</th>
+              <th className="w-28 px-3 py-2 font-medium">Unit price</th>
+              <th className="w-20 px-3 py-2 font-medium">Disc %</th>
               <th className="w-32 px-3 py-2 text-right font-medium">Line total</th>
               <th className="w-10 px-3 py-2"></th>
             </tr>
@@ -109,7 +117,18 @@ export default function QuotationEditor({
                     className={inputCls}
                   />
                 </td>
-                <td className="px-3 py-2 text-right font-mono text-slate-800">{money(l.qty * l.unitPrice, currency)}</td>
+                <td className="px-3 py-2">
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    step="0.5"
+                    value={l.discountPct}
+                    onChange={(e) => setLine(i, { discountPct: Math.min(100, Math.max(0, Number(e.target.value) || 0)) })}
+                    className={inputCls}
+                  />
+                </td>
+                <td className="px-3 py-2 text-right font-mono text-slate-800">{money(lineNet(l), currency)}</td>
                 <td className="px-3 py-2 text-right">
                   <button type="button" onClick={() => removeLine(i)} className="text-slate-400 hover:text-red-600" aria-label="Remove line">✕</button>
                 </td>
@@ -124,9 +143,17 @@ export default function QuotationEditor({
         </div>
       </section>
 
-      {/* Totals */}
-      <section className="ml-auto max-w-xs space-y-1 text-sm">
+      {/* Totals + additional charges */}
+      <section className="ml-auto max-w-sm space-y-1.5 text-sm">
         <div className="flex justify-between text-slate-600"><span>Subtotal</span><span className="font-mono">{money(subtotal, currency)}</span></div>
+        <div className="flex items-center justify-between text-slate-600">
+          <span>Shipping</span>
+          <input type="number" name="shipping" min={0} step="0.01" value={shipping} onChange={(e) => setShipping(Math.max(0, Number(e.target.value) || 0))} className="w-28 rounded border border-slate-300 px-2 py-1 text-right text-xs" />
+        </div>
+        <div className="flex items-center justify-between gap-2 text-slate-600">
+          <input name="otherChargesLabel" defaultValue={header.otherChargesLabel} placeholder="Other charge (e.g. installation)" className="min-w-0 flex-1 rounded border border-slate-300 px-2 py-1 text-xs" />
+          <input type="number" name="otherCharges" min={0} step="0.01" value={other} onChange={(e) => setOther(Math.max(0, Number(e.target.value) || 0))} className="w-28 rounded border border-slate-300 px-2 py-1 text-right text-xs" />
+        </div>
         <div className="flex items-center justify-between text-slate-600">
           <span className="flex items-center gap-1">VAT
             <input type="number" name="vatPercent" min={0} step="0.5" value={vat} onChange={(e) => setVat(Math.max(0, Number(e.target.value) || 0))} className="w-16 rounded border border-slate-300 px-2 py-0.5 text-xs" />%
