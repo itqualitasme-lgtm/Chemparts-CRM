@@ -57,6 +57,7 @@ model Customer {
   documents   CustomerDocument[]
   priceRequests PriceRequest[]
   enquiries   Enquiry[]
+  quotations  Quotation[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -191,6 +192,7 @@ model Product {
   priceRequests PriceRequest[]
   cartItems     CartItem[]
   enquiryItems  EnquiryItem[]
+  quotationItems QuotationItem[]
   // stock / inventory
   lotNumber   String?
   stockStatus StockStatus @default(IN_STOCK)
@@ -330,6 +332,7 @@ model Enquiry {
   message      String?
   status       EnquiryStatus @default(NEW)
   items        EnquiryItem[]
+  quotations   Quotation[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
@@ -344,6 +347,47 @@ model EnquiryItem {
   qty            Int      @default(1)
   priceRequested Boolean  @default(false) // was this a price-on-request line
   note           String?
+}
+
+// ---- Quotation (priced offer, usually created from an enquiry) ----
+enum QuotationStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+model Quotation {
+  id               String          @id @default(cuid())
+  quotationNo      String          @unique
+  enquiry          Enquiry?        @relation(fields: [enquiryId], references: [id])
+  enquiryId        String?
+  customer         Customer?       @relation(fields: [customerId], references: [id])
+  customerId       String?
+  createdByProfile String?
+  status           QuotationStatus @default(DRAFT)
+  currency         String          @default("AED")
+  vatPercent       Decimal         @default(5) @db.Decimal(5, 2)
+  validUntil       DateTime?
+  notes            String? // customer-facing notes
+  terms            String? // payment / delivery terms
+  items            QuotationItem[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+}
+
+model QuotationItem {
+  id          String    @id @default(cuid())
+  quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  quotationId String
+  product     Product?  @relation(fields: [productId], references: [id])
+  productId   String?
+  productName String // snapshot
+  qty         Int       @default(1)
+  unitPrice   Decimal   @default(0) @db.Decimal(12, 2)
+  note        String?
+  sortOrder   Int       @default(0)
 }
 
 model Setting {

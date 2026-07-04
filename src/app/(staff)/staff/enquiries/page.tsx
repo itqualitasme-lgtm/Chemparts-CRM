@@ -3,6 +3,7 @@ import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import StatusForm from './StatusForm'
 import DeleteButton from '@/components/DeleteButton'
+import CreateQuotationButton from './CreateQuotationButton'
 import { deleteEnquiry } from './actions'
 
 export const metadata = { title: 'Enquiries — Chemparts Staff' }
@@ -120,6 +121,7 @@ export default async function StaffEnquiriesPage() {
                   </div>
                   <div className="flex flex-col items-end gap-2">
                     <StatusForm enquiryId={e.id} current={e.status} />
+                    <CreateQuotationButton enquiryId={e.id} />
                     {isAdmin && (
                       <DeleteButton
                         action={deleteEnquiry.bind(null, e.id)}
