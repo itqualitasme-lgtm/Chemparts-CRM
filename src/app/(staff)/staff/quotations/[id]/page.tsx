@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { requirePortal, getSessionUser } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import QuotationEditor, { type Line } from './QuotationEditor'
+import CreateOrderButton from './CreateOrderButton'
 import DeleteButton from '@/components/DeleteButton'
 import { deleteQuotation } from '../actions'
 
@@ -23,6 +24,7 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
       include: {
         customer: { select: { companyName: true, id: true } },
         enquiry: { select: { enquiryNo: true } },
+        order: { select: { id: true, orderNo: true } },
         items: { orderBy: { sortOrder: 'asc' } },
       },
     }),
@@ -63,6 +65,22 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
         }}
         lines={lines}
       />
+
+      {/* Convert an accepted quotation into an order (or jump to the existing one). */}
+      <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6">
+        <h2 className="mb-1 font-medium text-slate-800">Order</h2>
+        {q.order ? (
+          <p className="text-sm text-slate-600">
+            This quotation became order{' '}
+            <Link href={`/staff/orders/${q.order.id}`} className="font-mono font-medium text-[#0A2540] underline">{q.order.orderNo}</Link>.
+          </p>
+        ) : (
+          <>
+            <p className="mb-3 text-sm text-slate-600">Once the customer accepts, convert this quotation into an order to attach the invoice, warranty and PO.</p>
+            <CreateOrderButton quotationId={q.id} />
+          </>
+        )}
+      </div>
 
       {user?.role === 'ADMIN' && (
         <div className="mt-6 rounded-xl border border-red-200 bg-red-50/40 p-6">

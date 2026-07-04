@@ -58,6 +58,7 @@ model Customer {
   priceRequests PriceRequest[]
   enquiries   Enquiry[]
   quotations  Quotation[]
+  orders      Order[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -193,6 +194,7 @@ model Product {
   cartItems     CartItem[]
   enquiryItems  EnquiryItem[]
   quotationItems QuotationItem[]
+  orderItems    OrderItem[]
   // stock / inventory
   lotNumber   String?
   stockStatus StockStatus @default(IN_STOCK)
@@ -373,6 +375,7 @@ model Quotation {
   notes            String? // customer-facing notes
   terms            String? // payment / delivery terms
   items            QuotationItem[]
+  order            Order?
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
 }
@@ -388,6 +391,64 @@ model QuotationItem {
   unitPrice   Decimal   @default(0) @db.Decimal(12, 2)
   note        String?
   sortOrder   Int       @default(0)
+}
+
+// ---- Order (a confirmed purchase; carries invoice/warranty/PO documents) ----
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  DELIVERED
+  CLOSED
+  CANCELLED
+}
+
+enum OrderDocKind {
+  INVOICE
+  WARRANTY
+  PURCHASE_ORDER
+  DELIVERY_NOTE
+  OTHER
+}
+
+model Order {
+  id               String          @id @default(cuid())
+  orderNo          String          @unique
+  customer         Customer?       @relation(fields: [customerId], references: [id])
+  customerId       String?
+  quotation        Quotation?      @relation(fields: [quotationId], references: [id])
+  quotationId      String?         @unique
+  createdByProfile String?
+  status           OrderStatus     @default(PENDING)
+  currency         String          @default("AED")
+  vatPercent       Decimal         @default(5) @db.Decimal(5, 2)
+  notes            String?
+  items            OrderItem[]
+  documents        OrderDocument[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId     String
+  product     Product? @relation(fields: [productId], references: [id])
+  productId   String?
+  productName String // snapshot
+  qty         Int      @default(1)
+  unitPrice   Decimal  @default(0) @db.Decimal(12, 2)
+  sortOrder   Int      @default(0)
+}
+
+model OrderDocument {
+  id        String       @id @default(cuid())
+  order     Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  kind      OrderDocKind @default(OTHER)
+  label     String
+  url       String // Supabase Storage public URL
+  createdAt DateTime     @default(now())
 }
 
 model Setting {
