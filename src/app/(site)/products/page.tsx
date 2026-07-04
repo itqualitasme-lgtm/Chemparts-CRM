@@ -1,4 +1,5 @@
 import { getInstrumentCount } from '@/lib/counts'
+import SectionCards from './SectionCards'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,6 +27,9 @@ export default async function ProductsPage() {
               </div>
               <p className="section-head__sub">XRF, flash point, distillation, mercury, NMR, FTIR, viscosity, RoHS — filter by brand, industry and test type.</p>
             </div>
+
+            {/* Catalog section entry points (DB-driven section pages) */}
+            <SectionCards />
 
             {/* Brand quick-jump strip */}
             <div className="brand-strip" data-reveal>
