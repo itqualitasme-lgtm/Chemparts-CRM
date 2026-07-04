@@ -76,6 +76,7 @@ model Brand {
   slug            String    @unique @default("")
   logo            String? // Storage URL or imported filename
   website         String?
+  email           String?
   countryOfOrigin String?
   focus           String? // specialization, e.g. "Petroleum testing"
   partnerSince    String? // e.g. "2008" or "IN-HOUSE"
