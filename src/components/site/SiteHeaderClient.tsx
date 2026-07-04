@@ -11,6 +11,7 @@ export type SiteHeaderClientProps = {
   isAuthed: boolean
   dashboardHref: string
   cartCount: number
+  ticker: string[]
 }
 
 // Derive the active nav key from the current pathname so the header can live
@@ -32,8 +33,12 @@ export default function SiteHeaderClient({
   isAuthed,
   dashboardHref,
   cartCount,
+  ticker,
 }: SiteHeaderClientProps) {
   const pathname = usePathname() || '/'
+  // Render the messages twice back-to-back so the marquee scrolls seamlessly.
+  // "{count}" is replaced with the live instrument count.
+  const tickerRun = [...ticker, ...ticker].map((m) => m.replace(/\{count\}/g, String(instrumentCount)))
   const active = navKeyForPath(pathname)
   const current = (key: NavKey) => (active === key ? { 'aria-current': 'page' as const } : {})
 
@@ -46,26 +51,9 @@ export default function SiteHeaderClient({
           <span className="topticker__live mono">LIVE · GLOBAL</span>
           <div className="topticker__scroll">
             <div className="topticker__scroll-track">
-              <span>AUTHORIZED PARTNER · Hitachi · Tanaka · Oxford Instruments · KEM</span>
-              <span>WORLDWIDE SHIPPING · export-packed · insured · fully documented</span>
-              <span>{instrumentCount} ANALYTICAL INSTRUMENTS · 16 brand partners · in stock</span>
-              <span>STANDARDS · ASTM · ISO · IP · referenced on every quote</span>
-              <span>SAME WORKING-DAY RESPONSE · enquiries answered worldwide</span>
-              <span>OEM SPARE PARTS · genuine parts · shipped worldwide</span>
-              <span>TURNKEY LAB SOLUTIONS · design · install · calibrate · service</span>
-              <span>ISO 9001 · 14001 · NABL traceable calibrations</span>
-              <span>EXPORTS WORLDWIDE · handled with care · since 2003</span>
-              <span>WHATSAPP +971 55 756 6123 · Get a quote in under 24 hours</span>
-              <span>AUTHORIZED PARTNER · Hitachi · Tanaka · Oxford Instruments · KEM</span>
-              <span>WORLDWIDE SHIPPING · export-packed · insured · fully documented</span>
-              <span>{instrumentCount} ANALYTICAL INSTRUMENTS · 16 brand partners · in stock</span>
-              <span>STANDARDS · ASTM · ISO · IP · referenced on every quote</span>
-              <span>SAME WORKING-DAY RESPONSE · enquiries answered worldwide</span>
-              <span>OEM SPARE PARTS · genuine parts · shipped worldwide</span>
-              <span>TURNKEY LAB SOLUTIONS · design · install · calibrate · service</span>
-              <span>ISO 9001 · 14001 · NABL traceable calibrations</span>
-              <span>EXPORTS WORLDWIDE · handled with care · since 2003</span>
-              <span>WHATSAPP +971 55 756 6123 · Get a quote in under 24 hours</span>
+              {tickerRun.map((msg, i) => (
+                <span key={i}>{msg}</span>
+              ))}
             </div>
           </div>
           <span className="topticker__right mono">ISO 9001 · 14001 · WORLDWIDE EXPORT</span>
