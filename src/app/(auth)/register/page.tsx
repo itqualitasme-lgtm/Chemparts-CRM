@@ -78,9 +78,6 @@ export default function RegisterPage() {
           </Field>
           <Field label="Company email" name="email" errors={state.fieldErrors}>
             <input name="email" type="email" required className={inputCls} placeholder="you@company.com" />
-            <span className="mt-1 block text-xs text-slate-400">
-              Use your official company email — personal addresses (Gmail, Yahoo…) aren&apos;t accepted.
-            </span>
           </Field>
           <Field label="Phone (with country code)" name="phone" errors={state.fieldErrors}>
             <input name="phone" type="tel" required className={inputCls} placeholder="+971 55 000 0000" />
