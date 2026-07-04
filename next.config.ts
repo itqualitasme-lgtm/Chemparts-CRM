@@ -15,6 +15,12 @@ const nextConfig: NextConfig = {
       ? [{ protocol: 'https', hostname: supabaseHost, pathname: '/storage/v1/object/public/**' }]
       : [],
   },
+  // Product/brand/customer uploads are cropped + compressed client-side before
+  // they reach the server action, but raise the default 1MB cap as a safety net
+  // for the odd large PDF (customer documents) or uncompressed source.
+  experimental: {
+    serverActions: { bodySizeLimit: '8mb' },
+  },
 }
 
 export default nextConfig
