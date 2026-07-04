@@ -6,9 +6,10 @@ import {
   productImageUrl,
   type SectionProduct,
 } from '@/lib/catalog-db'
-import { priceState } from '@/lib/price'
+import { priceState, canAddToCart } from '@/lib/price'
 import { getSessionUser } from '@/lib/auth/session'
 import RequestPrice from './RequestPrice'
+import AddToCart from './AddToCart'
 
 // Shared renderer for the three catalog section pages. Server component; the
 // filters are link-based (searchParams), so no client JS is needed here.
@@ -39,6 +40,7 @@ function formatPrice(currency: string, value: number): string {
 function ProductCard({ p, loggedIn }: { p: SectionProduct; loggedIn: boolean }) {
   const src = productImageUrl(p.image)
   const state = priceState(p)
+  const cartEligible = canAddToCart(p)
 
   return (
     <div className="card" data-industry={p.industries.join(',')} style={{ display: 'flex', flexDirection: 'column' }}>
@@ -63,12 +65,16 @@ function ProductCard({ p, loggedIn }: { p: SectionProduct; loggedIn: boolean }) 
             <span className="mono" style={{ fontSize: 16, fontWeight: 600, color: 'var(--navy)' }}>
               {formatPrice(state.currency, state.price!)}
             </span>
-            <div className="card__foot" style={{ marginTop: 0 }}>
-              <span className="mono text-muted">Request this item</span>
-              <svg className="card__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M3 13L13 3M13 3H5M13 3V11" stroke="currentColor" strokeWidth="1.25" />
-              </svg>
-            </div>
+            {cartEligible ? (
+              <AddToCart productId={p.id} variant="compact" />
+            ) : (
+              <div className="card__foot" style={{ marginTop: 0 }}>
+                <span className="mono text-muted">Request this item</span>
+                <svg className="card__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 13L13 3M13 3H5M13 3V11" stroke="currentColor" strokeWidth="1.25" />
+                </svg>
+              </div>
+            )}
           </div>
         ) : state.mode === 'indicative' ? (
           <div style={{ display: 'grid', gap: 6 }}>

@@ -10,6 +10,7 @@ export type SiteHeaderClientProps = {
   firstName: string
   isAuthed: boolean
   dashboardHref: string
+  cartCount: number
 }
 
 // Derive the active nav key from the current pathname so the header can live
@@ -30,6 +31,7 @@ export default function SiteHeaderClient({
   firstName,
   isAuthed,
   dashboardHref,
+  cartCount,
 }: SiteHeaderClientProps) {
   const pathname = usePathname() || '/'
   const active = navKeyForPath(pathname)
@@ -87,6 +89,45 @@ export default function SiteHeaderClient({
             </div>
           </nav>
           <div className="header-cta">
+            <Link
+              className="btn btn--ghost btn--sm"
+              href="/cart"
+              aria-label={`Cart${cartCount > 0 ? ` — ${cartCount} item${cartCount === 1 ? '' : 's'}` : ' — empty'}`}
+              style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13L5.4 5M7 13l-1.5 4h12"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle cx="9" cy="20" r="1.3" fill="currentColor" />
+                <circle cx="17" cy="20" r="1.3" fill="currentColor" />
+              </svg>
+              <span>Cart</span>
+              {cartCount > 0 ? (
+                <span
+                  aria-hidden="true"
+                  style={{
+                    minWidth: 18,
+                    height: 18,
+                    padding: '0 5px',
+                    borderRadius: 9,
+                    background: 'var(--crimson)',
+                    color: 'white',
+                    fontSize: 11,
+                    fontWeight: 600,
+                    lineHeight: '18px',
+                    textAlign: 'center',
+                    display: 'inline-block',
+                  }}
+                >
+                  {cartCount}
+                </span>
+              ) : null}
+            </Link>
             {isAuthed ? (
               <Link className="btn btn--ghost btn--sm" href={dashboardHref} aria-label={`Signed in as ${firstName} — go to dashboard`}>{firstName}</Link>
             ) : (

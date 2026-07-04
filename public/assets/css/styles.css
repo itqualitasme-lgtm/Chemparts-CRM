@@ -891,7 +891,7 @@ html.modal-locked body { overflow: hidden; touch-action: none; }
 .hero { overflow-x: clip; }
 @supports not (overflow-x: clip) { .hero { overflow: hidden; } }
 
-@media (max-width: 920px) {
+@media (max-width: 1100px) {
   .nav { display: none; }
   /* Keep topticker visible on mobile but hide the right-side cert text */
   .site-header__top { font-size: 10.5px; padding: 0 14px; gap: 14px; }

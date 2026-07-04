@@ -7,10 +7,11 @@ import {
   type ProductDetail,
   type CompatibleSpare,
 } from '@/lib/catalog-db'
-import { priceState } from '@/lib/price'
+import { priceState, canAddToCart } from '@/lib/price'
 import { getSessionUser } from '@/lib/auth/session'
 import Gallery from './Gallery'
 import RequestPrice from '../RequestPrice'
+import AddToCart from '../AddToCart'
 
 // DB-driven product detail page (PDP). Server component; the only client island
 // is the gallery thumbnail switcher. Styling reuses the ported marketing site's
@@ -63,24 +64,38 @@ function InfoCta({ product, loggedIn }: { product: ProductDetail; loggedIn: bool
   const state = priceState(product)
   const mailto = enquiryMailto(product)
 
-  // Listed (fresh, confirmed) → show price prominently + primary request action.
+  // Listed (fresh, confirmed) → show price prominently.
+  // Cart-eligible items get an Add-to-cart stepper; the rest keep the
+  // existing request-this-item quote CTA.
   if (state.mode === 'listed') {
+    const cartEligible = canAddToCart(product)
     return (
       <div className="pdp-info__cta" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 12 }}>
         <span className="mono" style={{ fontSize: 22, fontWeight: 600, color: 'var(--navy)' }}>
           {formatPrice(state.currency, state.price!)}
         </span>
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <button type="button" className="btn btn--accent" data-quote={product.slug}>
-            Request this item <span className="arrow">→</span>
-          </button>
-          <a className="btn btn--ghost" href={mailto}>
-            Email us
-          </a>
-        </div>
-        <span className="mono text-muted" style={{ fontSize: 11 }}>
-          Online ordering coming soon
-        </span>
+        {cartEligible ? (
+          <>
+            <AddToCart productId={product.id} variant="full" />
+            <a className="btn btn--ghost btn--sm" href="/cart">
+              View cart →
+            </a>
+          </>
+        ) : (
+          <>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <button type="button" className="btn btn--accent" data-quote={product.slug}>
+                Request this item <span className="arrow">→</span>
+              </button>
+              <a className="btn btn--ghost" href={mailto}>
+                Email us
+              </a>
+            </div>
+            <span className="mono text-muted" style={{ fontSize: 11 }}>
+              Online ordering coming soon
+            </span>
+          </>
+        )}
       </div>
     )
   }

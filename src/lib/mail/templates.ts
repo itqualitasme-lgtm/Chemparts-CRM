@@ -48,6 +48,17 @@ ${button(v.actionUrl, 'Set password')}`,
 ${button(v.actionUrl, 'Activate account')}`,
     ),
   }),
+  'enquiry-received': (v) => ({
+    subject: `Enquiry ${v.enquiryNo} received — Chemparts`,
+    html: layout(
+      'Thanks — we have your enquiry',
+      `<p>Dear ${esc(v.name)},</p>
+<p>We've received your enquiry <strong>${esc(v.enquiryNo)}</strong> with ${esc(v.itemCount)} item${
+        v.itemCount === '1' ? '' : 's'
+      }. Our team will reply with pricing and availability, usually within the working day.</p>
+<p style="color:#66788a;font-size:13px">Please quote ${esc(v.enquiryNo)} in any follow-up.</p>`,
+    ),
+  }),
 }
 
 export function renderEmail(template: string, vars: TemplateVars): Rendered {
