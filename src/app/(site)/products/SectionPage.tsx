@@ -16,7 +16,9 @@ import AddToCart from './AddToCart'
 // Styling reuses the ported marketing site's own CSS classes (from
 // /assets/css/styles.css) — the (site) group is excluded from Tailwind.
 
-type RawSearchParams = { q?: string; brand?: string; industry?: string }
+type RawSearchParams = { q?: string; brand?: string; industry?: string; page?: string }
+
+const PAGE_SIZE = 24
 
 function buildHref(section: Section, params: Record<string, string | undefined>): string {
   const sp = new URLSearchParams()
@@ -122,6 +124,21 @@ export default async function SectionPage({
 
   const meta = SECTION_META[section]
   const hasFilters = Boolean(filters.q || filters.brand || filters.industry)
+
+  // Pagination over the filtered result set.
+  const total = products.length
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const page = Math.min(totalPages, Math.max(1, Number(sp.page ?? '1') || 1))
+  const pageProducts = products.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+  const from = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1
+  const to = Math.min(page * PAGE_SIZE, total)
+  const pageHref = (p: number) =>
+    buildHref(section, {
+      q: filters.q,
+      brand: filters.brand,
+      industry: filters.industry,
+      page: p > 1 ? String(p) : undefined,
+    })
 
   return (
     <main id="main">
@@ -241,13 +258,14 @@ export default async function SectionPage({
             <div>
               <div className="products-toolbar">
                 <span className="products-toolbar__count">
-                  <strong>[{String(products.length).padStart(2, '0')}]</strong> {meta.countLabel} shown
+                  <strong>[{String(total).padStart(2, '0')}]</strong> {meta.countLabel}
+                  {total > PAGE_SIZE ? <span className="text-muted"> · showing {from}–{to}</span> : ' shown'}
                 </span>
               </div>
 
-              {products.length > 0 ? (
+              {total > 0 ? (
                 <div className="products-page-grid catalog-grid">
-                  {products.map((p) => (
+                  {pageProducts.map((p) => (
                     <ProductCard key={p.slug} p={p} loggedIn={loggedIn} />
                   ))}
                 </div>
@@ -267,6 +285,22 @@ export default async function SectionPage({
                   </a>
                 </div>
               )}
+
+              {totalPages > 1 ? (
+                <nav className="catalog-pagination" aria-label="Pagination">
+                  {page > 1 ? (
+                    <a className="btn btn--ghost btn--sm" href={pageHref(page - 1)}>← Prev</a>
+                  ) : (
+                    <span className="btn btn--ghost btn--sm" aria-disabled="true" style={{ opacity: 0.4, pointerEvents: 'none' }}>← Prev</span>
+                  )}
+                  <span className="mono catalog-pagination__status">Page {page} of {totalPages}</span>
+                  {page < totalPages ? (
+                    <a className="btn btn--ghost btn--sm" href={pageHref(page + 1)}>Next →</a>
+                  ) : (
+                    <span className="btn btn--ghost btn--sm" aria-disabled="true" style={{ opacity: 0.4, pointerEvents: 'none' }}>Next →</span>
+                  )}
+                </nav>
+              ) : null}
             </div>
           </div>
         </div>
