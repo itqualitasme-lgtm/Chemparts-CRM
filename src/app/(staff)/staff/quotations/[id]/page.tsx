@@ -55,6 +55,16 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
           >
             Print / PDF ↗
           </a>
+          {q.publicToken ? (
+            <a
+              href={`/q/${q.publicToken}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            >
+              Public link / QR ↗
+            </a>
+          ) : null}
         </div>
         <p className="text-slate-500">
           {q.customer ? q.customer.companyName : 'No customer'} ·{' '}
