@@ -982,7 +982,7 @@ html.modal-locked body { overflow: hidden; touch-action: none; }
 }
 /* In-nav CTA: only visible inside the open mobile menu */
 .nav__cta { display: none; }
-@media (max-width: 920px) {
+@media (max-width: 1200px) {
   .nav[data-open="true"] .nav__cta { display: flex; }
 }
 

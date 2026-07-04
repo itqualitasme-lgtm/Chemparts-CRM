@@ -82,6 +82,24 @@ export default function SiteHeaderClient({
             <Link href="/application" {...current('application')}>Application</Link>
             <Link href="/partners" {...current('partners')}>Partners</Link>
             <Link href="/contact" {...current('contact')}>Contact</Link>
+            {/* Account group — only rendered inside the open mobile drawer (the
+                header-cta versions are hidden on small screens). */}
+            <div className="nav__cta nav__cta--account">
+              <span className="nav__cta-label">— Account</span>
+              <Link className="btn btn--ghost" href="/cart">
+                Cart{cartCount > 0 ? ` (${cartCount})` : ''} <span className="arrow">&rarr;</span>
+              </Link>
+              {isAuthed ? (
+                <Link className="btn btn--primary" href={dashboardHref}>
+                  My account · {firstName} <span className="arrow">&rarr;</span>
+                </Link>
+              ) : (
+                <>
+                  <Link className="btn btn--ghost" href="/login">Sign in <span className="arrow">&rarr;</span></Link>
+                  <Link className="btn btn--primary" href="/register">Register <span className="arrow">&rarr;</span></Link>
+                </>
+              )}
+            </div>
             <div className="nav__cta">
               <span className="nav__cta-label">— Take action</span>
               <button type="button" className="btn btn--accent" data-quote="">Get a quote <span className="arrow">&rarr;</span></button>
