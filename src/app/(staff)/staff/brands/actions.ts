@@ -1,7 +1,8 @@
 'use server'
 
+import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { requirePortal } from '@/lib/auth/session'
+import { requirePortal, requireAdmin } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { brandSchema } from '@/lib/validation/brand'
 import { slugify } from '@/lib/slug'
@@ -140,6 +141,29 @@ export async function removeBrandLogo(brandId: string): Promise<void> {
   await deleteStoredLogo(brand.logo)
   await db.brand.update({ where: { id: brandId }, data: { logo: null } })
   revalidateBrand(brandId)
+}
+
+/** Admin-only: delete a brand. Blocked if it still has products. */
+export async function deleteBrand(brandId: string): Promise<{ error?: string }> {
+  const admin = await requireAdmin()
+  if (!admin) return { error: 'Only administrators can delete brands.' }
+
+  const b = await db.brand.findUnique({
+    where: { id: brandId },
+    select: { logo: true, _count: { select: { products: true } } },
+  })
+  if (!b) return { error: 'Brand not found.' }
+  if (b._count.products > 0) {
+    return { error: `This brand has ${b._count.products} product(s). Reassign or delete them first.` }
+  }
+
+  await deleteStoredLogo(b.logo)
+  await db.brand.delete({ where: { id: brandId } })
+  await db.auditLog.create({
+    data: { actorId: admin.id, action: 'DELETE', entity: 'Brand', entityId: brandId },
+  })
+  revalidateBrand()
+  redirect('/staff/brands')
 }
 
 /** Delete a logo from storage if the URL points at our bucket; ignore otherwise. */

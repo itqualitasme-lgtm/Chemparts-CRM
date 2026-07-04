@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import StatusForm from './StatusForm'
+import DeleteButton from '@/components/DeleteButton'
+import { deleteEnquiry } from './actions'
 
 export const metadata = { title: 'Enquiries — Chemparts Staff' }
 export const dynamic = 'force-dynamic'
@@ -37,7 +39,8 @@ const TYPE_LABEL: Record<string, string> = {
 }
 
 export default async function StaffEnquiriesPage() {
-  await requirePortal('staff')
+  const user = await requirePortal('staff')
+  const isAdmin = user.role === 'ADMIN'
 
   const enquiries = await db.enquiry.findMany({
     orderBy: { createdAt: 'desc' },
@@ -115,7 +118,17 @@ export default async function StaffEnquiriesPage() {
                       {itemCount} {itemCount === 1 ? 'line item' : 'line items'}
                     </p>
                   </div>
-                  <StatusForm enquiryId={e.id} current={e.status} />
+                  <div className="flex flex-col items-end gap-2">
+                    <StatusForm enquiryId={e.id} current={e.status} />
+                    {isAdmin && (
+                      <DeleteButton
+                        action={deleteEnquiry.bind(null, e.id)}
+                        label="Delete"
+                        confirmText={`Delete ${e.enquiryNo}? This cannot be undone.`}
+                        className="text-xs text-red-600 underline hover:text-red-700"
+                      />
+                    )}
+                  </div>
                 </div>
 
                 {e.message ? (

@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { requirePortal } from '@/lib/auth/session'
+import { requirePortal, requireAdmin } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { customerSchema, parseContacts } from '@/lib/validation/customer'
@@ -147,6 +147,50 @@ export async function uploadCustomerDocument(
 
   revalidatePath(`/staff/customers/${customerId}`)
   return { ok: true }
+}
+
+/** Admin-only: delete a customer. Blocked if it has enquiries, price requests
+ *  or a linked user account (protect history); contacts + documents cascade. */
+export async function deleteCustomer(customerId: string): Promise<{ error?: string }> {
+  const admin = await requireAdmin()
+  if (!admin) return { error: 'Only administrators can delete customers.' }
+
+  const c = await db.customer.findUnique({
+    where: { id: customerId },
+    select: {
+      documents: { select: { url: true } },
+      _count: { select: { enquiries: true, priceRequests: true, profiles: true } },
+    },
+  })
+  if (!c) return { error: 'Customer not found.' }
+  if (c._count.enquiries > 0 || c._count.priceRequests > 0) {
+    return { error: 'This customer has enquiries or price requests — reassign or delete those first.' }
+  }
+  if (c._count.profiles > 0) {
+    return { error: 'This customer has a linked user account. Remove that account first.' }
+  }
+
+  // Best-effort remove uploaded documents from storage before cascade delete.
+  const paths = c.documents
+    .map((d) => {
+      const i = d.url.indexOf(`/${BUCKET}/`)
+      return i === -1 ? null : d.url.slice(i + BUCKET.length + 2)
+    })
+    .filter((p): p is string => !!p)
+  if (paths.length) {
+    try {
+      await createAdminClient().storage.from(BUCKET).remove(paths)
+    } catch {
+      // ignore
+    }
+  }
+
+  await db.customer.delete({ where: { id: customerId } })
+  await db.auditLog.create({
+    data: { actorId: admin.id, action: 'DELETE', entity: 'Customer', entityId: customerId },
+  })
+  revalidatePath('/staff/customers')
+  redirect('/staff/customers')
 }
 
 export async function removeCustomerDocument(docId: string): Promise<void> {

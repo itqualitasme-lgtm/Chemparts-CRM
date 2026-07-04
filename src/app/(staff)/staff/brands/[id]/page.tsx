@@ -1,15 +1,19 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { db } from '@/lib/db'
+import { getSessionUser } from '@/lib/auth/session'
 import { brandLogoUrl } from '@/lib/brand-image'
 import EditBrandForm from './EditBrandForm'
 import BrandLogoUpload from './BrandLogoUpload'
+import DeleteButton from '@/components/DeleteButton'
+import { deleteBrand } from '../actions'
 
 export const metadata = { title: 'Edit brand — Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function EditBrandPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+  const user = await getSessionUser()
   const brand = await db.brand.findUnique({
     where: { id },
     select: {
@@ -47,6 +51,20 @@ export default async function EditBrandPage({ params }: { params: Promise<{ id: 
         <BrandLogoUpload brandId={brand.id} currentLogo={brandLogoUrl(brand.logo)} />
         <EditBrandForm brandId={brand.id} brand={brand} />
       </div>
+
+      {user?.role === 'ADMIN' && (
+        <div className="mt-6 rounded-xl border border-red-200 bg-red-50/40 p-6">
+          <h2 className="font-medium text-red-800">Danger zone</h2>
+          <p className="mb-3 text-sm text-slate-600">
+            Permanently delete this brand. Blocked while it still has products.
+          </p>
+          <DeleteButton
+            action={deleteBrand.bind(null, brand.id)}
+            label="Delete brand"
+            confirmText={`Delete ${brand.name}? This cannot be undone.`}
+          />
+        </div>
+      )}
     </div>
   )
 }

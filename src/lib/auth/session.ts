@@ -38,3 +38,12 @@ export async function requirePortal(portal: Portal): Promise<SessionUser> {
   if (!canAccessPortal(user.role, portal)) redirect(homePathFor(user.role))
   return user
 }
+
+/**
+ * For destructive server actions restricted to admins. Returns the admin user,
+ * or null if the caller is not an ADMIN (the action should return an error).
+ */
+export async function requireAdmin(): Promise<SessionUser | null> {
+  const user = await getSessionUser()
+  return user && user.role === 'ADMIN' ? user : null
+}

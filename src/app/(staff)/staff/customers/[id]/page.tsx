@@ -3,14 +3,15 @@ import { notFound } from 'next/navigation'
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import CustomerForm from '../CustomerForm'
-import { updateCustomer } from '../actions'
+import { updateCustomer, deleteCustomer } from '../actions'
 import DocumentsPanel from './DocumentsPanel'
+import DeleteButton from '@/components/DeleteButton'
 
 export const metadata = { title: 'Customer — Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function CustomerDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  await requirePortal('staff')
+  const user = await requirePortal('staff')
   const { id } = await params
 
   const c = await db.customer.findUnique({
@@ -70,6 +71,20 @@ export default async function CustomerDetailPage({ params }: { params: Promise<{
       <div className="mt-6">
         <DocumentsPanel customerId={c.id} documents={c.documents.map((d) => ({ id: d.id, label: d.label, url: d.url }))} />
       </div>
+
+      {user.role === 'ADMIN' && (
+        <div className="mt-6 rounded-xl border border-red-200 bg-red-50/40 p-6">
+          <h2 className="font-medium text-red-800">Danger zone</h2>
+          <p className="mb-3 text-sm text-slate-600">
+            Permanently delete this customer and its contacts &amp; documents. Blocked if it has enquiries.
+          </p>
+          <DeleteButton
+            action={deleteCustomer.bind(null, c.id)}
+            label="Delete customer"
+            confirmText={`Delete ${c.companyName}? This cannot be undone.`}
+          />
+        </div>
+      )}
     </div>
   )
 }

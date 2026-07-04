@@ -1,18 +1,21 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { db } from '@/lib/db'
+import { getSessionUser } from '@/lib/auth/session'
 import ProductForm from '../ProductForm'
 import ProductImages from '../ProductImages'
-import { updateProduct } from '../actions'
+import { updateProduct, deleteProduct } from '../actions'
+import DeleteButton from '@/components/DeleteButton'
 
 export const metadata = { title: 'Edit product — Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const [product, brands] = await Promise.all([
+  const [product, brands, user] = await Promise.all([
     db.product.findUnique({ where: { id } }),
     db.brand.findMany({ select: { id: true, name: true }, orderBy: { name: 'asc' } }),
+    getSessionUser(),
   ])
   if (!product) notFound()
 
@@ -59,6 +62,20 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
           active: product.active,
         }}
       />
+
+      {user?.role === 'ADMIN' && (
+        <div className="mt-6 rounded-xl border border-red-200 bg-red-50/40 p-6">
+          <h2 className="font-medium text-red-800">Danger zone</h2>
+          <p className="mb-3 text-sm text-slate-600">
+            Permanently delete this product. Blocked if it appears in enquiries or carts — hide it instead.
+          </p>
+          <DeleteButton
+            action={deleteProduct.bind(null, product.id)}
+            label="Delete product"
+            confirmText={`Delete ${product.name}? This cannot be undone.`}
+          />
+        </div>
+      )}
     </div>
   )
 }

@@ -2,13 +2,25 @@
 
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { requirePortal } from '@/lib/auth/session'
+import { requirePortal, requireAdmin } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { nextEnquiryNo } from '@/lib/enquiry-no'
 import type { EnquiryStatus, EnquiryType } from '@/generated/prisma/client'
 
 export type UpdateStatusState = { ok?: boolean; error?: string }
 export type CreateEnquiryState = { ok?: boolean; error?: string }
+
+/** Admin-only: delete an enquiry (line items cascade). */
+export async function deleteEnquiry(enquiryId: string): Promise<{ error?: string }> {
+  const admin = await requireAdmin()
+  if (!admin) return { error: 'Only administrators can delete enquiries.' }
+  const e = await db.enquiry.findUnique({ where: { id: enquiryId }, select: { id: true } })
+  if (!e) return { error: 'Enquiry not found.' }
+  await db.enquiry.delete({ where: { id: enquiryId } })
+  await db.auditLog.create({ data: { actorId: admin.id, action: 'DELETE', entity: 'Enquiry', entityId: enquiryId } })
+  revalidatePath('/staff/enquiries')
+  return {}
+}
 
 const ENQUIRY_TYPES: EnquiryType[] = [
   'WEBSITE', 'PHONE', 'EMAIL', 'WHATSAPP', 'WALK_IN', 'REFERRAL', 'EXHIBITION', 'TENDER', 'OTHER',

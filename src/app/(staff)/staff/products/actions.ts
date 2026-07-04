@@ -2,12 +2,55 @@
 
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { requirePortal } from '@/lib/auth/session'
+import { requirePortal, requireAdmin } from '@/lib/auth/session'
 import { db } from '@/lib/db'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { productSchema, splitList } from '@/lib/validation/product'
 import { slugify } from '@/lib/slug'
 
 export type ProductState = { error?: string; fieldErrors?: Record<string, string[]> }
+
+/** Admin-only: delete a product. Blocked if referenced by enquiries, carts or
+ *  price requests (hide it instead); BOM links + price history cascade. */
+export async function deleteProduct(id: string): Promise<{ error?: string }> {
+  const admin = await requireAdmin()
+  if (!admin) return { error: 'Only administrators can delete products.' }
+
+  const p = await db.product.findUnique({
+    where: { id },
+    select: {
+      slug: true,
+      images: true,
+      _count: { select: { enquiryItems: true, cartItems: true, priceRequests: true } },
+    },
+  })
+  if (!p) return { error: 'Product not found.' }
+  if (p._count.enquiryItems > 0) return { error: 'This product appears in enquiries — hide it instead of deleting.' }
+  if (p._count.cartItems > 0) return { error: 'This product is in a cart right now — try again once it clears.' }
+  if (p._count.priceRequests > 0) return { error: 'This product has price requests — hide it instead of deleting.' }
+
+  // Best-effort remove uploaded (Supabase) images; imported filenames are left.
+  const bucket = 'product-images'
+  const paths = p.images
+    .map((u) => {
+      const i = u.indexOf(`/${bucket}/`)
+      return i === -1 ? null : u.slice(i + bucket.length + 2)
+    })
+    .filter((x): x is string => !!x)
+  if (paths.length) {
+    try {
+      await createAdminClient().storage.from(bucket).remove(paths)
+    } catch {
+      // ignore
+    }
+  }
+
+  await db.product.delete({ where: { id } })
+  await db.auditLog.create({ data: { actorId: admin.id, action: 'DELETE', entity: 'Product', entityId: id } })
+  revalidatePath('/staff/products')
+  revalidatePath('/products')
+  redirect('/staff/products')
+}
 
 async function uniqueSlug(desired: string, excludeId?: string): Promise<string> {
   const baseSlug = slugify(desired) || 'product'
