@@ -25,6 +25,7 @@ export type CustomerDefaults = {
   email?: string | null
   website?: string | null
   notes?: string | null
+  salesPersonId?: string | null
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -41,11 +42,13 @@ export default function CustomerForm({
   mode,
   defaults = {},
   initialContacts,
+  salesPeople = [],
 }: {
   action: (prev: CustomerState, fd: FormData) => Promise<CustomerState>
   mode: 'create' | 'edit'
   defaults?: CustomerDefaults
   initialContacts?: ContactRow[]
+  salesPeople?: { id: string; name: string }[]
 }) {
   const [state, formAction, pending] = useActionState<CustomerState, FormData>(action, {})
   const fe = state.fieldErrors ?? {}
@@ -128,6 +131,15 @@ export default function CustomerForm({
               </select>
             </Field>
           </div>
+          <Field label="Default sales person">
+            <select name="salesPersonId" defaultValue={defaults.salesPersonId ?? ''} className={inputCls}>
+              <option value="">Unassigned</option>
+              {salesPeople.map((s) => (
+                <option key={s.id} value={s.id}>{s.name}</option>
+              ))}
+            </select>
+            <span className="mt-1 block text-xs text-slate-400">Auto-fills on this customer’s enquiries and quotations.</span>
+          </Field>
         </div>
       </section>
 

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { requirePortal } from '@/lib/auth/session'
+import { getActiveSalesPeople } from '@/lib/sales'
 import { db } from '@/lib/db'
 import EnquiryCreateForm from './EnquiryCreateForm'
 
@@ -9,13 +10,14 @@ export const dynamic = 'force-dynamic'
 export default async function NewEnquiryPage() {
   await requirePortal('staff')
 
-  const [customers, products] = await Promise.all([
-    db.customer.findMany({ select: { id: true, companyName: true }, orderBy: { companyName: 'asc' } }),
+  const [customers, products, salesPeople] = await Promise.all([
+    db.customer.findMany({ select: { id: true, companyName: true, salesPersonId: true }, orderBy: { companyName: 'asc' } }),
     db.product.findMany({
       where: { active: true },
       select: { id: true, name: true, type: true, brand: { select: { name: true } } },
       orderBy: { name: 'asc' },
     }),
+    getActiveSalesPeople(),
   ])
 
   const productOptions = products.map((p) => ({
@@ -34,7 +36,7 @@ export default async function NewEnquiryPage() {
         <h1 className="mt-2 text-2xl font-semibold text-slate-900">New enquiry</h1>
         <p className="text-slate-500">Log an enquiry from any channel. An enquiry is the starting point for a quotation.</p>
       </div>
-      <EnquiryCreateForm customers={customers} products={productOptions} />
+      <EnquiryCreateForm customers={customers} products={productOptions} salesPeople={salesPeople} />
     </div>
   )
 }

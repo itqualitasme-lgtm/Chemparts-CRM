@@ -10,6 +10,7 @@ export const metadata = { title: 'Quotation', robots: { index: false } }
 export const dynamic = 'force-dynamic'
 
 const QUOTATION_INCLUDE = {
+  salesPerson: { select: { name: true, email: true, phone: true } },
   customer: {
     select: {
       companyName: true,

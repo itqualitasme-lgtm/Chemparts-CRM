@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { requirePortal } from '@/lib/auth/session'
+import { getActiveSalesPeople } from '@/lib/sales'
 import { db } from '@/lib/db'
 import CustomerForm from '../CustomerForm'
 import { updateCustomer, deleteCustomer } from '../actions'
@@ -24,6 +25,8 @@ export default async function CustomerDetailPage({ params }: { params: Promise<{
   })
   if (!c) notFound()
 
+  const salesPeople = await getActiveSalesPeople()
+
   const defaults = {
     companyName: c.companyName,
     country: c.country,
@@ -39,6 +42,7 @@ export default async function CustomerDetailPage({ params }: { params: Promise<{
     email: c.email,
     website: c.website,
     notes: c.notes,
+    salesPersonId: c.salesPersonId,
   }
   const initialContacts = c.contacts.map((p) => ({
     name: p.name,
@@ -66,6 +70,7 @@ export default async function CustomerDetailPage({ params }: { params: Promise<{
         mode="edit"
         defaults={defaults}
         initialContacts={initialContacts}
+        salesPeople={salesPeople}
       />
 
       <div className="mt-6">

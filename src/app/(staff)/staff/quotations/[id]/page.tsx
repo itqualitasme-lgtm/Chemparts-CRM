@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { requirePortal, getSessionUser } from '@/lib/auth/session'
+import { getActiveSalesPeople } from '@/lib/sales'
 import { db } from '@/lib/db'
 import QuotationEditor, { type Line } from './QuotationEditor'
 import CreateOrderButton from './CreateOrderButton'
@@ -18,7 +19,7 @@ function toDateInput(d: Date | null): string {
 export default async function QuotationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   await requirePortal('staff')
   const { id } = await params
-  const [q, user] = await Promise.all([
+  const [q, user, salesPeople] = await Promise.all([
     db.quotation.findUnique({
       where: { id },
       include: {
@@ -29,6 +30,7 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
       },
     }),
     getSessionUser(),
+    getActiveSalesPeople(),
   ])
   if (!q) notFound()
 
@@ -85,8 +87,10 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
           shipping: Number(q.shipping),
           otherCharges: Number(q.otherCharges),
           otherChargesLabel: q.otherChargesLabel ?? '',
+          salesPersonId: q.salesPersonId ?? '',
         }}
         lines={lines}
+        salesPeople={salesPeople}
       />
 
       {/* Convert an accepted quotation into an order (or jump to the existing one). */}

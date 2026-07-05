@@ -36,6 +36,7 @@ export default async function StaffQuotationsPage() {
       otherCharges: true,
       customer: { select: { companyName: true } },
       enquiry: { select: { enquiryNo: true } },
+      salesPerson: { select: { name: true } },
       items: { select: { qty: true, unitPrice: true, discountPct: true } },
     },
   })
@@ -60,6 +61,7 @@ export default async function StaffQuotationsPage() {
               <tr className="border-b border-slate-200 bg-slate-50 text-left text-slate-600">
                 <th className="px-4 py-2.5 font-medium">Quotation</th>
                 <th className="px-4 py-2.5 font-medium">Customer</th>
+                <th className="px-4 py-2.5 font-medium">Sales</th>
                 <th className="px-4 py-2.5 font-medium">From</th>
                 <th className="px-4 py-2.5 font-medium">Total</th>
                 <th className="px-4 py-2.5 font-medium">Status</th>
@@ -78,6 +80,7 @@ export default async function StaffQuotationsPage() {
                   <tr key={q.id} className="border-b border-slate-100 last:border-0">
                     <td className="px-4 py-2.5 font-mono font-medium text-slate-800">{q.quotationNo}</td>
                     <td className="px-4 py-2.5 text-slate-600">{q.customer?.companyName ?? '—'}</td>
+                    <td className="px-4 py-2.5 text-slate-600">{q.salesPerson?.name ?? '—'}</td>
                     <td className="px-4 py-2.5 font-mono text-xs text-slate-500">{q.enquiry?.enquiryNo ?? '—'}</td>
                     <td className="px-4 py-2.5 text-slate-800">
                       {q.currency} {total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}

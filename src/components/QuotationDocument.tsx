@@ -49,6 +49,7 @@ export type QuotationDocData = {
   deliveryTerms: string | null
   terms: string | null
   notes: string | null
+  salesPerson: { name: string; email: string | null; phone: string | null } | null
   customer: {
     companyName: string
     address: string | null
@@ -113,6 +114,19 @@ export default function QuotationDocument({
               <tr><td className="pr-3 text-slate-400">Date</td><td className="font-medium">{fmtDate(q.createdAt)}</td></tr>
               {q.validUntil ? <tr><td className="pr-3 text-slate-400">Valid until</td><td className="font-medium">{fmtDate(q.validUntil)}</td></tr> : null}
               <tr><td className="pr-3 text-slate-400">Currency</td><td className="font-medium">{q.currency}</td></tr>
+              {q.salesPerson ? (
+                <tr>
+                  <td className="pr-3 align-top text-slate-400">Your contact</td>
+                  <td className="font-medium">
+                    {q.salesPerson.name}
+                    {q.salesPerson.email || q.salesPerson.phone ? (
+                      <div className="text-[11px] font-normal text-slate-500">
+                        {[q.salesPerson.email, q.salesPerson.phone].filter(Boolean).join(' · ')}
+                      </div>
+                    ) : null}
+                  </td>
+                </tr>
+              ) : null}
             </tbody>
           </table>
         </div>

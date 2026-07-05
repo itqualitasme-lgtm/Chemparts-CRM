@@ -63,6 +63,7 @@ export async function createQuotationFromEnquiry(enquiryId: string): Promise<{ e
     select: {
       id: true,
       customerId: true,
+      salesPersonId: true,
       items: {
         select: {
           productId: true,
@@ -87,6 +88,7 @@ export async function createQuotationFromEnquiry(enquiryId: string): Promise<{ e
       status: 'DRAFT',
       currency,
       vatPercent: 5,
+      salesPersonId: enquiry.salesPersonId,
       publicToken: publicToken(),
       items: {
         create: enquiry.items.map((it, i) => ({
@@ -150,6 +152,7 @@ export async function updateQuotation(
         shipping: num(formData, 'shipping'),
         otherCharges: num(formData, 'otherCharges'),
         otherChargesLabel: (formData.get('otherChargesLabel') as string | null)?.trim() || null,
+        salesPersonId: (formData.get('salesPersonId') as string | null)?.trim() || null,
         publicToken: existing.publicToken ?? publicToken(),
         items: {
           create: lines.map((l, i) => ({

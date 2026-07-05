@@ -59,8 +59,23 @@ model Customer {
   enquiries   Enquiry[]
   quotations  Quotation[]
   orders      Order[]
+  salesPerson   SalesPerson? @relation(fields: [salesPersonId], references: [id])
+  salesPersonId String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+// A sales rep who owns customer relationships / enquiries / quotations.
+model SalesPerson {
+  id         String       @id @default(cuid())
+  name       String
+  email      String?
+  phone      String?
+  active     Boolean      @default(true)
+  customers  Customer[]
+  enquiries  Enquiry[]
+  quotations Quotation[]
+  createdAt  DateTime     @default(now())
 }
 
 // A named contact at a customer company (many per customer).
@@ -336,6 +351,8 @@ model Enquiry {
   status       EnquiryStatus @default(NEW)
   items        EnquiryItem[]
   quotations   Quotation[]
+  salesPerson   SalesPerson? @relation(fields: [salesPersonId], references: [id])
+  salesPersonId String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
@@ -380,6 +397,8 @@ model Quotation {
   otherCharges     Decimal  @default(0) @db.Decimal(12, 2)
   otherChargesLabel String?
   publicToken      String?  @unique // for the public (no-login) quotation view + QR
+  salesPerson      SalesPerson? @relation(fields: [salesPersonId], references: [id])
+  salesPersonId    String?
   items            QuotationItem[]
   order            Order?
   createdAt        DateTime        @default(now())

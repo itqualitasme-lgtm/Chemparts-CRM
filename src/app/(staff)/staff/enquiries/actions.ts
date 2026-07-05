@@ -63,13 +63,16 @@ export async function createEnquiry(_prev: CreateEnquiryState, formData: FormDat
 
   const customerMode = (formData.get('customerMode') as string | null) ?? 'existing'
   let customerId: string | null = null
-  let contactName: string | null = (formData.get('contactName') as string | null)?.trim() || null
+  const contactName: string | null = (formData.get('contactName') as string | null)?.trim() || null
+  let salesPersonId: string | null = (formData.get('salesPersonId') as string | null)?.trim() || null
 
   if (customerMode === 'existing') {
     customerId = (formData.get('customerId') as string | null)?.trim() || null
     if (!customerId) return { error: 'Choose an existing customer or switch to “new customer”.' }
-    const exists = await db.customer.findUnique({ where: { id: customerId }, select: { id: true } })
+    const exists = await db.customer.findUnique({ where: { id: customerId }, select: { id: true, salesPersonId: true } })
     if (!exists) return { error: 'Selected customer not found.' }
+    // Fall back to the customer's default sales person if none chosen.
+    if (!salesPersonId) salesPersonId = exists.salesPersonId
   } else {
     const companyName = (formData.get('newCompanyName') as string | null)?.trim()
     if (!companyName) return { error: 'Enter the new company name.' }
@@ -82,6 +85,7 @@ export async function createEnquiry(_prev: CreateEnquiryState, formData: FormDat
         country,
         email,
         phone,
+        salesPersonId,
         source: 'STAFF',
         contacts: contactName
           ? { create: [{ name: contactName, email, phone, isPrimary: true }] }
@@ -108,6 +112,7 @@ export async function createEnquiry(_prev: CreateEnquiryState, formData: FormDat
       type,
       customerId,
       contactName,
+      salesPersonId,
       createdByProfile: user.id,
       message,
       status: 'NEW',

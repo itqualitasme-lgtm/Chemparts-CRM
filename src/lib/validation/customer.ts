@@ -56,6 +56,7 @@ export const customerSchema = z.object({
     .transform((v) => (v ? v : undefined)),
   website: opt(300),
   notes: opt(3000),
+  salesPersonId: opt(40),
 })
 
 export type CustomerInput = z.infer<typeof customerSchema>

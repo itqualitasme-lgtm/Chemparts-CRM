@@ -5,8 +5,9 @@ import Link from 'next/link'
 import { createEnquiry, type CreateEnquiryState } from '../actions'
 import CountrySelect from '@/components/CountrySelect'
 
-type CustomerOpt = { id: string; companyName: string }
+type CustomerOpt = { id: string; companyName: string; salesPersonId: string | null }
 type ProductOpt = { id: string; name: string; brand: string; type: string }
+type SalesOpt = { id: string; name: string }
 type Line = { productId: string; name: string; brand: string; qty: number; note: string }
 
 const inputCls =
@@ -28,14 +29,17 @@ const TYPES = [
 export default function EnquiryCreateForm({
   customers,
   products,
+  salesPeople,
 }: {
   customers: CustomerOpt[]
   products: ProductOpt[]
+  salesPeople: SalesOpt[]
 }) {
   const [state, formAction, pending] = useActionState<CreateEnquiryState, FormData>(createEnquiry, {})
   const [mode, setMode] = useState<'existing' | 'new'>(customers.length ? 'existing' : 'new')
   const [lines, setLines] = useState<Line[]>([])
   const [search, setSearch] = useState('')
+  const [salesPersonId, setSalesPersonId] = useState('')
 
   const matches = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -84,6 +88,21 @@ export default function EnquiryCreateForm({
             <span className={labelCls}>Contact person (who enquired)</span>
             <input name="contactName" className={inputCls} placeholder="Name of the person" />
           </label>
+          <label className="block sm:col-span-2">
+            <span className={labelCls}>Sales person</span>
+            <select
+              name="salesPersonId"
+              value={salesPersonId}
+              onChange={(e) => setSalesPersonId(e.target.value)}
+              className={inputCls}
+            >
+              <option value="">Unassigned</option>
+              {salesPeople.map((s) => (
+                <option key={s.id} value={s.id}>{s.name}</option>
+              ))}
+            </select>
+            <span className="mt-1 block text-xs text-slate-400">Defaults to the customer’s sales person; carries onto the quotation.</span>
+          </label>
         </div>
 
         <div className="mt-5">
@@ -107,7 +126,15 @@ export default function EnquiryCreateForm({
           {mode === 'existing' ? (
             <label className="block">
               <span className={labelCls}>Customer</span>
-              <select name="customerId" className={inputCls} defaultValue="">
+              <select
+                name="customerId"
+                className={inputCls}
+                defaultValue=""
+                onChange={(e) => {
+                  const c = customers.find((x) => x.id === e.target.value)
+                  if (c?.salesPersonId) setSalesPersonId(c.salesPersonId)
+                }}
+              >
                 <option value="" disabled>Select a customer…</option>
                 {customers.map((c) => (
                   <option key={c.id} value={c.id}>{c.companyName}</option>

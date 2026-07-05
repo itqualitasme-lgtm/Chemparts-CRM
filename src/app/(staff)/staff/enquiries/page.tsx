@@ -59,6 +59,7 @@ export default async function StaffEnquiriesPage() {
       message: true,
       createdAt: true,
       customer: { select: { companyName: true } },
+      salesPerson: { select: { name: true } },
       items: {
         select: { id: true, productName: true, qty: true, priceRequested: true, note: true },
       },
@@ -117,6 +118,7 @@ export default async function StaffEnquiriesPage() {
                     </p>
                     <p className="text-sm text-slate-500">
                       {itemCount} {itemCount === 1 ? 'line item' : 'line items'}
+                      {e.salesPerson ? <span> · <span className="text-slate-400">Sales:</span> {e.salesPerson.name}</span> : null}
                     </p>
                   </div>
                   <div className="flex flex-col items-end gap-2">

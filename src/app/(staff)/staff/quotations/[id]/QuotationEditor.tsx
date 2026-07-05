@@ -15,6 +15,7 @@ type Header = {
   shipping: number
   otherCharges: number
   otherChargesLabel: string
+  salesPersonId: string
 }
 
 const STATUSES = ['DRAFT', 'SENT', 'ACCEPTED', 'REJECTED', 'EXPIRED']
@@ -29,10 +30,12 @@ export default function QuotationEditor({
   quotationId,
   header,
   lines: initialLines,
+  salesPeople = [],
 }: {
   quotationId: string
   header: Header
   lines: Line[]
+  salesPeople?: { id: string; name: string }[]
 }) {
   const [state, formAction, pending] = useActionState<QuotationState, FormData>(
     updateQuotation.bind(null, quotationId),
@@ -169,6 +172,13 @@ export default function QuotationEditor({
           <span className="mb-1 block text-sm font-medium text-slate-700">Status</span>
           <select name="status" defaultValue={header.status} className={inputCls}>
             {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium text-slate-700">Sales person</span>
+          <select name="salesPersonId" defaultValue={header.salesPersonId} className={inputCls}>
+            <option value="">Unassigned</option>
+            {salesPeople.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
           </select>
         </label>
         <label className="block">

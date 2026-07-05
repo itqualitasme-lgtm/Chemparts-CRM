@@ -16,6 +16,7 @@ export default async function PublicQuotationPage({ params }: { params: Promise<
   const q = await db.quotation.findUnique({
     where: { publicToken: token },
     include: {
+      salesPerson: { select: { name: true, email: true, phone: true } },
       customer: {
         select: {
           companyName: true,
