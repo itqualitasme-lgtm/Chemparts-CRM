@@ -277,10 +277,24 @@ export default function QuotationDocument({
         </ol>
       </div>
 
-      {/* Footer */}
-      <footer className="mt-8 border-t-2 border-[#0A2540] pt-3 text-center text-[10px] text-slate-500">
-        {[company.legal, company.phone, company.email, company.web].filter(Boolean).join(' · ')}
-        <div className="mt-0.5">This is a computer-generated quotation and is valid without signature.</div>
+      {/* Footer — registered offices (company letterhead) */}
+      <footer className="mt-8 border-t-2 border-[#0A2540] pt-3 text-[9px] leading-snug text-slate-500">
+        <div className="grid grid-cols-2 gap-6">
+          <div>
+            <div className="text-[10px] font-semibold text-[#0A2540]">Head Office</div>
+            <div>Chemparts Middle East FZC</div>
+            <div>P.O. Box 9681, Sharjah — United Arab Emirates</div>
+            <div>Tel +971 6 5574047 · Fax +971 6 5574067</div>
+          </div>
+          <div className="text-right">
+            <div className="text-[10px] font-semibold text-[#0A2540]">Branch Office</div>
+            <div>Chemparts Medical &amp; Laboratory Supplies L.L.C</div>
+            <div>P.O. Box 9029, Abu Dhabi — United Arab Emirates</div>
+            <div>Tel +971 2 5527185 · Fax +971 2 5527195</div>
+          </div>
+        </div>
+        <div className="mt-2 text-center">Email: info@chemparts-me.com · Website: www.chemparts-me.com</div>
+        <div className="mt-0.5 text-center">This is a computer-generated quotation and is valid without signature.</div>
       </footer>
     </div>
   )

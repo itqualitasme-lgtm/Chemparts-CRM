@@ -42,49 +42,6 @@ export default function SiteFooter() {
         </div>
       </div>
 
-      {/* Registered offices — from the company letterhead */}
-      <div
-        style={{
-          display: 'grid',
-          gap: 24,
-          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-          borderTop: '1px solid rgba(255,255,255,0.12)',
-          paddingTop: 28,
-          marginTop: 8,
-        }}
-      >
-        <div>
-          <h4>Head Office</h4>
-          <p style={{ fontSize: 13, lineHeight: 1.7 }}>
-            Chemparts Middle East FZC<br />
-            P.O. Box 9681, Sharjah — United Arab Emirates<br />
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>Tel +971 6 5574047 · Fax +971 6 5574067</span>
-          </p>
-        </div>
-        <div>
-          <h4>Branch Office</h4>
-          <p style={{ fontSize: 13, lineHeight: 1.7 }}>
-            Chemparts Medical &amp; Laboratory Supplies L.L.C<br />
-            P.O. Box 9029, Abu Dhabi — United Arab Emirates<br />
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>Tel +971 2 5527185 · Fax +971 2 5527195</span>
-          </p>
-        </div>
-      </div>
-
-      <p
-        style={{
-          textAlign: 'center',
-          fontFamily: 'var(--font-mono)',
-          fontSize: 12.5,
-          marginTop: 20,
-          letterSpacing: '0.02em',
-        }}
-      >
-        Email: <a href="mailto:chempart@eim.ae" style={{ color: 'inherit', textDecoration: 'underline' }}>chempart@eim.ae</a>
-        <span style={{ opacity: 0.5, margin: '0 8px' }}>·</span>
-        Website: <a href="https://www.chemparts-me.com" target="_blank" rel="noopener" style={{ color: 'inherit', textDecoration: 'underline' }}>www.chemparts-me.com</a>
-      </p>
-
       <div className="site-footer__bottom">
         <span>© <span data-year>2026</span> CHEMPARTS MIDDLE EAST FZC · CHEMPARTS MEDICAL &amp; LABORATORY SUPPLIES LLC</span>
         <span>[ BUILT ON STANDARDS · ISO 9001 · 14001 ]</span>
