@@ -1,6 +1,17 @@
 import Script from 'next/script'
+import { getPublicCatalog } from '@/lib/catalog-data'
 
-export default function SiteChrome({ extraScripts = [] }: { extraScripts?: string[] }) {
+export default async function SiteChrome({ extraScripts = [] }: { extraScripts?: string[] }) {
+  const catalog = await getPublicCatalog()
+  // Inline the live catalog so it exists before the afterInteractive scripts run.
+  // Replaces the frozen static /assets/js/products.js — this is what makes staff
+  // product/brand edits show up on the website.
+  const catalogScript = (
+    `window.PRODUCTS=${JSON.stringify(catalog.products)};` +
+    `window.BRANDS=${JSON.stringify(catalog.brands)};` +
+    `window.INDUSTRIES=${JSON.stringify(catalog.industries)};` +
+    `window.TEST_TYPES=${JSON.stringify(catalog.testTypes)};`
+  ).replace(/</g, '\\u003c')
   return (
     <>
       {/* precedence makes React 19 hoist this to <head> and treat it as a
@@ -38,7 +49,8 @@ export default function SiteChrome({ extraScripts = [] }: { extraScripts?: strin
         <a className="btn btn--whatsapp" href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp</a>
       </div>
 
-      <Script src="/assets/js/products.js" strategy="afterInteractive" />
+      {/* Live catalog data from the database (was: static /assets/js/products.js) */}
+      <script dangerouslySetInnerHTML={{ __html: catalogScript }} />
       <Script src="/assets/js/app.js" strategy="afterInteractive" />
       {extraScripts.map((src) => (
         <Script key={src} src={src} strategy="afterInteractive" />

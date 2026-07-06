@@ -1,4 +1,5 @@
 import { getInstrumentCount } from '@/lib/counts'
+import BrandMarquee from '@/components/site/BrandMarquee'
 
 export const dynamic = 'force-dynamic'
 
@@ -803,50 +804,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* PARTNERS MARQUEE */}
-        <section className="section section--tight" style={{ paddingTop: 0 }}>
-          <div className="container">
-            <div className="section-head">
-              <div className="section-head__title">
-                <span className="eyebrow">Brand partners</span>
-                <h2 className="h-2">16+ specialist <em>brands</em>.</h2>
-              </div>
-              <p className="section-head__sub">Authorized regional partner for instruments built by category leaders.</p>
-            </div>
-          </div>
-          <div className="marquee" data-reveal style={{ marginBottom: 24 }}>
-            <div className="marquee__track">
-              <img width="140" height="36" src="/assets/images/partners/hitachi.jpg" alt="Hitachi" />
-              <img width="140" height="36" src="/assets/images/partners/tanaka.jpg" alt="Tanaka" />
-              <img width="140" height="36" src="/assets/images/partners/oxford.jpg" alt="Oxford Instruments" />
-              <img width="140" height="36" src="/assets/images/partners/kem-logo.jpg" alt="KEM" />
-              <img width="140" height="36" src="/assets/images/partners/ika.jpg" alt="IKA" />
-              <img width="140" height="36" src="/assets/images/partners/pt-tamson-logo.jpg" alt="PT Tamson" />
-              <img width="140" height="36" src="/assets/images/partners/normalab.svg" alt="Normalab" />
-              <img width="140" height="36" src="/assets/images/partners/nabertherm.webp" alt="Nabertherm" />
-              <img width="140" height="36" src="/assets/images/partners/biolab.png" alt="Biolab" />
-              <img width="140" height="36" src="/assets/images/partners/silverson.svg" alt="Silverson" />
-              <img width="140" height="36" src="/assets/images/partners/dataphysics.svg" alt="Dataphysics" />
-              <img width="140" height="36" src="/assets/images/partners/peak-instrument.jpg" alt="Peak Instrument" />
-            </div>
-          </div>
-          <div className="marquee marquee--reverse">
-            <div className="marquee__track">
-              <img width="140" height="36" src="/assets/images/partners/ne-techology-logo.jpg" alt="NE Technology" />
-              <img width="140" height="36" src="/assets/images/partners/debyetechnic.jpg" alt="Debye Technic" />
-              <img width="140" height="36" src="/assets/images/partners/chromos.jpg" alt="Chromos" />
-              <img width="140" height="36" src="/assets/images/partners/pmt.webp" alt="PMT" />
-              <img width="140" height="36" src="/assets/images/partners/pg-instruments.webp" alt="PG Instruments" />
-              <img width="140" height="36" src="/assets/images/partners/milwaukee.webp" alt="Milwaukee" />
-              <img width="140" height="36" src="/assets/images/partners/allafrance.webp" alt="Alla France" />
-              <img width="140" height="36" src="/assets/images/partners/linetronics.jpg" alt="Linetronics" />
-              <img width="140" height="36" src="/assets/images/partners/shnori.jpg" alt="Shnori" />
-              <img width="140" height="36" src="/assets/images/partners/partner-logo-01.jpg" alt="Partner" />
-              <img width="140" height="36" src="/assets/images/partners/partner-logo-02.jpg" alt="Partner" />
-              <img width="140" height="36" src="/assets/images/partners/partner-logo-03.jpg" alt="Partner" />
-            </div>
-          </div>
-        </section>
+        {/* PARTNERS MARQUEE — DB-driven (reflects staff brand edits) */}
+        <BrandMarquee />
 
         <hr className="rule" />
 
