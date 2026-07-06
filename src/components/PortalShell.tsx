@@ -1,51 +1,64 @@
 import Link from 'next/link'
 import { logout } from '@/app/(auth)/actions'
+import PortalMenu, { type NavGroup } from '@/components/PortalMenu'
 import type { SessionUser } from '@/lib/auth/session'
 import type { Portal } from '@/lib/auth/rbac'
 
 type NavItem = { href: string; label: string }
 
-const NAV: Record<Portal, NavItem[]> = {
-  store: [
-    { href: '/account', label: 'Overview' },
-    { href: '/products', label: 'Store' },
-    { href: '/account/enquiries', label: 'Enquiries' },
-    { href: '/account/quotations', label: 'Quotations' },
-    { href: '/account/orders', label: 'Orders' },
-  ],
+// Customer store portal — flat, small (desktop top nav + mobile bottom tabs).
+const STORE_NAV: NavItem[] = [
+  { href: '/account', label: 'Overview' },
+  { href: '/products', label: 'Store' },
+  { href: '/account/enquiries', label: 'Enquiries' },
+  { href: '/account/quotations', label: 'Quotations' },
+  { href: '/account/orders', label: 'Orders' },
+]
+
+// Staff/vendor/admin — grouped into a slide-in drawer menu.
+const SALES_ITEMS: NavItem[] = [
+  { href: '/staff/enquiries', label: 'Enquiries' },
+  { href: '/staff/quotations', label: 'Quotations' },
+  { href: '/staff/orders', label: 'Orders' },
+  { href: '/staff/service-requests', label: 'Service requests' },
+  { href: '/staff/price-requests', label: 'Price requests' },
+  { href: '/staff/customers', label: 'Customers' },
+  { href: '/staff/sales-people', label: 'Sales people' },
+]
+const CATALOG_ITEMS: NavItem[] = [
+  { href: '/staff/products', label: 'Products' },
+  { href: '/staff/brands', label: 'Brands' },
+  { href: '/staff/stock', label: 'Stock' },
+]
+
+const GROUPS: Record<'staff' | 'vendor' | 'admin', NavGroup[]> = {
   staff: [
-    { href: '/staff', label: 'Dashboard' },
-    { href: '/staff/enquiries', label: 'Enquiries' },
-    { href: '/staff/quotations', label: 'Quotations' },
-    { href: '/staff/orders', label: 'Orders' },
-    { href: '/staff/service-requests', label: 'Service requests' },
-    { href: '/staff/price-requests', label: 'Price requests' },
-    { href: '/staff/products', label: 'Products' },
-    { href: '/staff/brands', label: 'Brands' },
-    { href: '/staff/customers', label: 'Customers' },
-    { href: '/staff/sales-people', label: 'Sales people' },
-    { href: '/staff/stock', label: 'Stock' },
+    { items: [{ href: '/staff', label: 'Dashboard' }] },
+    { title: 'Sales', items: SALES_ITEMS },
+    { title: 'Catalog', items: CATALOG_ITEMS },
   ],
   vendor: [
-    { href: '/vendor', label: 'Overview' },
-    { href: '/vendor/purchase-orders', label: 'Purchase orders' },
-    { href: '/vendor/bills', label: 'Bills' },
+    { items: [{ href: '/vendor', label: 'Overview' }] },
+    {
+      title: 'Purchasing',
+      items: [
+        { href: '/vendor/purchase-orders', label: 'Purchase orders' },
+        { href: '/vendor/bills', label: 'Bills' },
+      ],
+    },
   ],
   admin: [
-    { href: '/admin', label: 'Dashboard' },
-    { href: '/staff/products', label: 'Products' },
-    { href: '/staff/brands', label: 'Brands' },
-    { href: '/staff/customers', label: 'Customers' },
-    { href: '/staff/sales-people', label: 'Sales people' },
-    { href: '/staff/enquiries', label: 'Enquiries' },
-    { href: '/staff/quotations', label: 'Quotations' },
-    { href: '/staff/orders', label: 'Orders' },
-    { href: '/staff/service-requests', label: 'Service requests' },
-    { href: '/staff/price-requests', label: 'Price requests' },
-    { href: '/staff/stock', label: 'Stock' },
-    { href: '/admin/users', label: 'Users' },
-    { href: '/admin/settings', label: 'Settings' },
-    { href: '/admin/reports', label: 'Reports' },
+    { items: [{ href: '/admin', label: 'Dashboard' }] },
+    { title: 'Sales', items: SALES_ITEMS },
+    { title: 'Catalog', items: CATALOG_ITEMS },
+    {
+      title: 'Administration',
+      items: [
+        { href: '/admin/users', label: 'Users' },
+        { href: '/admin/settings', label: 'Settings' },
+        { href: '/admin/reports', label: 'Reports' },
+      ],
+    },
   ],
 }
 
@@ -65,16 +78,21 @@ export default function PortalShell({
   user: SessionUser
   children: React.ReactNode
 }) {
-  // Admins see one comprehensive menu everywhere (they can reach every tool),
-  // so the sidebar stays consistent when they open a staff-area module.
-  const nav = user.role === 'ADMIN' ? NAV.admin : NAV[portal]
   const isCustomer = portal === 'store'
+  // Admins see one comprehensive menu everywhere (they can reach every tool),
+  // so the drawer stays consistent when they open a staff-area module.
+  const groups: NavGroup[] = isCustomer
+    ? []
+    : user.role === 'ADMIN'
+      ? GROUPS.admin
+      : GROUPS[portal as 'staff' | 'vendor']
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-[#0A2540] text-white">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
           <div className="flex items-center gap-3">
+            {!isCustomer && <PortalMenu groups={groups} label={PORTAL_LABEL[portal]} />}
             <Link href="/" className="flex items-center gap-2.5" aria-label="Chemparts — home">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/assets/images/logo.svg" alt="Chemparts" width={40} height={20} className="h-5 w-auto" />
@@ -106,7 +124,7 @@ export default function PortalShell({
       {isCustomer && (
         <nav className="hidden border-b border-slate-200 bg-white md:block">
           <div className="mx-auto flex max-w-6xl gap-1 px-4 py-2">
-            {nav.map((item) => (
+            {STORE_NAV.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -120,14 +138,14 @@ export default function PortalShell({
       )}
 
       <div className="mx-auto flex w-full max-w-6xl flex-1">
-        <main className={`flex-1 p-4 md:p-8 pb-24 ${isCustomer ? 'md:pb-8' : 'md:pb-24'}`}>{children}</main>
+        <main className={`flex-1 p-4 md:p-8 ${isCustomer ? 'pb-24 md:pb-8' : ''}`}>{children}</main>
       </div>
 
-      {/* Customer keeps its desktop top nav + mobile bottom tabs. Staff/admin
-          use a single fixed scrolling menu bar at the bottom on every size. */}
-      {isCustomer ? (
+      {/* Staff/vendor/admin navigate via the drawer in the header. Customer keeps
+          its desktop top nav + mobile bottom tabs. */}
+      {isCustomer && (
         <nav className="fixed inset-x-0 bottom-0 z-20 flex border-t border-slate-200 bg-white md:hidden">
-          {nav.map((item) => (
+          {STORE_NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -137,22 +155,7 @@ export default function PortalShell({
             </Link>
           ))}
         </nav>
-      ) : (
-        <nav className="fixed inset-x-0 bottom-0 z-20 flex justify-center border-t border-slate-200 bg-white">
-          <div className="flex w-full max-w-6xl overflow-x-auto">
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="shrink-0 px-4 py-3 text-center text-xs font-medium text-slate-600 hover:bg-slate-50"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </nav>
       )}
-
     </div>
   )
 }
