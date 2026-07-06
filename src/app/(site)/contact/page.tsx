@@ -165,9 +165,15 @@ export default function ContactPage() {
               </div>
               <p className="section-head__sub">Head office. Walk-ins by appointment.</p>
             </div>
-            <div style={{ border: '1px solid var(--rule)', aspectRatio: '21/9', overflow: 'hidden' }}>
-              <iframe src="https://www.google.com/maps?q=SAIF%20Zone%20Sharjah&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" style={{ width: '100%', height: '100%', border: 0 }} title="Chemparts SAIF Zone office on Google Maps"></iframe>
+            <div style={{ border: '1px solid var(--rule)', aspectRatio: '21/9', overflow: 'hidden', background: 'var(--bg-2)' }}>
+              <iframe src="https://maps.google.com/maps?q=SAIF+Zone+Sharjah&z=13&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" style={{ width: '100%', height: '100%', border: 0 }} title="Chemparts SAIF Zone office on Google Maps"></iframe>
             </div>
+            <p className="mono text-muted" style={{ fontSize: 12, marginTop: 12 }}>
+              Map not loading?{' '}
+              <a href="https://maps.google.com/?q=SAIF+Zone+Sharjah+A2-96" target="_blank" rel="noopener" style={{ color: 'var(--crimson)', textDecoration: 'underline' }}>
+                Open in Google Maps ↗
+              </a>
+            </p>
           </div>
         </section>
 

@@ -100,6 +100,9 @@ export default function QuotationDocument({
     { shipping: Number(q.shipping), other: Number(q.otherCharges) },
   )
   const m = (n: number) => `${q.currency} ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  // Plain amount (no currency) — the line-item table states the currency once in
+  // its column headers instead of repeating it on every row.
+  const n2 = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   const contact = q.customer?.contacts[0]
   const hasDiscount = q.items.some((i) => Number(i.discountPct) > 0)
   const anyItemDelivery = q.items.some((i) => i.deliveryPeriod)
@@ -183,9 +186,9 @@ export default function QuotationDocument({
             <th className="w-8 px-2 py-2 font-medium">#</th>
             <th className="px-2 py-2 font-medium">Description</th>
             <th className="w-12 px-2 py-2 text-center font-medium">Qty</th>
-            <th className="w-24 px-2 py-2 text-right font-medium">Unit price</th>
+            <th className="w-24 px-2 py-2 text-right font-medium">Unit price ({q.currency})</th>
             {hasDiscount ? <th className="w-12 px-2 py-2 text-right font-medium">Disc</th> : null}
-            <th className="w-28 px-2 py-2 text-right font-medium">Amount</th>
+            <th className="w-28 px-2 py-2 text-right font-medium">Amount ({q.currency})</th>
           </tr>
         </thead>
         <tbody>
@@ -224,9 +227,9 @@ export default function QuotationDocument({
                   </div>
                 </td>
                 <td className="px-2 py-2 text-center text-slate-700">{it.qty}</td>
-                <td className="px-2 py-2 text-right font-mono text-slate-700">{m(Number(it.unitPrice))}</td>
+                <td className="px-2 py-2 text-right font-mono text-slate-700">{n2(Number(it.unitPrice))}</td>
                 {hasDiscount ? <td className="px-2 py-2 text-right font-mono text-slate-600">{disc > 0 ? `${disc}%` : '—'}</td> : null}
-                <td className="px-2 py-2 text-right font-mono text-slate-800">{m(it.qty * Number(it.unitPrice) * (1 - disc / 100))}</td>
+                <td className="px-2 py-2 text-right font-mono text-slate-800">{n2(it.qty * Number(it.unitPrice) * (1 - disc / 100))}</td>
               </tr>
             )
           })}
