@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import type { ProductState } from './actions'
 import { PRODUCT_TYPES } from '@/lib/validation/product'
 
@@ -56,6 +56,8 @@ export default function ProductForm({
   submitLabel: string
 }) {
   const [state, formAction, pending] = useActionState<ProductState, FormData>(action, {})
+  const [type, setType] = useState(initial.type ?? 'EQUIPMENT')
+  const isEquipment = type === 'EQUIPMENT'
 
   return (
     <form action={formAction} className="max-w-2xl space-y-4">
@@ -86,7 +88,7 @@ export default function ProductForm({
         </label>
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-slate-700">Type</span>
-          <select name="type" defaultValue={initial.type ?? 'EQUIPMENT'} className={inputCls}>
+          <select name="type" value={type} onChange={(e) => setType(e.target.value)} className={inputCls}>
             {PRODUCT_TYPES.map((t) => (
               <option key={t} value={t}>
                 {TYPE_LABELS[t]}
@@ -181,21 +183,27 @@ export default function ProductForm({
           <span className="mb-1 block text-sm font-medium text-slate-700">Model no. (optional)</span>
           <input name="modelNo" defaultValue={initial.modelNo} className={inputCls} />
         </label>
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium text-slate-700">List price (spares/consumables)</span>
-          <input name="listPrice" type="number" step="0.01" min="0" defaultValue={initial.listPrice ?? ''} className={inputCls} />
-          <Err errors={state.fieldErrors} name="listPrice" />
-        </label>
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium text-slate-700">Currency</span>
-          <select name="currency" defaultValue={initial.currency ?? 'AED'} className={inputCls}>
-            {['AED', 'USD', 'QAR', 'EUR'].map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </label>
+        {/* Equipment is enquiry/quote-only — no list price. Hidden for EQUIPMENT
+            (and not submitted, so any stale price is cleared on save). */}
+        {!isEquipment && (
+          <>
+            <label className="block">
+              <span className="mb-1 block text-sm font-medium text-slate-700">List price (spares/consumables)</span>
+              <input name="listPrice" type="number" step="0.01" min="0" defaultValue={initial.listPrice ?? ''} className={inputCls} />
+              <Err errors={state.fieldErrors} name="listPrice" />
+            </label>
+            <label className="block">
+              <span className="mb-1 block text-sm font-medium text-slate-700">Currency</span>
+              <select name="currency" defaultValue={initial.currency ?? 'AED'} className={inputCls}>
+                {['AED', 'USD', 'QAR', 'EUR'].map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </>
+        )}
       </div>
 
       <div className="flex gap-6">

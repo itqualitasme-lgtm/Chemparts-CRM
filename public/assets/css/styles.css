@@ -543,17 +543,18 @@ hr.rule + .section,
 .brand__name-flip__opt:nth-child(1) { animation-name: brand-flip-a; }
 .brand__name-flip__opt:nth-child(2) { animation-name: brand-flip-b; }
 
-/* Name 1 (Middle East FZC) visible 0–45%, hidden 50–95%, back to visible at 100% */
+/* Name 1 (Middle East FZC). Fully faded out BEFORE name 2 fades in, so the two
+   different strings never overlap into garbled text during the crossfade. */
 @keyframes brand-flip-a {
-  0%, 42%   { opacity: 1; transform: translateY(0); }
-  50%, 92%  { opacity: 0; transform: translateY(-4px); }
+  0%, 40%   { opacity: 1; transform: translateY(0); }
+  46%, 94%  { opacity: 0; transform: translateY(-4px); }
   100%      { opacity: 1; transform: translateY(0); }
 }
-/* Name 2 (Medical & Laboratory Supplies) inverse — visible 50–92% */
+/* Name 2 (Medical & Laboratory Supplies) — starts only after name 1 is hidden. */
 @keyframes brand-flip-b {
-  0%, 42%   { opacity: 0; transform: translateY(4px); }
-  50%, 92%  { opacity: 1; transform: translateY(0); }
-  100%      { opacity: 0; transform: translateY(4px); }
+  0%, 50%   { opacity: 0; transform: translateY(4px); }
+  56%, 88%  { opacity: 1; transform: translateY(0); }
+  94%, 100% { opacity: 0; transform: translateY(4px); }
 }
 /* Brand-name flip always runs (slower for reduced-motion) */
 @media (prefers-reduced-motion: reduce) {
