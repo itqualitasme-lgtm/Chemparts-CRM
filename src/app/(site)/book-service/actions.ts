@@ -6,6 +6,7 @@ import { getSessionUser } from '@/lib/auth/session'
 import { nextServiceNo, SERVICE_TYPE_LABEL } from '@/lib/service'
 import { appUrl } from '@/lib/env'
 import { notify, notifyStaff } from '@/lib/mail/notify'
+import { createNotification } from '@/lib/notifications'
 import type { ServiceType } from '@/generated/prisma/client'
 
 export type BookServiceState = { ok?: boolean; error?: string; requestNo?: string }
@@ -65,6 +66,7 @@ export async function bookService(_prev: BookServiceState, formData: FormData): 
       equipment: equipment ?? '',
       link: `${appUrl()}/staff/service-requests`,
     })
+    await createNotification({ kind: 'SERVICE', title: `New service request ${requestNo}`, body: `${guestCompany || guestName || user?.fullName || 'Guest'} · ${SERVICE_TYPE_LABEL[type] ?? type}`, link: '/staff/service-requests', entity: 'ServiceRequest' })
   })
 
   return { ok: true, requestNo }

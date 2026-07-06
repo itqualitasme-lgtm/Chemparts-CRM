@@ -52,7 +52,9 @@ export default function PortalDashboard({ data, firstName, title }: { data: Dash
         <StatCard label="Active orders" value={data.ordersActive} href="/staff/orders" tone="blue" />
         <StatCard label="Price requests" value={data.priceOpen} href="/staff/price-requests" tone={data.priceOpen > 0 ? 'amber' : 'default'} hint="open" />
         <StatCard label="Service requests" value={data.serviceNew} href="/staff/service-requests" tone={data.serviceNew > 0 ? 'amber' : 'default'} hint="new" />
-        <StatCard label="Products" value={data.products} href="/staff/products" hint="active" />
+        <StatCard label="Equipment" value={data.productsEquipment} href="/staff/products?type=EQUIPMENT" hint="active" />
+        <StatCard label="Consumables" value={data.productsConsumable} href="/staff/products?type=CONSUMABLE" hint="active" />
+        <StatCard label="Spare parts" value={data.productsSpare} href="/staff/products?type=SPARE_PART" hint="active" />
         <StatCard label="Customers" value={data.customers} href="/staff/customers" />
       </div>
 

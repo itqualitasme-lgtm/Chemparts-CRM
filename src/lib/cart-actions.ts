@@ -7,6 +7,7 @@ import { getSessionUser } from '@/lib/auth/session'
 import { canAddToCart } from '@/lib/price'
 import { appUrl } from '@/lib/env'
 import { notify, notifyStaff } from '@/lib/mail/notify'
+import { createNotification } from '@/lib/notifications'
 import { nextEnquiryNo } from '@/lib/enquiry-no'
 import {
   ensureCart,
@@ -197,6 +198,7 @@ export async function submitEnquiry(formData: FormData): Promise<SubmitEnquirySt
       summary: `${cart.lines.length} item${cart.lines.length === 1 ? '' : 's'}${message ? ` · ${message}` : ''}`.slice(0, 220),
       link: `${appUrl()}/staff/enquiries`,
     })
+    await createNotification({ kind: 'ENQUIRY', title: `New enquiry ${enquiryNo}`, body: `${who} · cart (${cart.lines.length} item${cart.lines.length === 1 ? '' : 's'})`, link: '/staff/enquiries', entity: 'Enquiry' })
   })
 
   revalidateStore()

@@ -3,6 +3,7 @@ import { db } from '@/lib/db'
 import { nextEnquiryNo } from '@/lib/enquiry-no'
 import { appUrl } from '@/lib/env'
 import { notify, notifyStaff } from '@/lib/mail/notify'
+import { createNotification } from '@/lib/notifications'
 
 // Public endpoint for the site-wide "Get a quote" modal. The modal still opens
 // WhatsApp; this logs a staff-portal enquiry (channel WEBSITE) in parallel.
@@ -53,6 +54,7 @@ export async function POST(req: Request) {
       summary: message,
       link: `${appUrl()}/staff/enquiries`,
     })
+    await createNotification({ kind: 'ENQUIRY', title: `New enquiry ${enquiryNo}`, body: `${company || name} · quote form`, link: '/staff/enquiries', entity: 'Enquiry' })
   })
 
   return NextResponse.json({ ok: true, enquiryNo })

@@ -530,6 +530,23 @@ model Setting {
   updatedAt DateTime @updatedAt
 }
 
+// In-app staff notifications (shared team inbox). readAt/readBy mark who cleared it.
+model Notification {
+  id         String    @id @default(cuid())
+  kind       String    @default("INFO") // ENQUIRY | SERVICE | PRICE | INFO
+  title      String
+  body       String?
+  link       String?
+  entity     String?
+  entityId   String?
+  readAt     DateTime?
+  readById   String? // Profile id of the staff who marked it read
+  readByName String?
+  createdAt  DateTime  @default(now())
+
+  @@index([readAt, createdAt])
+}
+
 model EmailLog {
   id        String   @id @default(cuid())
   to        String

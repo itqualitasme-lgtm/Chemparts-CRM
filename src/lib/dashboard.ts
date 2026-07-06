@@ -11,7 +11,9 @@ export type DashboardData = {
   ordersActive: number
   priceOpen: number
   serviceNew: number
-  products: number
+  productsEquipment: number
+  productsConsumable: number
+  productsSpare: number
   customers: number
   recentEnquiries: RecentRow[]
   recentQuotations: RecentRow[]
@@ -27,7 +29,9 @@ export async function getDashboardData(): Promise<DashboardData> {
     ordersActive,
     priceOpen,
     serviceNew,
-    products,
+    productsEquipment,
+    productsConsumable,
+    productsSpare,
     customers,
     recentEnquiries,
     recentQuotations,
@@ -39,7 +43,9 @@ export async function getDashboardData(): Promise<DashboardData> {
     db.order.count({ where: { status: { in: ['PENDING', 'CONFIRMED', 'IN_PROGRESS'] } } }),
     db.priceRequest.count({ where: { status: 'OPEN' } }),
     db.serviceRequest.count({ where: { status: 'NEW' } }),
-    db.product.count({ where: { active: true } }),
+    db.product.count({ where: { active: true, type: 'EQUIPMENT' } }),
+    db.product.count({ where: { active: true, type: 'CONSUMABLE' } }),
+    db.product.count({ where: { active: true, type: 'SPARE_PART' } }),
     db.customer.count(),
     db.enquiry.findMany({
       orderBy: { createdAt: 'desc' },
@@ -61,7 +67,9 @@ export async function getDashboardData(): Promise<DashboardData> {
     ordersActive,
     priceOpen,
     serviceNew,
-    products,
+    productsEquipment,
+    productsConsumable,
+    productsSpare,
     customers,
     recentEnquiries: recentEnquiries.map((e) => ({
       id: e.id,

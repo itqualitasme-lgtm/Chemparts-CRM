@@ -6,6 +6,7 @@ import { getSessionUser } from '@/lib/auth/session'
 import { nextEnquiryNo } from '@/lib/enquiry-no'
 import { appUrl } from '@/lib/env'
 import { notify, notifyStaff } from '@/lib/mail/notify'
+import { createNotification } from '@/lib/notifications'
 
 export type ContactState = { ok?: boolean; error?: string; enquiryNo?: string }
 
@@ -58,6 +59,7 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
       summary: `Topic: ${topic}. ${messageRaw}`.slice(0, 220),
       link: `${appUrl()}/staff/enquiries`,
     })
+    await createNotification({ kind: 'ENQUIRY', title: `New enquiry ${enquiryNo}`, body: `${company || name} · contact form`, link: '/staff/enquiries', entity: 'Enquiry' })
   })
 
   return { ok: true, enquiryNo }

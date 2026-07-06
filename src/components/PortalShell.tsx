@@ -3,6 +3,8 @@ import { logout } from '@/app/(auth)/actions'
 import PortalMenu from '@/components/PortalMenu'
 import PortalLogoLink from '@/components/PortalLogoLink'
 import PortalNavList, { type NavGroup } from '@/components/PortalNavList'
+import NotificationBell from '@/components/NotificationBell'
+import { getNotifications, getUnreadCount } from '@/lib/notifications'
 import type { SessionUser } from '@/lib/auth/session'
 import type { Portal } from '@/lib/auth/rbac'
 
@@ -71,7 +73,7 @@ const PORTAL_LABEL: Record<Portal, string> = {
   admin: 'Administration',
 }
 
-export default function PortalShell({
+export default async function PortalShell({
   portal,
   user,
   children,
@@ -91,6 +93,21 @@ export default function PortalShell({
 
   const initial = user.fullName?.trim()?.[0]?.toUpperCase() ?? '?'
 
+  // Staff/admin get the notification bell (shared team inbox).
+  const [notifications, unread] = isCustomer
+    ? [[], 0]
+    : await Promise.all([getNotifications(), getUnreadCount()])
+  const bellItems = notifications.map((n) => ({
+    id: n.id,
+    kind: n.kind,
+    title: n.title,
+    body: n.body,
+    link: n.link,
+    readAt: n.readAt ? n.readAt.toISOString() : null,
+    readByName: n.readByName,
+    createdAt: n.createdAt.toISOString(),
+  }))
+
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
       <header className="sticky top-0 z-20 border-b border-black/10 bg-[#0A2540] text-white">
@@ -100,6 +117,7 @@ export default function PortalShell({
             <PortalLogoLink label={PORTAL_LABEL[portal]} />
           </div>
           <div className="flex items-center gap-2.5">
+            {!isCustomer && <NotificationBell items={bellItems} unread={unread} />}
             <div className="hidden text-right leading-tight sm:block">
               <div className="text-xs font-medium text-white">{user.fullName}</div>
               <div className="text-[10px] uppercase tracking-wide text-slate-300">{user.role.toLowerCase()}</div>

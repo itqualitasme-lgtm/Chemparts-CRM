@@ -5,6 +5,7 @@ import { db } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth/session'
 import { appUrl } from '@/lib/env'
 import { notify, notifyStaff } from '@/lib/mail/notify'
+import { createNotification } from '@/lib/notifications'
 
 export type RequestPriceState = { ok?: boolean; error?: string; needContact?: boolean }
 
@@ -71,6 +72,7 @@ export async function requestPrice(
       qty: String(qty),
       link: `${appUrl()}/staff/price-requests`,
     })
+    await createNotification({ kind: 'PRICE', title: `Price request — ${product.name}`, body: `${who} · qty ${qty}`, link: '/staff/price-requests', entity: 'PriceRequest' })
   })
 
   return { ok: true }
