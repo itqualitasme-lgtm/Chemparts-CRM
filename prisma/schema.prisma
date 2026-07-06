@@ -181,6 +181,18 @@ model Brand {
   updatedAt       DateTime  @updatedAt
 }
 
+// Homepage "Trusted by" logo strip — staff-managed short list of clients.
+model Client {
+  id        String   @id @default(cuid())
+  name      String
+  logo      String? // Storage URL or /assets/images/clients/* path
+  sortOrder Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([active, sortOrder])
+}
+
 model Category {
   id        String      @id @default(cuid())
   name      String

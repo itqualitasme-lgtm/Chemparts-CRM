@@ -32,6 +32,7 @@ const SALES_ITEMS: NavItem[] = [
 const CATALOG_ITEMS: NavItem[] = [
   { href: '/staff/products', label: 'Products' },
   { href: '/staff/brands', label: 'Brands' },
+  { href: '/staff/clients', label: 'Clients' },
   { href: '/staff/stock', label: 'Stock' },
 ]
 

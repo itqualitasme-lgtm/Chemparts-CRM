@@ -1,5 +1,6 @@
 import { getInstrumentCount } from '@/lib/counts'
 import BrandMarquee from '@/components/site/BrandMarquee'
+import ClientMarquee from '@/components/site/ClientMarquee'
 
 export const dynamic = 'force-dynamic'
 
@@ -777,32 +778,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* CLIENTS MARQUEE */}
-        <section className="section section--tight">
-          <div className="container">
-            <div className="section-head">
-              <div className="section-head__title">
-                <span className="eyebrow">Trusted by</span>
-                <h2 className="h-2">A short list of <em>clients</em>.</h2>
-              </div>
-              <p className="section-head__sub">Energy operators, national labs and universities across the UAE, Qatar and the wider Gulf.</p>
-            </div>
-          </div>
-          <div className="marquee marquee--clients" data-reveal>
-            <div className="marquee__track">
-              <img width="100" height="28" src="/assets/images/clients/enoc-logo.jpg" alt="ENOC" />
-              <img width="100" height="28" src="/assets/images/clients/adnoc.jpg" alt="ADNOC" />
-              <img width="100" height="28" src="/assets/images/clients/qatar-energy.jpg" alt="Qatar Energy" />
-              <img width="100" height="28" src="/assets/images/clients/qatar-energy-lng.jpg" alt="Qatar Energy LNG" />
-              <img width="140" height="36" src="/assets/images/clients/bapco.jpg" alt="Bapco" />
-              <img width="140" height="36" src="/assets/images/clients/Kwait-oil-comany.jpg" alt="Kuwait Oil Company" />
-              <img width="140" height="36" src="/assets/images/clients/nyu-abu-dhabi.jpg" alt="NYU Abu Dhabi" />
-              <img width="140" height="36" src="/assets/images/clients/higher-colleges-oftechnology.jpg" alt="Higher Colleges of Technology" />
-              <img width="140" height="36" src="/assets/images/clients/cic.jpg" alt="CIC" />
-              <img width="140" height="36" src="/assets/images/clients/usa-univercity.jpg" alt="USA University" />
-            </div>
-          </div>
-        </section>
+        {/* CLIENTS MARQUEE — DB-driven (staff-managed via /staff/clients) */}
+        <ClientMarquee />
 
         {/* PARTNERS MARQUEE — DB-driven (reflects staff brand edits) */}
         <BrandMarquee />
