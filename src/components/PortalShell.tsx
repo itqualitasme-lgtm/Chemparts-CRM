@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { logout } from '@/app/(auth)/actions'
 import PortalMenu from '@/components/PortalMenu'
+import PortalLogoLink from '@/components/PortalLogoLink'
 import PortalNavList, { type NavGroup } from '@/components/PortalNavList'
 import type { SessionUser } from '@/lib/auth/session'
 import type { Portal } from '@/lib/auth/rbac'
@@ -94,14 +95,7 @@ export default function PortalShell({
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
           <div className="flex items-center gap-3">
             {!isCustomer && <PortalMenu groups={groups} label={PORTAL_LABEL[portal]} />}
-            <Link href="/" className="flex items-center gap-2.5" aria-label="Chemparts — home">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/images/logo.svg" alt="Chemparts" width={40} height={20} className="h-5 w-auto" />
-              <span className="flex flex-col leading-tight">
-                <span className="text-sm font-bold tracking-[0.2em]">CHEMPARTS</span>
-                <span className="text-[10px] uppercase tracking-wide text-slate-300">{PORTAL_LABEL[portal]}</span>
-              </span>
-            </Link>
+            <PortalLogoLink label={PORTAL_LABEL[portal]} />
           </div>
           <div className="flex items-center gap-3">
             <span className="hidden text-sm text-slate-200 sm:block">{user.fullName}</span>

@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { useMemo, useState, useTransition } from 'react'
+import { useEffect, useMemo, useState, useTransition } from 'react'
 import { updateEnquiryStatus, deleteEnquiry } from './actions'
 import CreateQuotationButton from './CreateQuotationButton'
 import DeleteButton from '@/components/DeleteButton'
+import Pager, { pageSlice } from '@/components/ui/Pager'
 
 export type EnquiryRow = {
   id: string
@@ -53,6 +54,9 @@ export default function EnquiriesTable({ enquiries, isAdmin }: { enquiries: Enqu
   const [status, setStatus] = useState('ALL')
   const [channel, setChannel] = useState('ALL')
   const [sort, setSort] = useState<'newest' | 'oldest'>('newest')
+  const [page, setPage] = useState(1)
+  const PAGE_SIZE = 15
+  useEffect(() => setPage(1), [q, status, channel, sort])
 
   const channels = useMemo(
     () => Array.from(new Set(enquiries.map((e) => e.type))),
@@ -119,12 +123,12 @@ export default function EnquiriesTable({ enquiries, isAdmin }: { enquiries: Enqu
                 </td>
               </tr>
             ) : (
-              filtered.map((e) => <Row key={e.id} e={e} isAdmin={isAdmin} />)
+              pageSlice(filtered, page, PAGE_SIZE).map((e) => <Row key={e.id} e={e} isAdmin={isAdmin} />)
             )}
           </tbody>
         </table>
       </div>
-      <p className="mt-2 text-xs text-slate-400">{filtered.length} of {enquiries.length} shown</p>
+      <Pager page={page} pageSize={PAGE_SIZE} total={filtered.length} onPage={setPage} />
     </div>
   )
 }

@@ -1,7 +1,10 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import RespondForm from './RespondForm'
+import Pager, { pageSlice } from '@/components/ui/Pager'
+
+const PAGE_SIZE = 15
 
 export type PriceRow = {
   id: string
@@ -42,6 +45,9 @@ function fmtDate(iso: string): string {
 export default function PriceRequestsTable({ requests }: { requests: PriceRow[] }) {
   const [q, setQ] = useState('')
   const [status, setStatus] = useState('ALL')
+  const [sort, setSort] = useState<'newest' | 'oldest'>('newest')
+  const [page, setPage] = useState(1)
+  useEffect(() => setPage(1), [q, status, sort])
 
   const filtered = useMemo(() => {
     let rows = requests
@@ -52,8 +58,8 @@ export default function PriceRequestsTable({ requests }: { requests: PriceRow[] 
         [r.productName, r.modelNo ?? '', r.brand, r.requester, r.contact ?? ''].join(' ').toLowerCase().includes(s),
       )
     }
-    return rows
-  }, [requests, q, status])
+    return [...rows].sort((a, b) => (sort === 'oldest' ? a.createdAt.localeCompare(b.createdAt) : b.createdAt.localeCompare(a.createdAt)))
+  }, [requests, q, status, sort])
 
   return (
     <div>
@@ -68,6 +74,10 @@ export default function PriceRequestsTable({ requests }: { requests: PriceRow[] 
           <option value="ALL">All statuses</option>
           <option value="OPEN">Open</option>
           <option value="QUOTED">Quoted</option>
+        </select>
+        <select value={sort} onChange={(e) => setSort(e.target.value as 'newest' | 'oldest')} className={selectCls} aria-label="Sort">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
         </select>
       </div>
 
@@ -91,12 +101,12 @@ export default function PriceRequestsTable({ requests }: { requests: PriceRow[] 
                 <td colSpan={8} className="px-3 py-10 text-center text-slate-500">No price requests match these filters.</td>
               </tr>
             ) : (
-              filtered.map((r) => <Row key={r.id} r={r} />)
+              pageSlice(filtered, page, PAGE_SIZE).map((r) => <Row key={r.id} r={r} />)
             )}
           </tbody>
         </table>
       </div>
-      <p className="mt-2 text-xs text-slate-400">{filtered.length} of {requests.length} shown</p>
+      <Pager page={page} pageSize={PAGE_SIZE} total={filtered.length} onPage={setPage} />
     </div>
   )
 }

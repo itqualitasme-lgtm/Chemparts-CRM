@@ -78,7 +78,7 @@ ${button(v.actionUrl, 'Activate account')}`,
     ),
   }),
   'otp-code': (v) => ({
-    subject: `${v.code} is your Chemparts sign-in code`,
+    subject: `Your Chemparts sign-in code`,
     html: layout(
       'Your sign-in code',
       `<p>Use this code to sign in to Chemparts. It expires in 10 minutes.</p>
