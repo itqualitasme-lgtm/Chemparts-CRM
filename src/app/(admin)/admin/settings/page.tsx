@@ -11,7 +11,7 @@ export default async function SettingsPage() {
 
   return (
     <div className="max-w-3xl">
-      <h1 className="mb-1 text-2xl font-semibold text-slate-900">Settings</h1>
+      <h1 className="mb-1 text-lg font-semibold text-slate-900">Settings</h1>
       <p className="mb-6 text-slate-500">Customise site content that staff can edit without a developer.</p>
 
       <section className="mb-10">

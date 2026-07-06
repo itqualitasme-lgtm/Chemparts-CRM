@@ -23,8 +23,8 @@ export default async function StaffBrandsPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-semibold text-slate-900">Brands</h1>
-      <p className="mb-6 text-slate-500">
+      <h1 className="text-base font-semibold text-slate-900">Brands</h1>
+      <p className="mb-4 mt-0.5 text-[13px] text-slate-500">
         Manufacturer and supplier brands. Logo, website and details here sync to the public partners page.
       </p>
 

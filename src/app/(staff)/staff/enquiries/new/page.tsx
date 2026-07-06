@@ -33,7 +33,7 @@ export default async function NewEnquiryPage() {
         <Link href="/staff/enquiries" className="text-sm text-slate-500 underline">
           ← Back to enquiries
         </Link>
-        <h1 className="mt-2 text-2xl font-semibold text-slate-900">New enquiry</h1>
+        <h1 className="mt-2 text-lg font-semibold text-slate-900">New enquiry</h1>
         <p className="text-slate-500">Log an enquiry from any channel. An enquiry is the starting point for a quotation.</p>
       </div>
       <EnquiryCreateForm customers={customers} products={productOptions} salesPeople={salesPeople} />

@@ -1,6 +1,7 @@
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { quoteTotals } from '@/lib/quotation'
+import PageHeader from '@/components/ui/PageHeader'
 import OrdersTable, { type OrderRow } from './OrdersTable'
 
 export const metadata = { title: 'Orders — Chemparts Staff' }
@@ -47,15 +48,13 @@ export default async function StaffOrdersPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-slate-900">Orders</h1>
-        <p className="text-slate-500">
-          {rows.length} order{rows.length === 1 ? '' : 's'}. Create one from an accepted quotation, then attach the invoice, warranty and PO.
-        </p>
-      </div>
+      <PageHeader
+        title="Orders"
+        subtitle={`${rows.length} order${rows.length === 1 ? '' : 's'}. Create one from an accepted quotation, then attach the invoice, warranty and PO.`}
+      />
 
       {rows.length === 0 ? (
-        <div className="rounded-xl border border-slate-200 bg-white px-6 py-12 text-center text-slate-500">
+        <div className="rounded-lg border border-slate-200 bg-white px-6 py-8 text-center text-[13px] text-slate-500">
           No orders yet. Open a quotation and choose “Create order”.
         </div>
       ) : (

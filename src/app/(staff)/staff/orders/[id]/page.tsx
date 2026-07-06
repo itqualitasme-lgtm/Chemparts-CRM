@@ -38,7 +38,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
     <div className="max-w-4xl space-y-6">
       <div>
         <Link href="/staff/orders" className="text-sm text-slate-500 underline">← Back to orders</Link>
-        <h1 className="mt-2 font-mono text-2xl font-semibold text-slate-900">{o.orderNo}</h1>
+        <h1 className="mt-2 font-mono text-lg font-semibold text-slate-900">{o.orderNo}</h1>
         <p className="text-slate-500">
           {o.customer ? (
             <Link href={`/staff/customers/${o.customer.id}`} className="underline">{o.customer.companyName}</Link>

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { db } from '@/lib/db'
+import PageHeader from '@/components/ui/PageHeader'
 import type { Prisma } from '@/generated/prisma/client'
 
 export const metadata = { title: 'Customers — Chemparts Staff' }
@@ -61,18 +62,15 @@ export default async function StaffCustomersPage({
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Customers</h1>
-          <p className="text-slate-500">{total} customer{total === 1 ? '' : 's'}.</p>
-        </div>
-        <Link
-          href="/staff/customers/new"
-          className="rounded-lg bg-[#0A2540] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#123a63]"
-        >
-          + New customer
-        </Link>
-      </div>
+      <PageHeader
+        title="Customers"
+        subtitle={`${total} customer${total === 1 ? '' : 's'}.`}
+        action={
+          <Link href="/staff/customers/new" className="rounded-md bg-[#0A2540] px-3 py-1.5 text-[13px] font-medium text-white transition hover:bg-[#123a63]">
+            + New customer
+          </Link>
+        }
+      />
 
       <form method="get" action="/staff/customers" className="mb-4 flex gap-2">
         <input

@@ -14,8 +14,8 @@ export default async function SalesPeoplePage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-semibold text-slate-900">Sales people</h1>
-      <p className="mb-6 text-slate-500">Assign a sales person to customers, enquiries and quotations.</p>
+      <h1 className="text-base font-semibold text-slate-900">Sales people</h1>
+      <p className="mb-4 mt-0.5 text-[13px] text-slate-500">Assign a sales person to customers, enquiries and quotations.</p>
       <SalesPeople people={people} />
     </div>
   )

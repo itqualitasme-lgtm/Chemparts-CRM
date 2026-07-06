@@ -51,7 +51,7 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
       <div className="mb-6">
         <Link href="/staff/quotations" className="text-sm text-slate-500 underline">← Back to quotations</Link>
         <div className="mt-2 flex flex-wrap items-center gap-3">
-          <h1 className="font-mono text-2xl font-semibold text-slate-900">{q.quotationNo}</h1>
+          <h1 className="font-mono text-lg font-semibold text-slate-900">{q.quotationNo}</h1>
           <a
             href={`/print/quotation/${q.id}`}
             target="_blank"

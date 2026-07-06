@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { db } from '@/lib/db'
 import { productImageUrl } from '@/lib/product-image'
+import PageHeader from '@/components/ui/PageHeader'
 import type { Prisma } from '@/generated/prisma/client'
 
 export const metadata = { title: 'Products — Chemparts Staff' }
@@ -81,18 +82,15 @@ export default async function StaffProductsPage({
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Products</h1>
-          <p className="text-slate-500">{total} products in the catalog.</p>
-        </div>
-        <Link
-          href="/staff/products/new"
-          className="rounded-lg bg-[#0A2540] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#123a63]"
-        >
-          + New product
-        </Link>
-      </div>
+      <PageHeader
+        title="Products"
+        subtitle={`${total} products in the catalog.`}
+        action={
+          <Link href="/staff/products/new" className="rounded-md bg-[#0A2540] px-3 py-1.5 text-[13px] font-medium text-white transition hover:bg-[#123a63]">
+            + New product
+          </Link>
+        }
+      />
 
       {/* Filters */}
       <form method="get" action="/staff/products" className="mb-4 flex flex-wrap items-center gap-2">

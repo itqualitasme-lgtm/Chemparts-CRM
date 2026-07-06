@@ -30,7 +30,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         / Edit
       </nav>
       <div className="mb-6 flex items-center gap-3">
-        <h1 className="text-2xl font-semibold text-slate-900">{product.name}</h1>
+        <h1 className="text-lg font-semibold text-slate-900">{product.name}</h1>
         <Link
           href={`/products/${product.slug}`}
           className="text-sm text-[#0A2540] underline"

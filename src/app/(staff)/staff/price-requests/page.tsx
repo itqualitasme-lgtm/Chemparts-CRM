@@ -1,6 +1,7 @@
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { priceState } from '@/lib/price'
+import PageHeader from '@/components/ui/PageHeader'
 import PriceRequestsTable, { type PriceRow } from './PriceRequestsTable'
 
 export const metadata = { title: 'Price requests — Chemparts Staff' }
@@ -84,15 +85,13 @@ export default async function StaffPriceRequestsPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-slate-900">Price requests</h1>
-        <p className="text-slate-500">
-          {openCount} open {openCount === 1 ? 'request' : 'requests'} awaiting a confirmed price.
-        </p>
-      </div>
+      <PageHeader
+        title="Price requests"
+        subtitle={`${openCount} open ${openCount === 1 ? 'request' : 'requests'} awaiting a confirmed price.`}
+      />
 
       {rows.length === 0 ? (
-        <div className="rounded-xl border border-slate-200 bg-white px-6 py-12 text-center text-slate-500">
+        <div className="rounded-lg border border-slate-200 bg-white px-6 py-8 text-center text-[13px] text-slate-500">
           No price requests yet.
         </div>
       ) : (

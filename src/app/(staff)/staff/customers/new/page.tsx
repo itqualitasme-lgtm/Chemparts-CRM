@@ -16,7 +16,7 @@ export default async function NewCustomerPage() {
         <Link href="/staff/customers" className="text-sm text-slate-500 underline">
           ← Back to customers
         </Link>
-        <h1 className="mt-2 text-2xl font-semibold text-slate-900">New customer</h1>
+        <h1 className="mt-2 text-lg font-semibold text-slate-900">New customer</h1>
         <p className="text-slate-500">Company details, registration, payment terms and contact people. You can attach documents after creating.</p>
       </div>
       <CustomerForm action={createCustomer} mode="create" salesPeople={salesPeople} />

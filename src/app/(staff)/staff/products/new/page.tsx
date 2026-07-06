@@ -17,7 +17,7 @@ export default async function NewProductPage() {
         </Link>{' '}
         / New
       </nav>
-      <h1 className="mb-6 text-2xl font-semibold text-slate-900">New product</h1>
+      <h1 className="mb-6 text-lg font-semibold text-slate-900">New product</h1>
       {brands.length === 0 ? (
         <p className="rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-800">
           Add a brand first on the{' '}

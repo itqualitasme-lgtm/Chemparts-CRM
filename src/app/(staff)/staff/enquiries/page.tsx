@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
+import PageHeader from '@/components/ui/PageHeader'
 import EnquiriesTable, { type EnquiryRow } from './EnquiriesTable'
 
 export const metadata = { title: 'Enquiries — Chemparts Staff' }
@@ -53,23 +54,18 @@ export default async function StaffEnquiriesPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Enquiries</h1>
-          <p className="text-slate-500">
-            {rows.length} total · {newCount} new {newCount === 1 ? 'enquiry' : 'enquiries'} awaiting review.
-          </p>
-        </div>
-        <Link
-          href="/staff/enquiries/new"
-          className="shrink-0 rounded-lg bg-[#0A2540] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#123a63]"
-        >
-          + New enquiry
-        </Link>
-      </div>
+      <PageHeader
+        title="Enquiries"
+        subtitle={`${rows.length} total · ${newCount} new ${newCount === 1 ? 'enquiry' : 'enquiries'} awaiting review.`}
+        action={
+          <Link href="/staff/enquiries/new" className="rounded-md bg-[#0A2540] px-3 py-1.5 text-[13px] font-medium text-white transition hover:bg-[#123a63]">
+            + New enquiry
+          </Link>
+        }
+      />
 
       {rows.length === 0 ? (
-        <div className="rounded-xl border border-slate-200 bg-white px-6 py-12 text-center text-slate-500">
+        <div className="rounded-lg border border-slate-200 bg-white px-6 py-8 text-center text-[13px] text-slate-500">
           No enquiries yet. Website cart submissions and staff-logged enquiries will appear here.
         </div>
       ) : (

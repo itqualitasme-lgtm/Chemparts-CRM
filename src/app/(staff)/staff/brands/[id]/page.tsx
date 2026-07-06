@@ -40,7 +40,7 @@ export default async function EditBrandPage({ params }: { params: Promise<{ id: 
         <Link href="/staff/brands" className="text-sm text-slate-500 underline">
           ← Back to brands
         </Link>
-        <h1 className="mt-2 text-2xl font-semibold text-slate-900">{brand.name}</h1>
+        <h1 className="mt-2 text-lg font-semibold text-slate-900">{brand.name}</h1>
         <p className="text-slate-500">
           {brand._count.products} product{brand._count.products === 1 ? '' : 's'} · edits sync to the public
           partners page.
