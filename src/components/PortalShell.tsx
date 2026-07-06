@@ -105,14 +105,6 @@ export default function PortalShell({
           </div>
           <div className="flex items-center gap-3">
             <span className="hidden text-sm text-slate-200 sm:block">{user.fullName}</span>
-            {user.role === 'ADMIN' && (
-              <Link
-                href="/admin/settings"
-                className="rounded border border-white/30 px-3 py-1 text-xs text-slate-100 transition hover:bg-white/10"
-              >
-                Settings
-              </Link>
-            )}
             <form action={logout}>
               <button className="rounded border border-white/30 px-3 py-1 text-xs text-slate-100 transition hover:bg-white/10">
                 Sign out

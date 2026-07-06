@@ -33,5 +33,9 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
+  // Run on pages/routes only. Skip Next internals, the ported /assets + /images
+  // folders and any static file, so we don't fire an auth refresh per asset.
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|assets/|images/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff2?)$).*)',
+  ],
 }

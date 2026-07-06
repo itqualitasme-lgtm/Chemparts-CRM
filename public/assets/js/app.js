@@ -222,6 +222,16 @@
         const slug = fd.get('instrument') || '';
         const message = fd.get('message') || '';
         const text = `Hello Chemparts, I'd like a quote.\n\nName: ${name}\nCompany: ${company}\nEmail: ${email}\nInstrument: ${slug}\n\n${message}`;
+        // Log a staff-portal enquiry in parallel (best-effort — never blocks the
+        // WhatsApp hand-off).
+        try {
+          fetch('/api/quote-enquiry', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            keepalive: true,
+            body: JSON.stringify({ name, company, email, instrument: slug, message }),
+          }).catch(() => {});
+        } catch (err) { /* ignore */ }
         const url = `https://wa.me/971557566123?text=${encodeURIComponent(text)}`;
         window.open(url, '_blank');
         closeModal();

@@ -36,10 +36,10 @@ export default function PortalNavList({
               href={item.href}
               onClick={onNavigate}
               aria-current={isActive(item.href) ? 'page' : undefined}
-              className={`block rounded-lg px-3 py-2 text-sm transition ${
+              className={`block rounded-lg border-l-2 px-3 py-2 text-sm transition ${
                 isActive(item.href)
-                  ? 'bg-[#0A2540] font-medium text-white'
-                  : 'text-slate-700 hover:bg-slate-100'
+                  ? 'border-[#0A2540] bg-slate-100 font-semibold text-[#0A2540]'
+                  : 'border-transparent text-slate-700 hover:bg-slate-50'
               }`}
             >
               {item.label}
