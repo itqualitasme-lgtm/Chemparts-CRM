@@ -68,6 +68,15 @@ ${button(v.actionUrl, 'Activate account')}`,
 <p style="color:#66788a;font-size:13px">Please quote ${esc(v.requestNo)} in any follow-up.</p>`,
     ),
   }),
+  'contact-received': (v) => ({
+    subject: `We’ve got your message — Chemparts (${v.enquiryNo})`,
+    html: layout(
+      'Thanks — we have your message',
+      `<p>Dear ${esc(v.name)},</p>
+<p>Thanks for reaching out. We’ve logged your message as <strong>${esc(v.enquiryNo)}</strong> and our team will reply, usually within the working day.</p>
+<p style="color:#66788a;font-size:13px">Please quote ${esc(v.enquiryNo)} in any follow-up.</p>`,
+    ),
+  }),
   'otp-code': (v) => ({
     subject: `${v.code} is your Chemparts sign-in code`,
     html: layout(

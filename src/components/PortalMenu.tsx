@@ -1,19 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import PortalNavList, { type NavGroup } from '@/components/PortalNavList'
 
-type NavItem = { href: string; label: string }
-export type NavGroup = { title?: string; items: NavItem[] }
-
-// Dashboard/overview roots match only exactly (so /admin doesn't stay active on
-// /admin/users). Everything else matches on prefix.
-const ROOTS = new Set(['/admin', '/staff', '/vendor', '/account'])
-
+// Mobile-only hamburger + slide-in drawer. On desktop the same nav is shown as
+// a persistent sidebar (see PortalShell), so the hamburger is hidden at md+.
 export default function PortalMenu({ groups, label }: { groups: NavGroup[]; label: string }) {
   const [open, setOpen] = useState(false)
-  const pathname = usePathname() || ''
 
   useEffect(() => {
     if (!open) return
@@ -26,11 +19,8 @@ export default function PortalMenu({ groups, label }: { groups: NavGroup[]; labe
     }
   }, [open])
 
-  const isActive = (href: string) =>
-    ROOTS.has(href) ? pathname === href : pathname === href || pathname.startsWith(`${href}/`)
-
   return (
-    <>
+    <div className="md:hidden">
       <button
         type="button"
         onClick={() => setOpen(true)}
@@ -68,35 +58,11 @@ export default function PortalMenu({ groups, label }: { groups: NavGroup[]; labe
               </svg>
             </button>
           </div>
-
-          <nav className="flex-1 overflow-y-auto p-3">
-            {groups.map((g, i) => (
-              <div key={g.title ?? `g${i}`} className="mb-2">
-                {g.title ? (
-                  <div className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                    {g.title}
-                  </div>
-                ) : null}
-                {g.items.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    aria-current={isActive(item.href) ? 'page' : undefined}
-                    className={`block rounded-lg px-3 py-2 text-sm transition ${
-                      isActive(item.href)
-                        ? 'bg-[#0A2540] font-medium text-white'
-                        : 'text-slate-700 hover:bg-slate-100'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            ))}
-          </nav>
+          <div className="flex-1 overflow-y-auto p-3">
+            <PortalNavList groups={groups} onNavigate={() => setOpen(false)} />
+          </div>
         </aside>
       </div>
-    </>
+    </div>
   )
 }

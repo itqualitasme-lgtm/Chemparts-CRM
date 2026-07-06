@@ -1,4 +1,5 @@
 import ContactSuccessBanner from './ContactSuccessBanner'
+import ContactForm from './ContactForm'
 
 export const dynamic = 'force-dynamic'
 
@@ -147,28 +148,8 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* No backend wired: the original posted to contact.php. Route to email instead. */}
-            <form action="mailto:info@chemparts-me.com" method="post" encType="text/plain" data-reveal style={{ display: 'grid', gap: 16 }}>
-              <div className="field"><label htmlFor="cf-name">Name</label><input id="cf-name" name="name" type="text" autoComplete="name" inputMode="text" required /></div>
-              <div className="field"><label htmlFor="cf-company">Company</label><input id="cf-company" name="company" type="text" autoComplete="organization" inputMode="text" /></div>
-              <div className="field"><label htmlFor="cf-email">Email</label><input id="cf-email" name="email" type="email" autoComplete="email" inputMode="email" required /></div>
-              <div className="field"><label htmlFor="cf-phone">Phone (optional)</label><input id="cf-phone" name="phone" type="tel" autoComplete="tel" inputMode="tel" /></div>
-              <div className="field">
-                <label htmlFor="cf-topic">Topic</label>
-                <select id="cf-topic" name="topic">
-                  <option>Quote</option>
-                  <option>Service</option>
-                  <option>Application</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div className="field"><label htmlFor="cf-message">Message</label><textarea id="cf-message" name="message" rows={5} required></textarea></div>
-              <input type="text" name="website" className="honeypot" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-              <div className="form-actions">
-                <button type="submit" className="btn btn--primary">Send message <span className="arrow">→</span></button>
-                <a className="btn btn--ghost" href="mailto:info@chemparts-me.com">Or email instead</a>
-              </div>
-            </form>
+            {/* Submits to a server action that logs a staff-portal enquiry. */}
+            <ContactForm />
           </div>
         </section>
 

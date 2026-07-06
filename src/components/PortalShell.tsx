@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { logout } from '@/app/(auth)/actions'
-import PortalMenu, { type NavGroup } from '@/components/PortalMenu'
+import PortalMenu from '@/components/PortalMenu'
+import PortalNavList, { type NavGroup } from '@/components/PortalNavList'
 import type { SessionUser } from '@/lib/auth/session'
 import type { Portal } from '@/lib/auth/rbac'
 
@@ -138,7 +139,12 @@ export default function PortalShell({
       )}
 
       <div className="mx-auto flex w-full max-w-6xl flex-1">
-        <main className={`flex-1 p-4 md:p-8 ${isCustomer ? 'pb-24 md:pb-8' : ''}`}>{children}</main>
+        {!isCustomer && (
+          <aside className="sticky top-14 hidden max-h-[calc(100dvh-3.5rem)] w-60 shrink-0 self-start overflow-y-auto border-r border-slate-200 bg-white p-3 md:block">
+            <PortalNavList groups={groups} />
+          </aside>
+        )}
+        <main className={`min-w-0 flex-1 p-4 md:p-8 ${isCustomer ? 'pb-24 md:pb-8' : ''}`}>{children}</main>
       </div>
 
       {/* Staff/vendor/admin navigate via the drawer in the header. Customer keeps
