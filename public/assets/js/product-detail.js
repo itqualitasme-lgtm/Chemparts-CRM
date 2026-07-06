@@ -45,8 +45,9 @@ window.__cpProductDetailInit = function () {
     ).join('');
   }
 
-  // Quote button slug binding
+  // Quote / price button slug binding
   document.querySelectorAll('[data-pdp-quote]').forEach(b => b.dataset.quote = product.slug);
+  document.querySelectorAll('[data-pdp-price]').forEach(b => b.dataset.price = product.slug);
 
   // Mailto datasheet button
   const dsBtn = document.querySelector('[data-pdp-datasheet]');

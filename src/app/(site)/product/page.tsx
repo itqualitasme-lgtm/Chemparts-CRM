@@ -28,6 +28,7 @@ export default function ProductPage() {
                 <table className="spec-table" data-pdp-quick-spec></table>
                 <div className="pdp-info__cta">
                   <button type="button" className="btn btn--accent" data-pdp-quote data-quote="">Request a quote <span className="arrow">→</span></button>
+                  <button type="button" className="btn btn--primary" data-pdp-price data-price="">Request price <span className="arrow">→</span></button>
                   <a className="btn btn--ghost" href="mailto:info@chemparts-me.com" data-pdp-datasheet>Download spec sheet</a>
                 </div>
                 <div className="stat-strip" style={{ marginTop: 24 }}>

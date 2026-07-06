@@ -30,14 +30,14 @@ export default async function SiteChrome({ extraScripts = [] }: { extraScripts?:
           </div>
           <form className="modal__body" data-quote-form>
             <h3 id="quote-title">Tell us what you need</h3>
-            <p className="lede">Submit and we&apos;ll open WhatsApp pre-filled with your details. Or email <a href="mailto:info@chemparts-me.com" style={{ color: 'var(--crimson)' }}>info@chemparts-me.com</a>.</p>
+            <p className="lede">Send us your requirement and our team will reply by email — usually within the working day. Or email <a href="mailto:info@chemparts-me.com" style={{ color: 'var(--crimson)' }}>info@chemparts-me.com</a>.</p>
             <div className="field"><label htmlFor="qf-name">Name</label><input id="qf-name" name="name" type="text" required /></div>
             <div className="field"><label htmlFor="qf-company">Company</label><input id="qf-company" name="company" type="text" required /></div>
             <div className="field"><label htmlFor="qf-email">Email</label><input id="qf-email" name="email" type="email" required /></div>
             <div className="field"><label htmlFor="qf-instrument">Instrument</label><input id="qf-instrument" name="instrument" type="text" placeholder="e.g. LAB-X5000" /></div>
             <div className="field"><label htmlFor="qf-message">Message</label><textarea id="qf-message" name="message" rows={3} placeholder="Standards, sample type, throughput..."></textarea></div>
             <div className="actions">
-              <button type="submit" className="btn btn--accent">Open in WhatsApp <span className="arrow">→</span></button>
+              <button type="submit" className="btn btn--accent">Send request <span className="arrow">→</span></button>
               <button type="button" className="btn btn--ghost" data-modal-close>Cancel</button>
             </div>
           </form>

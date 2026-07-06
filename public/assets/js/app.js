@@ -148,9 +148,39 @@
     const modal = document.querySelector('[data-quote-modal]');
     const modalBackdrop = document.querySelector('.modal-backdrop');
     let lastFocus = null;
+    // Cache the pristine form markup so we can restore it after a successful
+    // send (the form body is replaced with a confirmation on submit).
+    const quoteFormEl = modal ? modal.querySelector('[data-quote-form]') : null;
+    const quoteFormPristine = quoteFormEl ? quoteFormEl.innerHTML : '';
 
-    function openModal(slug) {
+    // Copy for each mode: 'quote' (enquiry) vs 'price' (price request).
+    const MODAL_COPY = {
+      quote: { eyebrow: 'Request a quote', title: 'Tell us what you need', submit: 'Send request' },
+      price: { eyebrow: 'Request a price', title: 'Request the current price', submit: 'Request price' },
+    };
+
+    function resetQuoteForm() {
+      if (quoteFormEl && quoteFormEl.dataset.sent === 'true') {
+        quoteFormEl.innerHTML = quoteFormPristine;
+        quoteFormEl.dataset.sent = 'false';
+      }
+    }
+
+    function applyModalMode(mode) {
+      const copy = MODAL_COPY[mode] || MODAL_COPY.quote;
+      if (quoteFormEl) quoteFormEl.dataset.mode = mode;
+      const eyebrow = modalBackdrop && modalBackdrop.querySelector('.modal__head .eyebrow');
+      const title = modal && modal.querySelector('#quote-title');
+      const submit = modal && modal.querySelector('button[type="submit"]');
+      if (eyebrow) eyebrow.textContent = copy.eyebrow;
+      if (title) title.textContent = copy.title;
+      if (submit) submit.innerHTML = copy.submit + ' <span class="arrow">→</span>';
+    }
+
+    function openModal(slug, mode) {
       if (!modal || !modalBackdrop) return;
+      resetQuoteForm();
+      applyModalMode(mode === 'price' ? 'price' : 'quote');
       lastFocus = document.activeElement;
       modalBackdrop.dataset.open = 'true';
       document.documentElement.classList.add('modal-locked');
@@ -180,10 +210,16 @@
     // Delegated quote trigger: any [data-quote] element works, including ones
     // that only exist on some pages (e.g. /product) after client navigation.
     document.addEventListener('click', (e) => {
+      const priceTrigger = e.target.closest('[data-price]');
+      if (priceTrigger) {
+        e.preventDefault();
+        openModal(priceTrigger.dataset.price || '', 'price');
+        return;
+      }
       const trigger = e.target.closest('[data-quote]');
       if (trigger) {
         e.preventDefault();
-        openModal(trigger.dataset.quote || '');
+        openModal(trigger.dataset.quote || '', 'quote');
         return;
       }
       const closer = e.target.closest('[data-modal-close]');
@@ -210,32 +246,70 @@
       });
     }
 
-    /* ===== Quote form → WhatsApp ===== */
+    /* ===== Quote form → submit as an enquiry (email to staff + customer) ===== */
     const quoteForm = document.querySelector('[data-quote-form]');
     if (quoteForm) {
-      quoteForm.addEventListener('submit', (e) => {
+      quoteForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const fd = new FormData(quoteForm);
-        const name = fd.get('name') || '';
-        const company = fd.get('company') || '';
-        const email = fd.get('email') || '';
-        const slug = fd.get('instrument') || '';
-        const message = fd.get('message') || '';
-        const text = `Hello Chemparts, I'd like a quote.\n\nName: ${name}\nCompany: ${company}\nEmail: ${email}\nInstrument: ${slug}\n\n${message}`;
-        // Log a staff-portal enquiry in parallel (best-effort — never blocks the
-        // WhatsApp hand-off).
+        const name = (fd.get('name') || '').toString().trim();
+        const company = (fd.get('company') || '').toString().trim();
+        const email = (fd.get('email') || '').toString().trim();
+        const slug = (fd.get('instrument') || '').toString().trim();
+        const message = (fd.get('message') || '').toString().trim();
+
+        const mode = quoteForm.dataset.mode === 'price' ? 'price' : 'quote';
+        const endpoint = mode === 'price' ? '/api/price-request' : '/api/quote-enquiry';
+        const payload = mode === 'price'
+          ? { name, company, email, slug, qty: 1, message }
+          : { name, company, email, instrument: slug, message };
+
+        const submitBtn = quoteForm.querySelector('button[type="submit"]');
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.dataset.busy = 'true'; }
+
+        let ok = false;
         try {
-          fetch('/api/quote-enquiry', {
+          const res = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            keepalive: true,
-            body: JSON.stringify({ name, company, email, instrument: slug, message }),
-          }).catch(() => {});
-        } catch (err) { /* ignore */ }
-        const url = `https://wa.me/971557566123?text=${encodeURIComponent(text)}`;
-        window.open(url, '_blank');
-        closeModal();
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json().catch(() => ({}));
+          ok = !!data.ok;
+        } catch (err) { ok = false; }
+
+        if (ok) {
+          // Replace the form body with a confirmation, then auto-close. The
+          // pristine markup is restored by resetQuoteForm() on next open.
+          quoteForm.dataset.sent = 'true';
+          const kind = mode === 'price' ? 'Price request sent ✓' : 'Request sent ✓';
+          quoteForm.innerHTML =
+            '<h3>' + kind + '</h3>' +
+            '<p class="lede">Thank you' + (name ? ', ' + escapeHtmlText(name.split(' ')[0]) : '') +
+            '. Our team will reply to <strong>' + (escapeHtmlText(email) || 'your email') +
+            '</strong> — usually within the working day.</p>' +
+            '<div class="actions"><button type="button" class="btn btn--accent" data-modal-close>Done</button></div>';
+          setTimeout(() => { closeModal(); }, 4000);
+        } else {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.dataset.busy = 'false'; }
+          let err = quoteForm.querySelector('[data-quote-error]');
+          if (!err) {
+            err = document.createElement('p');
+            err.setAttribute('data-quote-error', '');
+            err.style.color = 'var(--crimson)';
+            err.style.marginTop = '8px';
+            const actions = quoteForm.querySelector('.actions');
+            if (actions) actions.parentNode.insertBefore(err, actions);
+          }
+          err.textContent = 'Please check your name and a valid email, then try again. Or email info@chemparts-me.com.';
+        }
       });
+    }
+
+    function escapeHtmlText(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
     }
 
     /* ===== Sticky mobile bottom bar — show after scrolling past hero (or 400px) ===== */
