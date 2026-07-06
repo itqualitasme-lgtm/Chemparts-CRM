@@ -40,7 +40,6 @@ export const registerSchema = z.object({
     .trim()
     .regex(/^\+[1-9]\d{6,14}$/, 'Include country code, e.g. +971...'),
   country: z.string().length(2, 'Select your country'),
-  password: z.string().min(10, 'At least 10 characters'),
   agreeTerms: z
     .string()
     .optional()

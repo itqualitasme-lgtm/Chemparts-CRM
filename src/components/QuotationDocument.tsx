@@ -80,6 +80,7 @@ export type QuotationDocData = {
     unitPrice: unknown
     discountPct: unknown
     note: string | null
+    deliveryPeriod: string | null
     product: Product
   }[]
 }
@@ -101,6 +102,7 @@ export default function QuotationDocument({
   const m = (n: number) => `${q.currency} ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   const contact = q.customer?.contacts[0]
   const hasDiscount = q.items.some((i) => Number(i.discountPct) > 0)
+  const anyItemDelivery = q.items.some((i) => i.deliveryPeriod)
 
   return (
     <div className="mx-auto my-0 max-w-[820px] bg-white p-10 text-[13px] leading-relaxed text-slate-800 shadow-lg print:my-0 print:max-w-none print:p-0 print:shadow-none">
@@ -215,6 +217,9 @@ export default function QuotationDocument({
                       <div>{name}</div>
                       {specs.length ? <div className="text-[11px] text-slate-500">{specs.join(' · ')}</div> : null}
                       {it.note ? <div className="text-[11px] italic text-slate-500">{it.note}</div> : null}
+                      {it.deliveryPeriod ? (
+                        <div className="text-[11px] font-medium text-[#0A2540]">Delivery: {it.deliveryPeriod}</div>
+                      ) : null}
                     </div>
                   </div>
                 </td>
@@ -245,7 +250,9 @@ export default function QuotationDocument({
       <div className="mt-6 grid grid-cols-2 gap-4 text-[12px]">
         <div>
           <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Delivery</div>
-          <div className="text-slate-700">{q.deliveryTerms || '2–4 weeks from order confirmation'}</div>
+          <div className="text-slate-700">
+            {q.deliveryTerms || (anyItemDelivery ? 'As indicated per line item' : '2–4 weeks from order confirmation')}
+          </div>
         </div>
         <div>
           <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Payment terms</div>

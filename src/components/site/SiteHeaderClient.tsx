@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-type NavKey = 'home' | 'about' | 'products' | 'application' | 'partners' | 'contact'
+type NavKey = 'home' | 'about' | 'products' | 'application' | 'services' | 'partners' | 'contact'
 
 export type SiteHeaderClientProps = {
   instrumentCount: number
@@ -22,6 +22,7 @@ function navKeyForPath(pathname: string): NavKey | null {
   // /products AND /product both highlight "Products"
   if (pathname.startsWith('/products') || pathname.startsWith('/product')) return 'products'
   if (pathname.startsWith('/application')) return 'application'
+  if (pathname.startsWith('/book-service')) return 'services'
   if (pathname.startsWith('/partners')) return 'partners'
   if (pathname.startsWith('/contact')) return 'contact'
   return null
@@ -68,6 +69,7 @@ export default function SiteHeaderClient({
             <Link href="/about" {...current('about')}>About</Link>
             <Link href="/products" {...current('products')}>Products</Link>
             <Link href="/application" {...current('application')}>Application</Link>
+            <Link href="/book-service" {...current('services')}>Services</Link>
             <Link href="/partners" {...current('partners')}>Partners</Link>
             <Link href="/contact" {...current('contact')}>Contact</Link>
             {/* Account group — only rendered inside the open mobile drawer (the

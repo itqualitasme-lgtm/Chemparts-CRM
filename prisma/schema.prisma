@@ -457,11 +457,12 @@ model QuotationItem {
   product     Product?  @relation(fields: [productId], references: [id])
   productId   String?
   productName String // snapshot
-  qty         Int       @default(1)
-  unitPrice   Decimal   @default(0) @db.Decimal(12, 2)
-  discountPct Decimal   @default(0) @db.Decimal(5, 2)
-  note        String?
-  sortOrder   Int       @default(0)
+  qty            Int      @default(1)
+  unitPrice      Decimal  @default(0) @db.Decimal(12, 2)
+  discountPct    Decimal  @default(0) @db.Decimal(5, 2)
+  note           String?
+  deliveryPeriod String? // per-line delivery/lead time, e.g. "2–4 weeks", "ex-stock"
+  sortOrder      Int      @default(0)
 }
 
 // ---- Order (a confirmed purchase; carries invoice/warranty/PO documents) ----

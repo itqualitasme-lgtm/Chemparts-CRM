@@ -17,7 +17,7 @@ export type QuotationState = { ok?: boolean; error?: string }
 
 const STATUSES: QuotationStatus[] = ['DRAFT', 'SENT', 'ACCEPTED', 'REJECTED', 'EXPIRED']
 
-type LineInput = { productId?: string | null; productName: string; qty: number; unitPrice: number; discountPct: number; note?: string }
+type LineInput = { productId?: string | null; productName: string; qty: number; unitPrice: number; discountPct: number; note?: string; deliveryPeriod?: string }
 
 function parseLines(json: string | null): LineInput[] {
   if (!json) return []
@@ -40,6 +40,7 @@ function parseLines(json: string | null): LineInput[] {
       unitPrice: Math.max(0, Number(r.unitPrice) || 0),
       discountPct: Number.isFinite(dp) ? Math.min(100, Math.max(0, dp)) : 0,
       note: (r.note ?? '').trim() || undefined,
+      deliveryPeriod: (r.deliveryPeriod ?? '').trim() || undefined,
     })
   }
   return out
@@ -163,6 +164,7 @@ export async function updateQuotation(
             unitPrice: l.unitPrice,
             discountPct: l.discountPct,
             note: l.note ?? null,
+            deliveryPeriod: l.deliveryPeriod ?? null,
             sortOrder: i,
           })),
         },

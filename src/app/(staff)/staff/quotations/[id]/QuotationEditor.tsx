@@ -3,7 +3,7 @@
 import { useActionState, useState } from 'react'
 import { updateQuotation, type QuotationState } from '../actions'
 
-export type Line = { productId: string | null; productName: string; qty: number; unitPrice: number; discountPct: number; note: string }
+export type Line = { productId: string | null; productName: string; qty: number; unitPrice: number; discountPct: number; note: string; deliveryPeriod: string }
 type Header = {
   status: string
   currency: string
@@ -44,7 +44,7 @@ export default function QuotationEditor({
     updateQuotation.bind(null, quotationId),
     {},
   )
-  const emptyLine = (): Line => ({ productId: null, productName: '', qty: 1, unitPrice: 0, discountPct: 0, note: '' })
+  const emptyLine = (): Line => ({ productId: null, productName: '', qty: 1, unitPrice: 0, discountPct: 0, note: '', deliveryPeriod: '' })
   const [lines, setLines] = useState<Line[]>(initialLines.length ? initialLines : [emptyLine()])
   const [currency, setCurrency] = useState(header.currency)
   const [vat, setVat] = useState(header.vatPercent)
@@ -64,7 +64,7 @@ export default function QuotationEditor({
   const itemsJson = JSON.stringify(
     lines
       .filter((l) => l.productName.trim())
-      .map((l) => ({ productId: l.productId, productName: l.productName, qty: l.qty, unitPrice: l.unitPrice, discountPct: l.discountPct, note: l.note })),
+      .map((l) => ({ productId: l.productId, productName: l.productName, qty: l.qty, unitPrice: l.unitPrice, discountPct: l.discountPct, note: l.note, deliveryPeriod: l.deliveryPeriod })),
   )
 
   return (
@@ -101,6 +101,12 @@ export default function QuotationEditor({
                     value={l.note}
                     onChange={(e) => setLine(i, { note: e.target.value })}
                     placeholder="Note (optional)"
+                    className="mt-1 w-full rounded border border-slate-200 px-2 py-1 text-xs text-slate-600"
+                  />
+                  <input
+                    value={l.deliveryPeriod}
+                    onChange={(e) => setLine(i, { deliveryPeriod: e.target.value })}
+                    placeholder="Delivery / lead time (e.g. 2–4 weeks, ex-stock)"
                     className="mt-1 w-full rounded border border-slate-200 px-2 py-1 text-xs text-slate-600"
                   />
                 </td>

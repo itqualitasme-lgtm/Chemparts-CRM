@@ -7,7 +7,6 @@ const valid = {
   email: 'ali@gulflabs.com',
   phone: '+97455512345',
   country: 'QA',
-  password: 'Str0ng-password',
   agreeTerms: 'yes',
 }
 
@@ -15,9 +14,8 @@ describe('registerSchema', () => {
   it('accepts a valid global registration', () => {
     expect(registerSchema.safeParse(valid).success).toBe(true)
   })
-  it('rejects bad email, short password, missing country', () => {
+  it('rejects bad email and missing country', () => {
     expect(registerSchema.safeParse({ ...valid, email: 'nope' }).success).toBe(false)
-    expect(registerSchema.safeParse({ ...valid, password: 'short' }).success).toBe(false)
     expect(registerSchema.safeParse({ ...valid, country: '' }).success).toBe(false)
   })
   it('rejects phone without country code', () => {

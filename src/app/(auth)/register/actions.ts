@@ -25,10 +25,11 @@ export async function registerCustomer(_prev: RegisterState, formData: FormData)
   const input = parsed.data
   const email = input.email.trim().toLowerCase()
 
+  // No password at sign-up — the customer verifies by emailed code and can set a
+  // password later from Account → Settings. Supabase allows a passwordless user.
   const admin = createAdminClient()
   const { data, error } = await admin.auth.admin.createUser({
     email,
-    password: input.password,
     email_confirm: true,
     user_metadata: { full_name: input.fullName },
   })

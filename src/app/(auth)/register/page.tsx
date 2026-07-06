@@ -35,7 +35,6 @@ function Field({
 
 export default function RegisterPage() {
   const [state, formAction, pending] = useActionState(registerCustomer, initialState)
-  const [showPw, setShowPw] = useState(false)
   const [verState, verifyAction, verifying] = useActionState<LoginState, FormData>(verifyOtp, {})
   const [resending, startResend] = useTransition()
   const [resent, setResent] = useState(false)
@@ -127,36 +126,10 @@ export default function RegisterPage() {
               ))}
             </select>
           </Field>
-          <Field label="Password" name="password" errors={state.fieldErrors}>
-            <div className="relative">
-              <input
-                name="password"
-                type={showPw ? 'text' : 'password'}
-                required
-                minLength={10}
-                className={`${inputCls} pr-11`}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPw((v) => !v)}
-                aria-label={showPw ? 'Hide password' : 'Show password'}
-                className="absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 hover:text-[#0E7490]"
-              >
-                {showPw ? (
-                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7">
-                    <path d="M3 3l18 18M10.6 10.7a2 2 0 002.8 2.8" strokeLinecap="round" />
-                    <path d="M9.9 5.1A9.8 9.8 0 0112 5c5 0 9 4.5 9 7-.4 1-1.3 2.3-2.6 3.4M6.1 6.1C3.9 7.4 2.4 9.6 2 12c.6 1.6 2.7 5 7 6.5" strokeLinecap="round" />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7">
-                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" strokeLinecap="round" strokeLinejoin="round" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                )}
-              </button>
-            </div>
-            <span className="mt-1 block text-xs text-slate-400">At least 10 characters.</span>
-          </Field>
+          <p className="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500">
+            No password needed — we&apos;ll email you a 6-digit code to sign in. You can add a password later from
+            Account&nbsp;→&nbsp;Settings if you prefer.
+          </p>
 
           <label className="flex items-start gap-2.5 pt-1">
             <input
