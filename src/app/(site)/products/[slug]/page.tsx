@@ -135,6 +135,7 @@ function InfoCta({ product, loggedIn }: { product: ProductDetail; loggedIn: bool
 function QuickSpec({ product }: { product: ProductDetail }) {
   const rows: [string, string][] = []
   if (product.productType) rows.push(['Type', product.productType])
+  if (product.modelNo) rows.push(['Model', product.modelNo])
   if (product.sample) rows.push(['Sample', product.sample])
   if (product.standards.length) rows.push(['Standards', product.standards.join(', ')])
   if (product.output) rows.push(['Output', product.output])
@@ -157,6 +158,7 @@ function QuickSpec({ product }: { product: ProductDetail }) {
 function FullSpec({ product }: { product: ProductDetail }) {
   const rows: [string, string][] = []
   if (product.productType) rows.push(['Type', product.productType])
+  if (product.modelNo) rows.push(['Model number', product.modelNo])
   if (product.sample) rows.push(['Sample compatibility', product.sample])
   if (product.standards.length) rows.push(['Standards', product.standards.join(', ')])
   if (product.output) rows.push(['Output / measurement', product.output])

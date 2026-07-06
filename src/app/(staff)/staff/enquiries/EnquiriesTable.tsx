@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useMemo, useState, useTransition } from 'react'
 import { updateEnquiryStatus, deleteEnquiry } from './actions'
 import CreateQuotationButton from './CreateQuotationButton'
@@ -18,6 +19,7 @@ export type EnquiryRow = {
   lostReason: string | null
   createdAt: string // ISO
   items: { id: string; productName: string; qty: number; priceRequested: boolean }[]
+  quotations: { id: string; quotationNo: string }[]
 }
 
 const STATUSES = ['NEW', 'UNDER_REVIEW', 'QUOTED', 'WON', 'LOST'] as const
@@ -236,7 +238,22 @@ function Row({ e, isAdmin }: { e: EnquiryRow; isAdmin: boolean }) {
 
               {/* Actions */}
               <div className="flex flex-row flex-wrap items-start gap-2 md:flex-col md:items-end">
-                <CreateQuotationButton enquiryId={e.id} />
+                {e.quotations.length > 0 ? (
+                  <div className="flex flex-col items-start gap-1 md:items-end">
+                    {e.quotations.map((qt) => (
+                      <Link
+                        key={qt.id}
+                        href={`/staff/quotations/${qt.id}`}
+                        className="rounded-lg border border-[#0A2540] px-3 py-1.5 font-mono text-xs font-medium text-[#0A2540] transition hover:bg-[#0A2540] hover:text-white"
+                      >
+                        View {qt.quotationNo} →
+                      </Link>
+                    ))}
+                    <span className="text-[11px] text-slate-400">Already quoted</span>
+                  </div>
+                ) : (
+                  <CreateQuotationButton enquiryId={e.id} />
+                )}
                 {isAdmin && (
                   <DeleteButton
                     action={deleteEnquiry.bind(null, e.id)}

@@ -29,6 +29,7 @@ export default async function StaffEnquiriesPage() {
       customer: { select: { companyName: true } },
       salesPerson: { select: { name: true } },
       items: { select: { id: true, productName: true, qty: true, priceRequested: true } },
+      quotations: { select: { id: true, quotationNo: true }, orderBy: { createdAt: 'desc' } },
     },
   })
 
@@ -45,6 +46,7 @@ export default async function StaffEnquiriesPage() {
     lostReason: e.lostReason,
     createdAt: e.createdAt.toISOString(),
     items: e.items.map((it) => ({ id: it.id, productName: it.productName, qty: it.qty, priceRequested: it.priceRequested })),
+    quotations: e.quotations.map((qt) => ({ id: qt.id, quotationNo: qt.quotationNo })),
   }))
 
   const newCount = rows.filter((e) => e.status === 'NEW').length

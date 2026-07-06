@@ -275,6 +275,7 @@ export type ProductDetail = {
   industries: string[]
   standards: string[]
   productType: string | null
+  modelNo: string | null
   sample: string | null
   output: string | null
   partnerStatus: string | null
@@ -312,6 +313,7 @@ export async function getProductDetail(slug: string): Promise<ProductDetail | nu
       industries: true,
       standards: true,
       productType: true,
+      modelNo: true,
       sample: true,
       output: true,
       partnerStatus: true,
@@ -434,6 +436,7 @@ export async function getProductDetail(slug: string): Promise<ProductDetail | nu
     industries: p.industries,
     standards: p.standards,
     productType: p.productType,
+    modelNo: p.modelNo,
     sample: p.sample,
     output: p.output,
     partnerStatus: p.partnerStatus,
