@@ -18,9 +18,9 @@ export default function SalesPeople({ people }: { people: Sales[] }) {
   }, [state.ok])
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-        <table className="w-full text-sm">
+    <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+        <table className="w-full min-w-[420px] text-sm">
           <thead>
             <tr className="border-b border-slate-200 bg-slate-50 text-left text-slate-600">
               <th className="px-4 py-2.5 font-medium">Name</th>
