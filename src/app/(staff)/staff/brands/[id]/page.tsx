@@ -52,7 +52,7 @@ export default async function EditBrandPage({ params }: { params: Promise<{ id: 
         <EditBrandForm brandId={brand.id} brand={brand} />
       </div>
 
-      {user?.role === 'ADMIN' && (
+      {user && (
         <div className="mt-6 rounded-xl border border-red-200 bg-red-50/40 p-6">
           <h2 className="font-medium text-red-800">Danger zone</h2>
           <p className="mb-3 text-sm text-slate-600">

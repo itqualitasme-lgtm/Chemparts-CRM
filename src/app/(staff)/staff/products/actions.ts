@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { requirePortal, requireAdmin } from '@/lib/auth/session'
+import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { productSchema, splitList, splitTags } from '@/lib/validation/product'
@@ -10,11 +10,10 @@ import { slugify } from '@/lib/slug'
 
 export type ProductState = { error?: string; fieldErrors?: Record<string, string[]> }
 
-/** Admin-only: delete a product. Blocked if referenced by enquiries, carts or
+/** Staff/admin: delete a product. Blocked if referenced by enquiries, carts or
  *  price requests (hide it instead); BOM links + price history cascade. */
 export async function deleteProduct(id: string): Promise<{ error?: string }> {
-  const admin = await requireAdmin()
-  if (!admin) return { error: 'Only administrators can delete products.' }
+  const user = await requirePortal('staff')
 
   const p = await db.product.findUnique({
     where: { id },
@@ -46,7 +45,7 @@ export async function deleteProduct(id: string): Promise<{ error?: string }> {
   }
 
   await db.product.delete({ where: { id } })
-  await db.auditLog.create({ data: { actorId: admin.id, action: 'DELETE', entity: 'Product', entityId: id } })
+  await db.auditLog.create({ data: { actorId: user.id, action: 'DELETE', entity: 'Product', entityId: id } })
   revalidatePath('/staff/products')
   revalidatePath('/products')
   redirect('/staff/products')

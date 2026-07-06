@@ -181,7 +181,7 @@ export async function updateQuotation(
   return { ok: true }
 }
 
-/** Admin-only: delete a quotation (line items cascade). */
+/** Admin-only: delete a quotation (line items cascade). Redirects to the list. */
 export async function deleteQuotation(quotationId: string): Promise<{ error?: string }> {
   const admin = await requireAdmin()
   if (!admin) return { error: 'Only administrators can delete quotations.' }
@@ -190,5 +190,5 @@ export async function deleteQuotation(quotationId: string): Promise<{ error?: st
   await db.quotation.delete({ where: { id: quotationId } })
   await db.auditLog.create({ data: { actorId: admin.id, action: 'DELETE', entity: 'Quotation', entityId: quotationId } })
   revalidatePath('/staff/quotations')
-  return {}
+  redirect('/staff/quotations')
 }

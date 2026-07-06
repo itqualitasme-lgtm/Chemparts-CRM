@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { requirePortal, requireAdmin } from '@/lib/auth/session'
+import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { brandSchema } from '@/lib/validation/brand'
 import { slugify } from '@/lib/slug'
@@ -143,10 +143,9 @@ export async function removeBrandLogo(brandId: string): Promise<void> {
   revalidateBrand(brandId)
 }
 
-/** Admin-only: delete a brand. Blocked if it still has products. */
+/** Staff/admin: delete a brand. Blocked if it still has products. */
 export async function deleteBrand(brandId: string): Promise<{ error?: string }> {
-  const admin = await requireAdmin()
-  if (!admin) return { error: 'Only administrators can delete brands.' }
+  const user = await requirePortal('staff')
 
   const b = await db.brand.findUnique({
     where: { id: brandId },
@@ -160,7 +159,7 @@ export async function deleteBrand(brandId: string): Promise<{ error?: string }> 
   await deleteStoredLogo(b.logo)
   await db.brand.delete({ where: { id: brandId } })
   await db.auditLog.create({
-    data: { actorId: admin.id, action: 'DELETE', entity: 'Brand', entityId: brandId },
+    data: { actorId: user.id, action: 'DELETE', entity: 'Brand', entityId: brandId },
   })
   revalidateBrand()
   redirect('/staff/brands')
