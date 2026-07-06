@@ -67,7 +67,7 @@ export default function SalesPeople({ people }: { people: Sales[] }) {
         {state.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>}
         {state.ok && <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">Added.</p>}
         <input name="name" required placeholder="Full name" className={inputCls} />
-        <input name="email" type="email" placeholder="Email (optional)" className={inputCls} />
+        <input name="email" type="email" required placeholder="Email" className={inputCls} />
         <input name="phone" placeholder="Phone (optional)" className={inputCls} />
         <button
           type="submit"

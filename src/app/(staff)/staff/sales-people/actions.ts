@@ -11,7 +11,9 @@ export async function createSalesPerson(_prev: SalesState, formData: FormData): 
   await requirePortal('staff')
   const name = ((formData.get('name') as string | null) ?? '').trim()
   if (name.length < 2) return { error: 'Enter the sales person’s name.' }
-  const email = ((formData.get('email') as string | null) ?? '').trim() || null
+  const email = ((formData.get('email') as string | null) ?? '').trim()
+  // Email is required — sales people are CC'd on their enquiry notifications.
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: 'Enter a valid email address.' }
   const phone = ((formData.get('phone') as string | null) ?? '').trim() || null
   await db.salesPerson.create({ data: { name, email, phone } })
   revalidatePath('/staff/sales-people')
