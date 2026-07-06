@@ -78,8 +78,13 @@ export default function RequestPrice({ productId, loggedIn, variant = 'primary',
         <input id="rp-qty" name="qty" type="number" min={1} defaultValue={1} required />
       </div>
 
-      {!loggedIn ? (
+      {!loggedIn || state.needContact ? (
         <>
+          {state.needContact ? (
+            <p className="mono text-muted" style={{ fontSize: 12, margin: 0 }}>
+              Your session isn&apos;t active — add your name and email and we&apos;ll still send this through.
+            </p>
+          ) : null}
           <div className="field">
             <label htmlFor="rp-name">Your name</label>
             <input id="rp-name" name="guestName" type="text" placeholder="Full name" required />

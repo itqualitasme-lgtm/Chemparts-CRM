@@ -3,7 +3,7 @@
 import { db } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth/session'
 
-export type RequestPriceState = { ok?: boolean; error?: string }
+export type RequestPriceState = { ok?: boolean; error?: string; needContact?: boolean }
 
 /**
  * Customer (or guest) asks staff to confirm the current price of a product.
@@ -36,7 +36,9 @@ export async function requestPrice(
     guestName = (formData.get('guestName') as string | null)?.trim() || null
     guestEmail = (formData.get('guestEmail') as string | null)?.trim() || null
     if (!guestName || !guestEmail) {
-      return { error: 'Please enter your name and email so we can reply.' }
+      // No session (e.g. it expired since the page loaded) and no contact info —
+      // ask for name/email rather than silently failing.
+      return { needContact: true, error: 'Please add your name and email so we can reply.' }
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) {
       return { error: 'Please enter a valid email address.' }
