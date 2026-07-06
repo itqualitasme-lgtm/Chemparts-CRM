@@ -15,6 +15,13 @@ type Initial = {
   industries?: string[]
   tags?: string[]
   newUntil?: string
+  productType?: string
+  sample?: string
+  output?: string
+  partnerStatus?: string
+  warranty?: string
+  service?: string
+  datasheetUrl?: string
   modelNo?: string
   unit?: string
   listPrice?: number | null
@@ -131,6 +138,43 @@ export default function ProductForm({
           Shows a “New” badge and lists the product first until this date, then auto-expires. Leave blank for none.
         </span>
       </label>
+
+      {/* Specifications + commercial info shown on the public product page. */}
+      <fieldset className="space-y-4 rounded-xl border border-slate-200 p-4">
+        <legend className="px-1 text-sm font-semibold text-slate-700">
+          Specifications &amp; service <span className="font-normal text-slate-400">— shown on the product page</span>
+        </legend>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium text-slate-700">Type / category</span>
+            <input name="productType" defaultValue={initial.productType} placeholder="e.g. Petroleum Tester" className={inputCls} />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium text-slate-700">Sample compatibility</span>
+            <input name="sample" defaultValue={initial.sample} placeholder="e.g. Liquids, solids (verify per method)" className={inputCls} />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium text-slate-700">Output / measurement</span>
+            <input name="output" defaultValue={initial.output} placeholder="e.g. Per method specification" className={inputCls} />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium text-slate-700">Partner status</span>
+            <input name="partnerStatus" defaultValue={initial.partnerStatus} placeholder="e.g. Authorized partner / Direct partner" className={inputCls} />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium text-slate-700">Warranty</span>
+            <input name="warranty" defaultValue={initial.warranty} placeholder="e.g. 12 months / Manufacturer" className={inputCls} />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium text-slate-700">Service</span>
+            <input name="service" defaultValue={initial.service} placeholder="e.g. In-region service & AMC" className={inputCls} />
+          </label>
+        </div>
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium text-slate-700">Spec sheet URL (Documentation)</span>
+          <input name="datasheetUrl" type="url" defaultValue={initial.datasheetUrl} placeholder="https://…/datasheet.pdf" className={inputCls} />
+        </label>
+      </fieldset>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <label className="block">

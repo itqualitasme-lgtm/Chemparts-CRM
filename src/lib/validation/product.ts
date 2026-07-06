@@ -18,6 +18,14 @@ export const productSchema = z.object({
   overview: z.string().trim().optional().or(z.literal('')),
   standards: z.string().trim().optional().or(z.literal('')), // comma-separated
   industries: z.string().trim().optional().or(z.literal('')), // comma-separated
+  // PDP specification / commercial fields (shown on the public product page).
+  productType: z.string().trim().optional().or(z.literal('')), // e.g. "Petroleum Tester"
+  sample: z.string().trim().optional().or(z.literal('')),
+  output: z.string().trim().optional().or(z.literal('')),
+  partnerStatus: z.string().trim().optional().or(z.literal('')),
+  warranty: z.string().trim().optional().or(z.literal('')),
+  service: z.string().trim().optional().or(z.literal('')),
+  datasheetUrl: z.string().trim().optional().or(z.literal('')),
   modelNo: z.string().trim().optional().or(z.literal('')),
   unit: z.string().trim().optional().or(z.literal('')),
   tags: z.string().trim().optional().or(z.literal('')), // hashtags: "#xrf #petroleum" or "xrf, petroleum"
