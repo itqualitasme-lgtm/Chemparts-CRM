@@ -1,9 +1,11 @@
 'use server'
 
+import { after } from 'next/server'
 import { db } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth/session'
-import { nextServiceNo } from '@/lib/service'
-import { sendMail } from '@/lib/mail/send'
+import { nextServiceNo, SERVICE_TYPE_LABEL } from '@/lib/service'
+import { appUrl } from '@/lib/env'
+import { notify, notifyStaff } from '@/lib/mail/notify'
 import type { ServiceType } from '@/generated/prisma/client'
 
 export type BookServiceState = { ok?: boolean; error?: string; requestNo?: string }
@@ -52,18 +54,18 @@ export async function bookService(_prev: BookServiceState, formData: FormData): 
     },
   })
 
-  // Best-effort confirmation email.
+  // Confirm to the requester + notify staff, after the response (non-blocking).
   const to = user?.email ?? guestEmail
-  if (to) {
-    try {
-      await sendMail(to, 'service-received', {
-        name: user?.fullName || guestName || 'there',
-        requestNo,
-      })
-    } catch {
-      // swallow — the request is already recorded.
-    }
-  }
+  after(async () => {
+    await notify(to, 'service-received', { name: user?.fullName || guestName || 'there', requestNo })
+    await notifyStaff('staff-new-service', {
+      requestNo,
+      type: SERVICE_TYPE_LABEL[type] ?? type,
+      who: guestCompany || guestName || user?.fullName || 'Guest',
+      equipment: equipment ?? '',
+      link: `${appUrl()}/staff/service-requests`,
+    })
+  })
 
   return { ok: true, requestNo }
 }

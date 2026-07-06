@@ -1,8 +1,10 @@
 'use server'
 
+import { after } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
+import { notify } from '@/lib/mail/notify'
 
 export type RespondPriceState = { ok?: boolean; error?: string }
 
@@ -40,7 +42,9 @@ export async function respondPrice(
     select: {
       id: true,
       status: true,
+      guestName: true,
       guestEmail: true,
+      customer: { select: { companyName: true, email: true, contacts: { where: { isPrimary: true }, take: 1, select: { email: true } } } },
       product: { select: { id: true, name: true, listPrice: true, currency: true } },
     },
   })
@@ -76,15 +80,18 @@ export async function respondPrice(
         respondedAt: now,
       },
     }),
-    db.emailLog.create({
-      data: {
-        to: request.guestEmail ?? '',
-        subject: `Price confirmed — ${request.product.name}`,
-        template: 'price-request-quoted',
-        status: 'PENDING',
-      },
-    }),
   ])
+
+  // Email the confirmed price to the customer (non-blocking).
+  const to = request.guestEmail ?? request.customer?.email ?? request.customer?.contacts[0]?.email
+  after(() =>
+    notify(to, 'price-confirmed', {
+      name: request.guestName ?? request.customer?.companyName ?? 'there',
+      product: request.product.name,
+      price: `${currency} ${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+      validUntil: validUntil ? validUntil.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '',
+    }),
+  )
 
   revalidatePath('/staff/price-requests')
   revalidatePath('/products')

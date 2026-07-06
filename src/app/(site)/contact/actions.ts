@@ -1,9 +1,11 @@
 'use server'
 
+import { after } from 'next/server'
 import { db } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth/session'
 import { nextEnquiryNo } from '@/lib/enquiry-no'
-import { sendMail } from '@/lib/mail/send'
+import { appUrl } from '@/lib/env'
+import { notify, notifyStaff } from '@/lib/mail/notify'
 
 export type ContactState = { ok?: boolean; error?: string; enquiryNo?: string }
 
@@ -46,12 +48,17 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
     },
   })
 
-  // Best-effort confirmation to the sender.
-  try {
-    await sendMail(email, 'contact-received', { name, enquiryNo })
-  } catch {
-    // swallow — the enquiry is already recorded.
-  }
+  // Confirm to the sender + notify staff, after the response (non-blocking).
+  after(async () => {
+    await notify(email, 'contact-received', { name, enquiryNo })
+    await notifyStaff('staff-new-enquiry', {
+      enquiryNo,
+      who: company || name,
+      channel: 'website contact form',
+      summary: `Topic: ${topic}. ${messageRaw}`.slice(0, 220),
+      link: `${appUrl()}/staff/enquiries`,
+    })
+  })
 
   return { ok: true, enquiryNo }
 }

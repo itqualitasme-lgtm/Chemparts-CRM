@@ -1,11 +1,13 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { after } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { requirePortal, requireAdmin } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { nextOrderNo } from '@/lib/order'
+import { notify } from '@/lib/mail/notify'
 import type { OrderStatus, OrderDocKind } from '@/generated/prisma/client'
 
 export type OrderState = { ok?: boolean; error?: string }
@@ -76,11 +78,32 @@ export async function updateOrder(orderId: string, formData: FormData): Promise<
   const status = statusRaw && STATUSES.includes(statusRaw) ? statusRaw : undefined
   const notes = (formData.get('notes') as string | null)?.trim() || null
 
-  const order = await db.order.findUnique({ where: { id: orderId }, select: { id: true } })
+  const order = await db.order.findUnique({
+    where: { id: orderId },
+    select: {
+      id: true,
+      status: true,
+      orderNo: true,
+      customer: { select: { companyName: true, email: true, contacts: { where: { isPrimary: true }, take: 1, select: { email: true } } } },
+    },
+  })
   if (!order) return { error: 'Order not found.' }
 
   await db.order.update({ where: { id: orderId }, data: { ...(status ? { status } : {}), notes } })
   await db.auditLog.create({ data: { actorId: user.id, action: 'UPDATE', entity: 'Order', entityId: orderId, detail: { status } } })
+
+  // Email the customer when the order status changes.
+  if (status && status !== order.status) {
+    const to = order.customer?.email ?? order.customer?.contacts[0]?.email
+    after(() =>
+      notify(to, 'order-status-update', {
+        name: order.customer?.companyName ?? 'there',
+        orderNo: order.orderNo,
+        status: status.replace(/_/g, ' '),
+      }),
+    )
+  }
+
   revalidatePath('/staff/orders')
   revalidatePath(`/staff/orders/${orderId}`)
   return { ok: true }

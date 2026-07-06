@@ -1,10 +1,12 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { after } from 'next/server'
 import { db } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth/session'
 import { canAddToCart } from '@/lib/price'
-import { sendMail } from '@/lib/mail/send'
+import { appUrl } from '@/lib/env'
+import { notify, notifyStaff } from '@/lib/mail/notify'
 import { nextEnquiryNo } from '@/lib/enquiry-no'
 import {
   ensureCart,
@@ -179,19 +181,23 @@ export async function submitEnquiry(formData: FormData): Promise<SubmitEnquirySt
     await db.cartItem.deleteMany({ where: { cartId: cart.id } })
   }
 
-  // Best-effort confirmation email — never fail the submission if mail throws.
+  // Confirm to the requester + notify staff, after the response (non-blocking).
   const to = user?.email ?? guestEmail
-  if (to) {
-    try {
-      await sendMail(to, 'enquiry-received', {
-        name: user?.fullName || guestName || 'there',
-        enquiryNo,
-        itemCount: String(cart.lines.length),
-      })
-    } catch {
-      // swallow — the enquiry is already recorded.
-    }
-  }
+  const who = guestCompany || guestName || user?.fullName || 'A customer'
+  after(async () => {
+    await notify(to, 'enquiry-received', {
+      name: user?.fullName || guestName || 'there',
+      enquiryNo,
+      itemCount: String(cart.lines.length),
+    })
+    await notifyStaff('staff-new-enquiry', {
+      enquiryNo,
+      who,
+      channel: 'website cart',
+      summary: `${cart.lines.length} item${cart.lines.length === 1 ? '' : 's'}${message ? ` · ${message}` : ''}`.slice(0, 220),
+      link: `${appUrl()}/staff/enquiries`,
+    })
+  })
 
   revalidateStore()
   return { ok: true, enquiryNo }

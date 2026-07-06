@@ -1,7 +1,8 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, after } from 'next/server'
 import { db } from '@/lib/db'
 import { nextEnquiryNo } from '@/lib/enquiry-no'
-import { sendMail } from '@/lib/mail/send'
+import { appUrl } from '@/lib/env'
+import { notify, notifyStaff } from '@/lib/mail/notify'
 
 // Public endpoint for the site-wide "Get a quote" modal. The modal still opens
 // WhatsApp; this logs a staff-portal enquiry (channel WEBSITE) in parallel.
@@ -43,11 +44,16 @@ export async function POST(req: Request) {
     },
   })
 
-  try {
-    await sendMail(email, 'contact-received', { name, enquiryNo })
-  } catch {
-    // swallow — the enquiry is already recorded.
-  }
+  after(async () => {
+    await notify(email, 'contact-received', { name, enquiryNo })
+    await notifyStaff('staff-new-enquiry', {
+      enquiryNo,
+      who: company || name,
+      channel: 'website quote form',
+      summary: message,
+      link: `${appUrl()}/staff/enquiries`,
+    })
+  })
 
   return NextResponse.json({ ok: true, enquiryNo })
 }

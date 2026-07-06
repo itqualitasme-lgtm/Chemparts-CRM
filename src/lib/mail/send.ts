@@ -10,14 +10,20 @@ const transporter = nodemailer.createTransport({
   auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
 })
 
-export async function sendMail(to: string, template: string, vars: Record<string, string>) {
+export async function sendMail(
+  to: string,
+  template: string,
+  vars: Record<string, string>,
+  opts?: { cc?: string },
+) {
   const { subject, html } = renderEmail(template, vars)
+  const logTo = opts?.cc ? `${to} (cc ${opts.cc})` : to
   try {
-    await transporter.sendMail({ from: process.env.MAIL_FROM, to, subject, html })
-    await db.emailLog.create({ data: { to, subject, template, status: 'SENT' } })
+    await transporter.sendMail({ from: process.env.MAIL_FROM, to, cc: opts?.cc, subject, html })
+    await db.emailLog.create({ data: { to: logTo, subject, template, status: 'SENT' } })
   } catch (err) {
     await db.emailLog.create({
-      data: { to, subject, template, status: 'FAILED', error: String(err) },
+      data: { to: logTo, subject, template, status: 'FAILED', error: String(err) },
     })
     throw err
   }

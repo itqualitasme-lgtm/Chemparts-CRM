@@ -1,7 +1,10 @@
 'use server'
 
+import { after } from 'next/server'
 import { db } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth/session'
+import { appUrl } from '@/lib/env'
+import { notify, notifyStaff } from '@/lib/mail/notify'
 
 export type RequestPriceState = { ok?: boolean; error?: string; needContact?: boolean }
 
@@ -58,14 +61,16 @@ export async function requestPrice(
     },
   })
 
-  // Placeholder for the (deferred) staff notification email.
-  await db.emailLog.create({
-    data: {
-      to: user?.email ?? guestEmail ?? '',
-      subject: `Price request — ${product.name}`,
-      template: 'price-request-received',
-      status: 'PENDING',
-    },
+  // Confirm to the requester + notify staff, after the response (non-blocking).
+  const who = guestName || user?.fullName || 'A customer'
+  after(async () => {
+    await notify(user?.email ?? guestEmail, 'price-request-received', { name: guestName || user?.fullName || 'there', product: product.name })
+    await notifyStaff('staff-new-price-request', {
+      product: product.name,
+      who,
+      qty: String(qty),
+      link: `${appUrl()}/staff/price-requests`,
+    })
   })
 
   return { ok: true }

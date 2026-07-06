@@ -1,10 +1,12 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { after } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { requirePortal, requireAdmin } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { nextEnquiryNo } from '@/lib/enquiry-no'
+import { notify } from '@/lib/mail/notify'
 import type { EnquiryStatus, EnquiryType } from '@/generated/prisma/client'
 
 export type UpdateStatusState = { ok?: boolean; error?: string }
@@ -150,7 +152,17 @@ export async function updateEnquiryStatus(
     return { error: 'Invalid status.' }
   }
 
-  const enquiry = await db.enquiry.findUnique({ where: { id: enquiryId }, select: { id: true } })
+  const enquiry = await db.enquiry.findUnique({
+    where: { id: enquiryId },
+    select: {
+      id: true,
+      status: true,
+      enquiryNo: true,
+      guestName: true,
+      guestEmail: true,
+      customer: { select: { companyName: true, email: true, contacts: { where: { isPrimary: true }, take: 1, select: { email: true } } } },
+    },
+  })
   if (!enquiry) return { error: 'Enquiry not found.' }
 
   // Capture a reason when marking LOST; clear it if moving away from LOST.
@@ -161,6 +173,13 @@ export async function updateEnquiryStatus(
   const lostReason = status === 'LOST' ? reasonRaw : null
 
   await db.enquiry.update({ where: { id: enquiryId }, data: { status, lostReason } })
+
+  // Tell the customer about meaningful status changes (not the internal LOST).
+  if (status !== enquiry.status && status !== 'LOST' && status !== 'NEW') {
+    const to = enquiry.guestEmail ?? enquiry.customer?.email ?? enquiry.customer?.contacts[0]?.email
+    const name = enquiry.guestName ?? enquiry.customer?.companyName ?? 'there'
+    after(() => notify(to, 'enquiry-status-update', { name, enquiryNo: enquiry.enquiryNo, status: status.replace(/_/g, ' ') }))
+  }
 
   revalidatePath('/staff/enquiries')
   return { ok: true }

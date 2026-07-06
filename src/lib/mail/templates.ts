@@ -77,6 +77,87 @@ ${button(v.actionUrl, 'Activate account')}`,
 <p style="color:#66788a;font-size:13px">Please quote ${esc(v.enquiryNo)} in any follow-up.</p>`,
     ),
   }),
+  // ---- Staff notifications (to the info inbox, cc sales person) ----
+  'staff-new-enquiry': (v) => ({
+    subject: `New enquiry ${v.enquiryNo} — ${v.who}`,
+    html: layout(
+      'New enquiry received',
+      `<p><strong>${esc(v.enquiryNo)}</strong> from <strong>${esc(v.who)}</strong> via ${esc(v.channel)}.</p>
+${v.summary ? `<p style="color:#66788a">${esc(v.summary)}</p>` : ''}
+${button(v.link, 'Open in portal')}`,
+    ),
+  }),
+  'staff-new-service': (v) => ({
+    subject: `New service request ${v.requestNo} — ${v.type}`,
+    html: layout(
+      'New service request',
+      `<p><strong>${esc(v.requestNo)}</strong> (${esc(v.type)}) from <strong>${esc(v.who)}</strong>.</p>
+${v.equipment ? `<p style="color:#66788a">Equipment: ${esc(v.equipment)}</p>` : ''}
+${button(v.link, 'Open in portal')}`,
+    ),
+  }),
+  'staff-new-price-request': (v) => ({
+    subject: `New price request — ${v.product}`,
+    html: layout(
+      'New price request',
+      `<p><strong>${esc(v.who)}</strong> asked for the current price of <strong>${esc(v.product)}</strong> (qty ${esc(v.qty)}).</p>
+${button(v.link, 'Open in portal')}`,
+    ),
+  }),
+  // ---- Customer notifications ----
+  'price-request-received': (v) => ({
+    subject: `We've got your price request — Chemparts`,
+    html: layout(
+      'Thanks — we have your request',
+      `<p>Dear ${esc(v.name)},</p>
+<p>We've received your request for the current price of <strong>${esc(v.product)}</strong>. Our team will confirm pricing and availability, usually within the working day.</p>`,
+    ),
+  }),
+  'price-confirmed': (v) => ({
+    subject: `Your price for ${v.product} — Chemparts`,
+    html: layout(
+      'Your price is confirmed',
+      `<p>Dear ${esc(v.name)},</p>
+<p>The current price for <strong>${esc(v.product)}</strong> is:</p>
+<p style="font-size:22px;font-weight:bold;color:#0A2540;margin:12px 0">${esc(v.price)}</p>
+${v.validUntil ? `<p style="color:#66788a">Valid until ${esc(v.validUntil)}.</p>` : ''}
+<p>Reply to this enquiry or contact us to place an order.</p>`,
+    ),
+  }),
+  'enquiry-status-update': (v) => ({
+    subject: `Update on your enquiry ${v.enquiryNo} — Chemparts`,
+    html: layout(
+      'Your enquiry has an update',
+      `<p>Dear ${esc(v.name)},</p>
+<p>Your enquiry <strong>${esc(v.enquiryNo)}</strong> is now marked <strong>${esc(v.status)}</strong>. Our team will be in touch with next steps.</p>`,
+    ),
+  }),
+  'quotation-sent': (v) => ({
+    subject: `Your quotation ${v.quotationNo} is ready — Chemparts`,
+    html: layout(
+      'Your quotation is ready',
+      `<p>Dear ${esc(v.name)},</p>
+<p>Your quotation <strong>${esc(v.quotationNo)}</strong> is ready to view online.</p>
+${button(v.link, 'View quotation')}
+<p style="color:#66788a;font-size:13px">Please quote ${esc(v.quotationNo)} in any follow-up.</p>`,
+    ),
+  }),
+  'order-status-update': (v) => ({
+    subject: `Update on your order ${v.orderNo} — Chemparts`,
+    html: layout(
+      'Your order has an update',
+      `<p>Dear ${esc(v.name)},</p>
+<p>Your order <strong>${esc(v.orderNo)}</strong> is now <strong>${esc(v.status)}</strong>.</p>`,
+    ),
+  }),
+  'service-status-update': (v) => ({
+    subject: `Update on your service request ${v.requestNo} — Chemparts`,
+    html: layout(
+      'Your service request has an update',
+      `<p>Dear ${esc(v.name)},</p>
+<p>Your service request <strong>${esc(v.requestNo)}</strong> is now <strong>${esc(v.status)}</strong>. Our service team will follow up.</p>`,
+    ),
+  }),
   'otp-code': (v) => ({
     subject: `Your Chemparts sign-in code`,
     html: layout(

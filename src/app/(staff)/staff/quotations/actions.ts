@@ -2,10 +2,13 @@
 
 import { randomBytes } from 'node:crypto'
 import { redirect } from 'next/navigation'
+import { after } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { requirePortal, requireAdmin } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { nextQuotationNo } from '@/lib/quotation'
+import { appUrl } from '@/lib/env'
+import { notify } from '@/lib/mail/notify'
 import type { QuotationStatus } from '@/generated/prisma/client'
 
 /** URL-safe token for the public (no-login) quotation view. */
@@ -122,8 +125,18 @@ export async function updateQuotation(
 ): Promise<QuotationState> {
   const user = await requirePortal('staff')
 
-  const existing = await db.quotation.findUnique({ where: { id: quotationId }, select: { id: true, publicToken: true } })
+  const existing = await db.quotation.findUnique({
+    where: { id: quotationId },
+    select: {
+      id: true,
+      publicToken: true,
+      status: true,
+      quotationNo: true,
+      customer: { select: { companyName: true, email: true, contacts: { where: { isPrimary: true }, take: 1, select: { email: true } } } },
+    },
+  })
   if (!existing) return { error: 'Quotation not found.' }
+  const token = existing.publicToken ?? publicToken()
 
   const statusRaw = (formData.get('status') as string | null)?.trim() as QuotationStatus | undefined
   const status = statusRaw && STATUSES.includes(statusRaw) ? statusRaw : 'DRAFT'
@@ -155,7 +168,7 @@ export async function updateQuotation(
         otherChargesLabel: (formData.get('otherChargesLabel') as string | null)?.trim() || null,
         salesPersonId: (formData.get('salesPersonId') as string | null)?.trim() || null,
         companyBranchId: (formData.get('companyBranchId') as string | null)?.trim() || null,
-        publicToken: existing.publicToken ?? publicToken(),
+        publicToken: token,
         items: {
           create: lines.map((l, i) => ({
             productId: l.productId ?? null,
@@ -175,6 +188,18 @@ export async function updateQuotation(
   await db.auditLog.create({
     data: { actorId: user.id, action: 'UPDATE', entity: 'Quotation', entityId: quotationId, detail: { status } },
   })
+
+  // When a quotation is first marked SENT, email the customer the public link.
+  if (status === 'SENT' && existing.status !== 'SENT') {
+    const to = existing.customer?.email ?? existing.customer?.contacts[0]?.email
+    after(() =>
+      notify(to, 'quotation-sent', {
+        name: existing.customer?.companyName ?? 'there',
+        quotationNo: existing.quotationNo,
+        link: `${appUrl()}/q/${token}`,
+      }),
+    )
+  }
 
   revalidatePath('/staff/quotations')
   revalidatePath(`/staff/quotations/${quotationId}`)
