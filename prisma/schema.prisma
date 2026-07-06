@@ -61,6 +61,7 @@ model Customer {
   orders      Order[]
   salesPerson   SalesPerson? @relation(fields: [salesPersonId], references: [id])
   salesPersonId String?
+  serviceRequests ServiceRequest[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -75,7 +76,49 @@ model SalesPerson {
   customers  Customer[]
   enquiries  Enquiry[]
   quotations Quotation[]
+  serviceRequests ServiceRequest[]
   createdAt  DateTime     @default(now())
+}
+
+// ---- Service / AMC request (from the website "Book a service" form) ----
+enum ServiceType {
+  AMC
+  CALIBRATION
+  REPAIR
+  INSTALLATION
+  CONSULTATION
+  OTHER
+}
+
+enum ServiceStatus {
+  NEW
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model ServiceRequest {
+  id               String        @id @default(cuid())
+  requestNo        String        @unique
+  type             ServiceType   @default(AMC)
+  customer         Customer?     @relation(fields: [customerId], references: [id])
+  customerId       String?
+  guestName        String?
+  guestEmail       String?
+  guestCompany     String?
+  guestPhone       String?
+  product          Product?      @relation(fields: [productId], references: [id])
+  productId        String?
+  equipment        String? // free-text equipment when not in the catalog
+  message          String?
+  preferredDate    DateTime?
+  status           ServiceStatus @default(NEW)
+  salesPerson      SalesPerson?  @relation(fields: [salesPersonId], references: [id])
+  salesPersonId    String?
+  createdByProfile String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 }
 
 // A named contact at a customer company (many per customer).
@@ -211,6 +254,7 @@ model Product {
   enquiryItems  EnquiryItem[]
   quotationItems QuotationItem[]
   orderItems    OrderItem[]
+  serviceRequests ServiceRequest[]
   // stock / inventory
   lotNumber   String?
   stockStatus StockStatus @default(IN_STOCK)

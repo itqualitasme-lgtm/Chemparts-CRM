@@ -5,7 +5,7 @@ export default function SiteFooter() {
         <h2>Need analytical <em>instruments?</em><br />Or service for one you already have?</h2>
         <div className="site-footer__cta-actions">
           <a className="btn btn--whatsapp" href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp our team <span className="arrow">→</span></a>
-          <a className="btn btn--ghost" style={{ color: 'white', borderColor: 'rgba(255,255,255,0.2)' }} href="mailto:info@chemparts-me.com">Email info@chemparts-me.com</a>
+          <a className="btn btn--ghost" style={{ color: 'white', borderColor: 'rgba(255,255,255,0.2)' }} href="/book-service">Book a service <span className="arrow">→</span></a>
         </div>
       </div>
 
@@ -35,6 +35,7 @@ export default function SiteFooter() {
           <ul>
             <li><a href="mailto:info@chemparts-me.com">info@chemparts-me.com</a></li>
             <li><a href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp our team</a></li>
+            <li><a href="/book-service">Book a service</a></li>
             <li><a href="/contact">Request a quote</a></li>
           </ul>
           <p style={{ fontFamily: 'var(--font-mono)', marginTop: 12 }}>+971 6 5574047</p>
