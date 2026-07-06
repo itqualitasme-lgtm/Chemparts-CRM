@@ -6,6 +6,7 @@ import { COUNTRIES } from '@/lib/countries'
 import { registerCustomer, resendRegisterCode, type RegisterState } from './actions'
 import { verifyOtp } from '../actions'
 import type { LoginState } from '../actions'
+import { CUSTOMER_PORTAL_ENABLED, MAINTENANCE_MESSAGE } from '@/lib/auth/portal-access'
 
 const initialState: RegisterState = {}
 
@@ -38,6 +39,33 @@ export default function RegisterPage() {
   const [verState, verifyAction, verifying] = useActionState<LoginState, FormData>(verifyOtp, {})
   const [resending, startResend] = useTransition()
   const [resent, setResent] = useState(false)
+
+  // Maintenance: customer registration is closed for now.
+  if (!CUSTOMER_PORTAL_ENABLED) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+        <div className="w-full max-w-md rounded-2xl border border-slate-100 bg-white p-8 text-center shadow-sm">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/logo.svg" alt="Chemparts" width={52} height={28} className="mx-auto mb-4" />
+          <h1 className="mb-2 text-xl font-semibold text-[#0A2540]">Customer portal — under maintenance</h1>
+          <p className="mb-6 text-sm text-slate-600">{MAINTENANCE_MESSAGE}</p>
+          <div className="flex flex-col gap-2">
+            <a
+              href="https://wa.me/971557566123"
+              target="_blank"
+              rel="noopener"
+              className="rounded-lg bg-[#0E7490] py-2.5 font-medium text-white transition hover:bg-[#0b5f77]"
+            >
+              WhatsApp our team
+            </a>
+            <Link href="/" className="text-sm font-medium text-[#0E7490] underline">
+              Back to the website
+            </Link>
+          </div>
+        </div>
+      </main>
+    )
+  }
 
   // After the account is created we email a code; verify it to finish sign-up.
   if (state.ok && state.email) {

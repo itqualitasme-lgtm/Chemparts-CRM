@@ -8,6 +8,7 @@ import { db } from '@/lib/db'
 import { hashCode, issueOtpCode } from '@/lib/auth/otp'
 import { canAccessPortal, homePathFor, portalFromPath } from '@/lib/auth/rbac'
 import { markOtpVerified } from '@/lib/auth/otp-grace'
+import { CUSTOMER_PORTAL_ENABLED, MAINTENANCE_MESSAGE, isStaffRole } from '@/lib/auth/portal-access'
 
 export type LoginState = { error?: string }
 
@@ -28,6 +29,12 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
   if (!profile || profile.status !== 'ACTIVE') {
     await supabase.auth.signOut()
     return { error: 'Account is not active. Contact info@chemparts-me.com.' }
+  }
+
+  // Maintenance: only Chemparts staff may sign in for now.
+  if (!CUSTOMER_PORTAL_ENABLED && !isStaffRole(profile.role)) {
+    await supabase.auth.signOut()
+    return { error: MAINTENANCE_MESSAGE }
   }
 
   // Honour a ?next= target only if this user's role may access it.
@@ -60,6 +67,14 @@ export async function requestOtp(_prev: OtpState, formData: FormData): Promise<O
   if (profile && profile.status !== 'ACTIVE') {
     return { error: 'Account is not active. Contact info@chemparts-me.com.' }
   }
+
+  // Maintenance: only Chemparts staff may sign in for now. A company-domain email
+  // (or an existing staff/admin account) is allowed; everyone else sees the notice.
+  const staffEligible = isCompanyEmail(email) || (profile != null && isStaffRole(profile.role))
+  if (!CUSTOMER_PORTAL_ENABLED && !staffEligible) {
+    return { error: MAINTENANCE_MESSAGE }
+  }
+
   const autoProvision = !profile && isCompanyEmail(email)
   if (!profile && !autoProvision) {
     return { error: 'No account found for that email. Customers can register for an account.' }
@@ -149,6 +164,12 @@ export async function verifyOtp(_prev: LoginState, formData: FormData): Promise<
   if (!profile || profile.status !== 'ACTIVE') {
     await supabase.auth.signOut()
     return { error: 'Account is not active. Contact info@chemparts-me.com.' }
+  }
+
+  // Maintenance: only Chemparts staff may sign in for now.
+  if (!CUSTOMER_PORTAL_ENABLED && !isStaffRole(profile.role)) {
+    await supabase.auth.signOut()
+    return { error: MAINTENANCE_MESSAGE }
   }
 
   // Mark a fresh OTP verification so the customer can change their password
