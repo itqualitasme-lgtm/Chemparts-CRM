@@ -893,6 +893,15 @@ html.modal-locked body { overflow: hidden; touch-action: none; }
 .hero { overflow-x: clip; }
 @supports not (overflow-x: clip) { .hero { overflow: hidden; } }
 
+/* Between the nav-collapse breakpoint (1200px) and ~1400px the full header is
+   crowded — tighten spacing so the CTAs (Get a quote) don't clip off-screen. */
+@media (min-width: 1201px) and (max-width: 1400px) {
+  .site-header__main { gap: 14px; }
+  .nav { gap: 2px; }
+  .nav a { padding: 0 10px; }
+  .header-cta { gap: 6px; }
+}
+
 @media (max-width: 1200px) {
   .nav { display: none; }
   /* Keep topticker visible on mobile but hide the right-side cert text */
@@ -3636,7 +3645,9 @@ figure[data-reveal][data-shown="true"] img,
   letter-spacing: 0.02em;
   font-feature-settings: "tnum" 1;
 }
-@media (max-width: 920px) {
+/* Phone number is redundant (also in the top bar + footer). Hide it below
+   1400px where the full desktop header would otherwise overflow. */
+@media (max-width: 1400px) {
   .header-cta__phone { display: none; }
 }
 
