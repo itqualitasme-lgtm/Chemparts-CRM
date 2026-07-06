@@ -1,4 +1,5 @@
 import 'server-only'
+import { cache } from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { db } from '@/lib/db'
@@ -13,7 +14,9 @@ export type SessionUser = {
   vendorId: string | null
 }
 
-export async function getSessionUser(): Promise<SessionUser | null> {
+// Wrapped in React.cache so the layout, page and any actions in a single
+// request share ONE Supabase auth call + Profile query instead of repeating it.
+export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
   const supabase = await createClient()
   const {
     data: { user },
@@ -29,7 +32,7 @@ export async function getSessionUser(): Promise<SessionUser | null> {
     customerId: profile.customerId,
     vendorId: profile.vendorId,
   }
-}
+})
 
 /** Call at the top of each protected route-group layout. */
 export async function requirePortal(portal: Portal): Promise<SessionUser> {
