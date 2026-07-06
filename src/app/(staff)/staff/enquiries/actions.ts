@@ -153,7 +153,14 @@ export async function updateEnquiryStatus(
   const enquiry = await db.enquiry.findUnique({ where: { id: enquiryId }, select: { id: true } })
   if (!enquiry) return { error: 'Enquiry not found.' }
 
-  await db.enquiry.update({ where: { id: enquiryId }, data: { status } })
+  // Capture a reason when marking LOST; clear it if moving away from LOST.
+  const reasonRaw = (formData.get('lostReason') as string | null)?.trim() || null
+  if (status === 'LOST' && !reasonRaw) {
+    return { error: 'Add a reason for marking this enquiry lost.' }
+  }
+  const lostReason = status === 'LOST' ? reasonRaw : null
+
+  await db.enquiry.update({ where: { id: enquiryId }, data: { status, lostReason } })
 
   revalidatePath('/staff/enquiries')
   return { ok: true }

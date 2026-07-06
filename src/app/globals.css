@@ -11,6 +11,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* The whole app is a fixed light design. Declaring the scheme stops the
+     browser (e.g. Chrome "Auto Dark Mode for Web Contents") from inverting
+     colors — which was turning white button text dark and invisible. */
+  color-scheme: only light;
 }
 
 @theme inline {
@@ -18,13 +22,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

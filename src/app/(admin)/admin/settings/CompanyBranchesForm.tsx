@@ -66,9 +66,9 @@ export default function CompanyBranchesForm({ initial }: { initial: BranchInput[
           <div className="mb-3 flex items-center justify-between">
             <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
               <input type="radio" name="defaultBranch" checked={b.isDefault} onChange={() => setDefault(i)} />
-              Default entity
+              {b.isDefault ? 'Default entity' : 'Set as default'}
             </label>
-            {branches.length > 1 && (
+            {branches.length > 1 && !b.isDefault && (
               <button type="button" onClick={() => remove(i)} className="text-xs text-red-600 underline hover:text-red-700">
                 Remove
               </button>

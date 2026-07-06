@@ -393,6 +393,7 @@ model Enquiry {
   guestPhone   String?
   message      String?
   status       EnquiryStatus @default(NEW)
+  lostReason   String? // why the enquiry was marked LOST
   items        EnquiryItem[]
   quotations   Quotation[]
   salesPerson   SalesPerson? @relation(fields: [salesPersonId], references: [id])
