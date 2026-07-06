@@ -5,7 +5,15 @@ import { submitContact, type ContactState } from './actions'
 
 // (site) group → NO Tailwind. Styled with the ported site's own .field/.btn
 // classes + inline styles.
-export default function ContactForm() {
+export default function ContactForm({
+  defaultName = '',
+  defaultCompany = '',
+  defaultEmail = '',
+}: {
+  defaultName?: string
+  defaultCompany?: string
+  defaultEmail?: string
+} = {}) {
   const [state, formAction, pending] = useActionState<ContactState, FormData>(submitContact, {})
 
   if (state.ok && state.enquiryNo) {
@@ -27,9 +35,9 @@ export default function ContactForm() {
 
   return (
     <form action={formAction} data-reveal style={{ display: 'grid', gap: 16 }}>
-      <div className="field"><label htmlFor="cf-name">Name</label><input id="cf-name" name="name" type="text" autoComplete="name" inputMode="text" required /></div>
-      <div className="field"><label htmlFor="cf-company">Company</label><input id="cf-company" name="company" type="text" autoComplete="organization" inputMode="text" /></div>
-      <div className="field"><label htmlFor="cf-email">Email</label><input id="cf-email" name="email" type="email" autoComplete="email" inputMode="email" required /></div>
+      <div className="field"><label htmlFor="cf-name">Name</label><input id="cf-name" name="name" type="text" autoComplete="name" inputMode="text" required defaultValue={defaultName} /></div>
+      <div className="field"><label htmlFor="cf-company">Company</label><input id="cf-company" name="company" type="text" autoComplete="organization" inputMode="text" defaultValue={defaultCompany} /></div>
+      <div className="field"><label htmlFor="cf-email">Email</label><input id="cf-email" name="email" type="email" autoComplete="email" inputMode="email" required defaultValue={defaultEmail} /></div>
       <div className="field"><label htmlFor="cf-phone">Phone (optional)</label><input id="cf-phone" name="phone" type="tel" autoComplete="tel" inputMode="tel" /></div>
       <div className="field">
         <label htmlFor="cf-topic">Topic</label>

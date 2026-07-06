@@ -1,8 +1,20 @@
 import Script from 'next/script'
 import { getPublicCatalog } from '@/lib/catalog-data'
+import { getSessionUser } from '@/lib/auth/session'
+import { db } from '@/lib/db'
 
 export default async function SiteChrome({ extraScripts = [] }: { extraScripts?: string[] }) {
   const catalog = await getPublicCatalog()
+
+  // Prefill the quote/price modal for signed-in users.
+  const user = await getSessionUser()
+  let prefillCompany = ''
+  if (user?.customerId) {
+    const c = await db.customer.findUnique({ where: { id: user.customerId }, select: { companyName: true } })
+    prefillCompany = c?.companyName ?? ''
+  }
+  const prefillName = user?.fullName ?? ''
+  const prefillEmail = user?.email ?? ''
   // Inline the live catalog so it exists before the afterInteractive scripts run.
   // Replaces the frozen static /assets/js/products.js — this is what makes staff
   // product/brand edits show up on the website.
@@ -31,9 +43,9 @@ export default async function SiteChrome({ extraScripts = [] }: { extraScripts?:
           <form className="modal__body" data-quote-form>
             <h3 id="quote-title">Tell us what you need</h3>
             <p className="lede">Send us your requirement and our team will reply by email — usually within the working day. Or email <a href="mailto:info@chemparts-me.com" style={{ color: 'var(--crimson)' }}>info@chemparts-me.com</a>.</p>
-            <div className="field"><label htmlFor="qf-name">Name</label><input id="qf-name" name="name" type="text" required /></div>
-            <div className="field"><label htmlFor="qf-company">Company</label><input id="qf-company" name="company" type="text" required /></div>
-            <div className="field"><label htmlFor="qf-email">Email</label><input id="qf-email" name="email" type="email" required /></div>
+            <div className="field"><label htmlFor="qf-name">Name</label><input id="qf-name" name="name" type="text" required defaultValue={prefillName} /></div>
+            <div className="field"><label htmlFor="qf-company">Company</label><input id="qf-company" name="company" type="text" required defaultValue={prefillCompany} /></div>
+            <div className="field"><label htmlFor="qf-email">Email</label><input id="qf-email" name="email" type="email" required defaultValue={prefillEmail} /></div>
             <div className="field"><label htmlFor="qf-instrument">Instrument</label><input id="qf-instrument" name="instrument" type="text" placeholder="e.g. LAB-X5000" /></div>
             <div className="field"><label htmlFor="qf-message">Message</label><textarea id="qf-message" name="message" rows={3} placeholder="Standards, sample type, throughput..."></textarea></div>
             <div className="actions">

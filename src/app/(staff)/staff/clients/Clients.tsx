@@ -8,6 +8,15 @@ type Client = { id: string; name: string; logo: string | null; active: boolean }
 const inputCls =
   'w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#0A2540] focus:outline-none focus:ring-2 focus:ring-[#0A2540]/20'
 
+// Checkerboard so white/transparent logos stay visible while managing them.
+const CHECKER_STYLE: React.CSSProperties = {
+  backgroundColor: '#fff',
+  backgroundImage:
+    'linear-gradient(45deg,#e2e8f0 25%,transparent 25%),linear-gradient(-45deg,#e2e8f0 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#e2e8f0 75%),linear-gradient(-45deg,transparent 75%,#e2e8f0 75%)',
+  backgroundSize: '10px 10px',
+  backgroundPosition: '0 0,0 5px,5px -5px,-5px 0',
+}
+
 export default function Clients({ clients }: { clients: Client[] }) {
   const [state, formAction, pending] = useActionState<ClientState, FormData>(createClient, {})
   const [busy, startBusy] = useTransition()
@@ -37,7 +46,7 @@ export default function Clients({ clients }: { clients: Client[] }) {
             {clients.map((c) => (
               <tr key={c.id} className="border-b border-slate-100 last:border-0">
                 <td className="px-4 py-2.5">
-                  <div className="flex h-10 w-24 items-center justify-center overflow-hidden rounded border border-slate-200 bg-white">
+                  <div className="flex h-10 w-24 items-center justify-center overflow-hidden rounded border border-slate-200" style={CHECKER_STYLE}>
                     {c.logo ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={c.logo} alt={c.name} className="max-h-8 max-w-full object-contain" />

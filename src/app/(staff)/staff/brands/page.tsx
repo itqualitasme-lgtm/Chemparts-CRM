@@ -48,7 +48,16 @@ export default async function StaffBrandsPage() {
                     <td className="px-4 py-2.5 font-mono text-slate-400">{b.sortOrder}</td>
                     <td className="px-4 py-2.5">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-16 shrink-0 items-center justify-center overflow-hidden rounded border border-slate-200 bg-white">
+                        <div
+                          className="flex h-10 w-16 shrink-0 items-center justify-center overflow-hidden rounded border border-slate-200"
+                          style={{
+                            backgroundColor: '#fff',
+                            backgroundImage:
+                              'linear-gradient(45deg,#e2e8f0 25%,transparent 25%),linear-gradient(-45deg,#e2e8f0 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#e2e8f0 75%),linear-gradient(-45deg,transparent 75%,#e2e8f0 75%)',
+                            backgroundSize: '10px 10px',
+                            backgroundPosition: '0 0,0 5px,5px -5px,-5px 0',
+                          }}
+                        >
                           {logo ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={logo} alt="" className="max-h-8 max-w-14 object-contain" />

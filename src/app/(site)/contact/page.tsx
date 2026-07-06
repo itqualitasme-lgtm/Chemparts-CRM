@@ -1,9 +1,17 @@
 import ContactSuccessBanner from './ContactSuccessBanner'
 import ContactForm from './ContactForm'
+import { getSessionUser } from '@/lib/auth/session'
+import { db } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const user = await getSessionUser()
+  let company = ''
+  if (user?.customerId) {
+    const c = await db.customer.findUnique({ where: { id: user.customerId }, select: { companyName: true } })
+    company = c?.companyName ?? ''
+  }
   return (
     <>
       <div id="success-banner" hidden>
@@ -149,7 +157,7 @@ export default function ContactPage() {
             </div>
 
             {/* Submits to a server action that logs a staff-portal enquiry. */}
-            <ContactForm />
+            <ContactForm defaultName={user?.fullName ?? ''} defaultCompany={company} defaultEmail={user?.email ?? ''} />
           </div>
         </section>
 
