@@ -17,12 +17,14 @@ window.__cpProductsPageInit = function () {
   if (grid.dataset.cpProductsInit === 'true') return;
   grid.dataset.cpProductsInit = 'true';
 
+  const PAGE_SIZE = 24;
   const state = {
     q: '',
     brands: new Set(),
     industries: new Set(),
     testTypes: new Set(),
-    sort: 'featured'
+    sort: 'featured',
+    page: 1
   };
 
   // Populate sidebar from data
@@ -65,6 +67,7 @@ window.__cpProductsPageInit = function () {
       if (t.name === 'brand') toggleSet(state.brands, t.value, t.checked);
       if (t.name === 'industry') toggleSet(state.industries, t.value, t.checked);
       if (t.name === 'testType') toggleSet(state.testTypes, t.value, t.checked);
+      state.page = 1;
       render();
       writeHash();
     });
@@ -76,6 +79,7 @@ window.__cpProductsPageInit = function () {
       clearTimeout(timer);
       timer = setTimeout(() => {
         state.q = searchInput.value.trim().toLowerCase();
+        state.page = 1;
         render();
         writeHash();
       }, 200);
@@ -85,6 +89,7 @@ window.__cpProductsPageInit = function () {
   if (sortSelect) {
     sortSelect.addEventListener('change', () => {
       state.sort = sortSelect.value;
+      state.page = 1;
       render();
       writeHash();
     });
@@ -115,12 +120,63 @@ window.__cpProductsPageInit = function () {
     return a;
   }
 
+  // Pager element lives right after the grid; created once, updated per render.
+  let pager = grid.parentNode ? grid.parentNode.querySelector('[data-products-pager]') : null;
+  if (!pager && grid.parentNode) {
+    pager = document.createElement('nav');
+    pager.setAttribute('data-products-pager', '');
+    pager.className = 'products-pager';
+    pager.setAttribute('aria-label', 'Catalog pages');
+    grid.parentNode.insertBefore(pager, grid.nextSibling);
+    pager.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-page]');
+      if (!btn) return;
+      const p = Number(btn.dataset.page);
+      if (!Number.isFinite(p)) return;
+      state.page = p;
+      render();
+      // Bring the top of the results into view after a page change.
+      const top = document.querySelector('.products-toolbar') || grid;
+      if (top && top.scrollIntoView) top.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  function renderPager(total, pages) {
+    if (!pager) return;
+    if (pages <= 1) { pager.innerHTML = ''; return; }
+    const cur = state.page;
+    const nums = [];
+    for (let i = 1; i <= pages; i++) {
+      if (i === 1 || i === pages || Math.abs(i - cur) <= 1) nums.push(i);
+      else if (nums[nums.length - 1] !== '…') nums.push('…');
+    }
+    const btn = (label, page, opts = {}) =>
+      opts.disabled
+        ? `<span class="products-pager__btn is-disabled">${label}</span>`
+        : `<button type="button" class="products-pager__btn${opts.active ? ' is-active' : ''}" data-page="${page}">${label}</button>`;
+    let html = btn('‹ Prev', cur - 1, { disabled: cur <= 1 });
+    html += nums.map(n => n === '…' ? '<span class="products-pager__gap">…</span>' : btn(n, n, { active: n === cur })).join('');
+    html += btn('Next ›', cur + 1, { disabled: cur >= pages });
+    pager.innerHTML = html;
+  }
+
   function render() {
     const list = applySort(applyFilters());
-    if (countEl) countEl.innerHTML = `<strong>[${String(list.length).padStart(2, '0')}]</strong> instruments`;
+    const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+    if (state.page > pages) state.page = pages;
+    if (state.page < 1) state.page = 1;
+    const start = (state.page - 1) * PAGE_SIZE;
+    const pageList = list.slice(start, start + PAGE_SIZE);
+    if (countEl) {
+      const shownFrom = list.length ? start + 1 : 0;
+      const shownTo = start + pageList.length;
+      countEl.innerHTML = list.length
+        ? `<strong>[${String(list.length).padStart(2, '0')}]</strong> instruments${pages > 1 ? ` · ${shownFrom}–${shownTo}` : ''}`
+        : `<strong>[00]</strong> instruments`;
+    }
     if (window.__productCard) {
       grid.innerHTML = list.length
-        ? list.map(window.__productCard).join('')
+        ? pageList.map(window.__productCard).join('')
         : `<div class="empty-state">
             <span class="eyebrow">No matches</span>
             <h3>No instruments match the current filters.</h3>
@@ -130,10 +186,11 @@ window.__cpProductsPageInit = function () {
       const clear = grid.querySelector('[data-clear-filters]');
       if (clear) clear.addEventListener('click', () => clearAll());
     }
+    renderPager(list.length, pages);
   }
 
   function clearAll() {
-    state.q = ''; state.brands.clear(); state.industries.clear(); state.testTypes.clear();
+    state.q = ''; state.brands.clear(); state.industries.clear(); state.testTypes.clear(); state.page = 1;
     if (searchInput) searchInput.value = '';
     document.querySelectorAll('[data-products-sidebar] input[type="checkbox"]').forEach(c => c.checked = false);
     render();
