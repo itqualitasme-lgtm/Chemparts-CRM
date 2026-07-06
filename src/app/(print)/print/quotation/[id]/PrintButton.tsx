@@ -3,7 +3,7 @@
 export default function PrintButton() {
   return (
     <div className="mx-auto flex max-w-[820px] items-center justify-between px-4 py-4 print:hidden">
-      <a href="javascript:history.back()" className="text-sm text-slate-600 underline">← Back</a>
+      <button type="button" onClick={() => window.history.back()} className="text-sm text-slate-600 underline">← Back</button>
       <button
         type="button"
         onClick={() => window.print()}
