@@ -186,17 +186,11 @@ export default function LoginForm({ next }: { next?: string }) {
           </Link>
 
           <h1 className="mb-1 text-center text-2xl font-semibold text-slate-900">Sign in</h1>
-          <p className="mb-5 text-center text-sm text-slate-500">
+          <p className="mb-7 text-center text-sm text-slate-500">
             {mode === 'password'
               ? 'Sign in to your Chemparts account.'
               : 'Enter your email and we’ll send you a one-time sign-in code.'}
           </p>
-
-          {!CUSTOMER_PORTAL_ENABLED && (
-            <p className="mb-5 rounded-lg bg-amber-50 px-3 py-2 text-center text-xs text-amber-800">
-              Staff sign-in only — the customer portal is under maintenance right now.
-            </p>
-          )}
 
           {mode === 'password' ? (
             <PasswordForm next={next} onUseOtp={() => setMode('otp')} />
