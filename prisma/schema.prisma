@@ -441,6 +441,7 @@ model Quotation {
   otherCharges     Decimal  @default(0) @db.Decimal(12, 2)
   otherChargesLabel String?
   publicToken      String?  @unique // for the public (no-login) quotation view + QR
+  companyBranchId  String? // which company entity issues this quote (Setting: company.branches)
   salesPerson      SalesPerson? @relation(fields: [salesPersonId], references: [id])
   salesPersonId    String?
   items            QuotationItem[]

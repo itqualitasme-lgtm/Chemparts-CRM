@@ -16,6 +16,7 @@ type Header = {
   otherCharges: number
   otherChargesLabel: string
   salesPersonId: string
+  companyBranchId: string
 }
 
 const STATUSES = ['DRAFT', 'SENT', 'ACCEPTED', 'REJECTED', 'EXPIRED']
@@ -31,11 +32,13 @@ export default function QuotationEditor({
   header,
   lines: initialLines,
   salesPeople = [],
+  branches = [],
 }: {
   quotationId: string
   header: Header
   lines: Line[]
   salesPeople?: { id: string; name: string }[]
+  branches?: { id: string; name: string; isDefault: boolean }[]
 }) {
   const [state, formAction, pending] = useActionState<QuotationState, FormData>(
     updateQuotation.bind(null, quotationId),
@@ -181,6 +184,20 @@ export default function QuotationEditor({
             {salesPeople.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
           </select>
         </label>
+        {branches.length > 0 && (
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium text-slate-700">Issued by (company)</span>
+            <select
+              name="companyBranchId"
+              defaultValue={header.companyBranchId || branches.find((b) => b.isDefault)?.id || branches[0]?.id || ''}
+              className={inputCls}
+            >
+              {branches.map((b) => (
+                <option key={b.id} value={b.id}>{b.name}{b.isDefault ? ' (default)' : ''}</option>
+              ))}
+            </select>
+          </label>
+        )}
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-slate-700">Currency</span>
           <select name="currency" value={currency} onChange={(e) => setCurrency(e.target.value)} className={inputCls}>

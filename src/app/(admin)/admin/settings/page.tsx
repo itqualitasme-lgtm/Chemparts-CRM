@@ -1,19 +1,31 @@
 import { getTickerMessages } from '@/lib/site-settings'
+import { getCompanyBranches } from '@/lib/company'
 import TickerForm from './TickerForm'
+import CompanyBranchesForm from './CompanyBranchesForm'
 
 export const metadata = { title: 'Settings — Chemparts' }
 export const dynamic = 'force-dynamic'
 
 export default async function SettingsPage() {
-  const ticker = await getTickerMessages()
+  const [ticker, branches] = await Promise.all([getTickerMessages(), getCompanyBranches()])
 
   return (
-    <div>
+    <div className="max-w-3xl">
       <h1 className="mb-1 text-2xl font-semibold text-slate-900">Settings</h1>
       <p className="mb-6 text-slate-500">Customise site content that staff can edit without a developer.</p>
 
-      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Header ticker</h2>
-      <TickerForm initial={ticker} />
+      <section className="mb-10">
+        <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-slate-500">Company entities</h2>
+        <p className="mb-3 text-sm text-slate-500">
+          The legal entities you issue quotations under. The default entity is used unless a quotation says otherwise.
+        </p>
+        <CompanyBranchesForm initial={branches} />
+      </section>
+
+      <section>
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Header ticker</h2>
+        <TickerForm initial={ticker} />
+      </section>
     </div>
   )
 }

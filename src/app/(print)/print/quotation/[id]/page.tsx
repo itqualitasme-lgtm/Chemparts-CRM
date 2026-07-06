@@ -3,6 +3,7 @@ import QRCode from 'qrcode'
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { appUrl } from '@/lib/env'
+import { getCompanyBranches, resolveBranch } from '@/lib/company'
 import QuotationDocument from '@/components/QuotationDocument'
 import PrintButton from './PrintButton'
 
@@ -36,14 +37,16 @@ export default async function QuotationPrintPage({ params }: { params: Promise<{
   const q = await db.quotation.findUnique({ where: { id }, include: QUOTATION_INCLUDE })
   if (!q) notFound()
 
-  const qrDataUrl = q.publicToken
-    ? await QRCode.toDataURL(`${appUrl()}/q/${q.publicToken}`, { margin: 1, width: 200 })
-    : null
+  const [qrDataUrl, branches] = await Promise.all([
+    q.publicToken ? QRCode.toDataURL(`${appUrl()}/q/${q.publicToken}`, { margin: 1, width: 200 }) : null,
+    getCompanyBranches(),
+  ])
+  const company = resolveBranch(branches, q.companyBranchId)
 
   return (
     <>
       <PrintButton />
-      <QuotationDocument q={q} qrDataUrl={qrDataUrl} />
+      <QuotationDocument q={q} qrDataUrl={qrDataUrl} company={company} />
     </>
   )
 }

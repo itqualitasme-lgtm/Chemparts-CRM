@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { requirePortal, getSessionUser } from '@/lib/auth/session'
 import { getActiveSalesPeople } from '@/lib/sales'
+import { getCompanyBranches } from '@/lib/company'
 import { db } from '@/lib/db'
 import QuotationEditor, { type Line } from './QuotationEditor'
 import CreateOrderButton from './CreateOrderButton'
@@ -19,7 +20,7 @@ function toDateInput(d: Date | null): string {
 export default async function QuotationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   await requirePortal('staff')
   const { id } = await params
-  const [q, user, salesPeople] = await Promise.all([
+  const [q, user, salesPeople, branches] = await Promise.all([
     db.quotation.findUnique({
       where: { id },
       include: {
@@ -31,6 +32,7 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
     }),
     getSessionUser(),
     getActiveSalesPeople(),
+    getCompanyBranches(),
   ])
   if (!q) notFound()
 
@@ -88,9 +90,11 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
           otherCharges: Number(q.otherCharges),
           otherChargesLabel: q.otherChargesLabel ?? '',
           salesPersonId: q.salesPersonId ?? '',
+          companyBranchId: q.companyBranchId ?? '',
         }}
         lines={lines}
         salesPeople={salesPeople}
+        branches={branches.map((b) => ({ id: b.id, name: b.name, isDefault: b.isDefault }))}
       />
 
       {/* Convert an accepted quotation into an order (or jump to the existing one). */}

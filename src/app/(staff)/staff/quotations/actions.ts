@@ -153,6 +153,7 @@ export async function updateQuotation(
         otherCharges: num(formData, 'otherCharges'),
         otherChargesLabel: (formData.get('otherChargesLabel') as string | null)?.trim() || null,
         salesPersonId: (formData.get('salesPersonId') as string | null)?.trim() || null,
+        companyBranchId: (formData.get('companyBranchId') as string | null)?.trim() || null,
         publicToken: existing.publicToken ?? publicToken(),
         items: {
           create: lines.map((l, i) => ({

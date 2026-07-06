@@ -5,13 +5,28 @@ import { productImageUrl } from '@/lib/product-image'
 // (/print/quotation/[id]) and the public no-login page (/q/[token]). Server
 // component — receives already-fetched data + a QR data URL.
 
-const COMPANY = {
+// Issuing company entity (resolved from Setting: company.branches). Falls back
+// to the primary entity when a page doesn't pass one.
+export type QuotationCompany = {
+  name: string
+  legal: string
+  tagline: string
+  address: string
+  phone: string
+  email: string
+  web: string
+  trn: string
+}
+
+const DEFAULT_COMPANY: QuotationCompany = {
   name: 'Chemparts Middle East FZC',
-  legal: 'Chemparts Medical & Laboratory Supplies LLC',
+  legal: 'Chemparts Middle East FZC',
   tagline: 'Analytical instruments · OEM spare parts · lab consumables · service & AMC',
+  address: '',
   phone: '+971 6 5574047',
   email: 'info@chemparts-me.com',
   web: 'chemparts-me.com',
+  trn: '',
 }
 
 const TERMS = [
@@ -72,9 +87,11 @@ export type QuotationDocData = {
 export default function QuotationDocument({
   q,
   qrDataUrl,
+  company = DEFAULT_COMPANY,
 }: {
   q: QuotationDocData
   qrDataUrl: string | null
+  company?: QuotationCompany
 }) {
   const t = quoteTotals(
     q.items.map((i) => ({ qty: i.qty, unitPrice: Number(i.unitPrice), discountPct: Number(i.discountPct) })),
@@ -93,14 +110,16 @@ export default function QuotationDocument({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/assets/images/logo.svg" alt="Chemparts" width={72} height={36} />
           <div>
-            <div className="text-lg font-bold tracking-tight text-[#0A2540]">{COMPANY.name}</div>
-            <div className="text-[11px] text-slate-500">{COMPANY.tagline}</div>
+            <div className="text-lg font-bold tracking-tight text-[#0A2540]">{company.name}</div>
+            {company.tagline ? <div className="text-[11px] text-slate-500">{company.tagline}</div> : null}
           </div>
         </div>
         <div className="text-right text-[11px] text-slate-600">
-          <div>{COMPANY.phone}</div>
-          <div>{COMPANY.email}</div>
-          <div>{COMPANY.web}</div>
+          {company.address ? <div className="whitespace-pre-line">{company.address}</div> : null}
+          {company.phone ? <div>{company.phone}</div> : null}
+          {company.email ? <div>{company.email}</div> : null}
+          {company.web ? <div>{company.web}</div> : null}
+          {company.trn ? <div>TRN: {company.trn}</div> : null}
         </div>
       </header>
 
@@ -250,7 +269,7 @@ export default function QuotationDocument({
 
       {/* Footer */}
       <footer className="mt-8 border-t-2 border-[#0A2540] pt-3 text-center text-[10px] text-slate-500">
-        {COMPANY.legal} · {COMPANY.phone} · {COMPANY.email} · {COMPANY.web}
+        {[company.legal, company.phone, company.email, company.web].filter(Boolean).join(' · ')}
         <div className="mt-0.5">This is a computer-generated quotation and is valid without signature.</div>
       </footer>
     </div>

@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import QRCode from 'qrcode'
 import { db } from '@/lib/db'
 import { appUrl } from '@/lib/env'
+import { getCompanyBranches, resolveBranch } from '@/lib/company'
 import QuotationDocument from '@/components/QuotationDocument'
 import PrintButton from '../../print/quotation/[id]/PrintButton'
 
@@ -38,12 +39,16 @@ export default async function PublicQuotationPage({ params }: { params: Promise<
   // Only expose quotations that have been sent to the customer.
   if (!q || q.status === 'DRAFT') notFound()
 
-  const qrDataUrl = await QRCode.toDataURL(`${appUrl()}/q/${token}`, { margin: 1, width: 200 })
+  const [qrDataUrl, branches] = await Promise.all([
+    QRCode.toDataURL(`${appUrl()}/q/${token}`, { margin: 1, width: 200 }),
+    getCompanyBranches(),
+  ])
+  const company = resolveBranch(branches, q.companyBranchId)
 
   return (
     <>
       <PrintButton />
-      <QuotationDocument q={q} qrDataUrl={qrDataUrl} />
+      <QuotationDocument q={q} qrDataUrl={qrDataUrl} company={company} />
     </>
   )
 }
