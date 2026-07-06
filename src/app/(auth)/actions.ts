@@ -8,7 +8,7 @@ import { db } from '@/lib/db'
 import { hashCode, issueOtpCode } from '@/lib/auth/otp'
 import { canAccessPortal, homePathFor, portalFromPath } from '@/lib/auth/rbac'
 import { markOtpVerified } from '@/lib/auth/otp-grace'
-import { CUSTOMER_PORTAL_ENABLED, MAINTENANCE_MESSAGE, isStaffRole } from '@/lib/auth/portal-access'
+import { CUSTOMER_LOGIN_ENABLED, MAINTENANCE_MESSAGE, isStaffRole } from '@/lib/auth/portal-access'
 
 export type LoginState = { error?: string }
 
@@ -31,8 +31,8 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
     return { error: 'Account is not active. Contact info@chemparts-me.com.' }
   }
 
-  // Maintenance: only Chemparts staff may sign in for now.
-  if (!CUSTOMER_PORTAL_ENABLED && !isStaffRole(profile.role)) {
+  // Maintenance: customer sign-in is paused; only Chemparts staff may sign in.
+  if (!CUSTOMER_LOGIN_ENABLED && !isStaffRole(profile.role)) {
     await supabase.auth.signOut()
     return { error: MAINTENANCE_MESSAGE }
   }
@@ -68,10 +68,11 @@ export async function requestOtp(_prev: OtpState, formData: FormData): Promise<O
     return { error: 'Account is not active. Contact info@chemparts-me.com.' }
   }
 
-  // Maintenance: only Chemparts staff may sign in for now. A company-domain email
-  // (or an existing staff/admin account) is allowed; everyone else sees the notice.
+  // Maintenance: customer sign-in is paused. A company-domain email (or an
+  // existing staff/admin account) is allowed; everyone else sees the notice.
+  // Registration has its own (open) OTP path, so this only gates login.
   const staffEligible = isCompanyEmail(email) || (profile != null && isStaffRole(profile.role))
-  if (!CUSTOMER_PORTAL_ENABLED && !staffEligible) {
+  if (!CUSTOMER_LOGIN_ENABLED && !staffEligible) {
     return { error: MAINTENANCE_MESSAGE }
   }
 
@@ -166,11 +167,9 @@ export async function verifyOtp(_prev: LoginState, formData: FormData): Promise<
     return { error: 'Account is not active. Contact info@chemparts-me.com.' }
   }
 
-  // Maintenance: only Chemparts staff may sign in for now.
-  if (!CUSTOMER_PORTAL_ENABLED && !isStaffRole(profile.role)) {
-    await supabase.auth.signOut()
-    return { error: MAINTENANCE_MESSAGE }
-  }
+  // Note: no login gate here. This action completes both registration (which is
+  // open) and login. The login path is already blocked upstream in requestOtp,
+  // so a customer can only reach here with a code issued during registration.
 
   // Mark a fresh OTP verification so the customer can change their password
   // within the grace window without re-verifying.

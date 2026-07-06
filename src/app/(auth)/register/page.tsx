@@ -6,7 +6,7 @@ import { COUNTRIES } from '@/lib/countries'
 import { registerCustomer, resendRegisterCode, type RegisterState } from './actions'
 import { verifyOtp } from '../actions'
 import type { LoginState } from '../actions'
-import { CUSTOMER_PORTAL_ENABLED, MAINTENANCE_MESSAGE } from '@/lib/auth/portal-access'
+import { CUSTOMER_REGISTRATION_ENABLED, MAINTENANCE_MESSAGE } from '@/lib/auth/portal-access'
 
 const initialState: RegisterState = {}
 
@@ -40,8 +40,8 @@ export default function RegisterPage() {
   const [resending, startResend] = useTransition()
   const [resent, setResent] = useState(false)
 
-  // Maintenance: customer registration is closed for now.
-  if (!CUSTOMER_PORTAL_ENABLED) {
+  // Registration can be closed independently of login.
+  if (!CUSTOMER_REGISTRATION_ENABLED) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
         <div className="w-full max-w-md rounded-2xl border border-slate-100 bg-white p-8 text-center shadow-sm">

@@ -4,7 +4,7 @@ import { useActionState, useState } from 'react'
 import Link from 'next/link'
 import AnimatedLogo from '@/components/AnimatedLogo'
 import { login, requestOtp, verifyOtp, type LoginState, type OtpState } from '@/app/(auth)/actions'
-import { CUSTOMER_PORTAL_ENABLED } from '@/lib/auth/portal-access'
+import { CUSTOMER_REGISTRATION_ENABLED } from '@/lib/auth/portal-access'
 
 const inputCls =
   'w-full rounded-lg border border-slate-300 px-3 py-2.5 text-slate-900 focus:border-[#0E7490] focus:outline-none focus:ring-2 focus:ring-[#0E7490]/20'
@@ -198,16 +198,12 @@ export default function LoginForm({ next }: { next?: string }) {
             <OtpForm next={next} onUsePassword={() => setMode('password')} />
           )}
 
-          {CUSTOMER_PORTAL_ENABLED ? (
+          {CUSTOMER_REGISTRATION_ENABLED && (
             <p className="mt-7 text-center text-sm text-slate-500">
               New customer?{' '}
               <Link href="/register" className="font-medium text-[#0E7490] underline">
                 Create an account
               </Link>
-            </p>
-          ) : (
-            <p className="mt-7 text-center text-sm text-slate-400">
-              Customer registration is temporarily paused.
             </p>
           )}
         </div>

@@ -4,7 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { db } from '@/lib/db'
 import { issueOtpCode } from '@/lib/auth/otp'
 import { registerSchema } from '@/lib/validation/register'
-import { CUSTOMER_PORTAL_ENABLED, MAINTENANCE_MESSAGE } from '@/lib/auth/portal-access'
+import { CUSTOMER_REGISTRATION_ENABLED, MAINTENANCE_MESSAGE } from '@/lib/auth/portal-access'
 
 export type RegisterState = {
   error?: string
@@ -18,8 +18,8 @@ export type RegisterState = {
 // the register page verifies to sign the customer in — no magic link, no
 // localhost redirect.
 export async function registerCustomer(_prev: RegisterState, formData: FormData): Promise<RegisterState> {
-  // Maintenance: customer registration is closed for now.
-  if (!CUSTOMER_PORTAL_ENABLED) return { error: MAINTENANCE_MESSAGE }
+  // Registration can be closed independently of login.
+  if (!CUSTOMER_REGISTRATION_ENABLED) return { error: MAINTENANCE_MESSAGE }
   const parsed = registerSchema.safeParse(Object.fromEntries(formData))
   if (!parsed.success) {
     const flat = parsed.error.flatten()

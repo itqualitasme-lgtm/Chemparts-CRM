@@ -1,13 +1,15 @@
-// Temporary access gate. While the customer store/portal is being finalised we
-// allow ONLY Chemparts staff to sign in; customers see an "under maintenance"
-// notice and registration is closed. Flip CUSTOMER_PORTAL_ENABLED to true (and
-// redeploy) to reopen the customer portal.
-export const CUSTOMER_PORTAL_ENABLED = false
+// Temporary access gate for the customer portal.
+//
+// For now: customers CAN register (which signs them in on completion), but the
+// standalone customer sign-in is paused — only Chemparts staff can use the
+// /login flow. Flip these flags (and redeploy) to change that.
+export const CUSTOMER_REGISTRATION_ENABLED = true
+export const CUSTOMER_LOGIN_ENABLED = false
 
 export const MAINTENANCE_MESSAGE =
-  'The customer portal is temporarily under maintenance. Please check back soon — for anything urgent, email info@chemparts-me.com or WhatsApp +971 55 756 6123.'
+  'Customer sign-in is temporarily paused — please check back soon. For anything urgent, email info@chemparts-me.com or WhatsApp +971 55 756 6123.'
 
-/** Roles considered "Chemparts staff" (internal), allowed in during maintenance. */
+/** Roles considered "Chemparts staff" (internal), always allowed to sign in. */
 export function isStaffRole(role: string): boolean {
   return role === 'STAFF' || role === 'ADMIN'
 }
