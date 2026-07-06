@@ -41,12 +41,12 @@ function RecentList({ title, rows, hrefFor, viewAll }: { title: string; rows: Re
 export default function PortalDashboard({ data, firstName, title }: { data: DashboardData; firstName: string; title: string }) {
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-slate-900">{title}{firstName ? ` — ${firstName}` : ''}</h1>
-        <p className="text-slate-500">Here&apos;s what needs attention today.</p>
+      <div className="mb-4">
+        <h1 className="text-lg font-semibold text-slate-900">{title}{firstName ? ` — ${firstName}` : ''}</h1>
+        <p className="text-[13px] text-slate-500">Here&apos;s what needs attention today.</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 xl:grid-cols-7">
         <StatCard label="New enquiries" value={data.enquiriesNew} href="/staff/enquiries" tone={data.enquiriesNew > 0 ? 'amber' : 'default'} hint={`${data.enquiriesOpen} open`} />
         <StatCard label="Quotations sent" value={data.quotationsSent} href="/staff/quotations" tone="indigo" hint={`${data.quotationsDraft} draft`} />
         <StatCard label="Active orders" value={data.ordersActive} href="/staff/orders" tone="blue" />
@@ -56,7 +56,7 @@ export default function PortalDashboard({ data, firstName, title }: { data: Dash
         <StatCard label="Customers" value={data.customers} href="/staff/customers" />
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <div className="mt-5 grid gap-4 lg:grid-cols-2">
         <RecentList
           title="Recent enquiries"
           rows={data.recentEnquiries}

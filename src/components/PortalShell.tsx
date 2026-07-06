@@ -89,18 +89,26 @@ export default function PortalShell({
       ? GROUPS.admin
       : GROUPS[portal as 'staff' | 'vendor']
 
+  const initial = user.fullName?.trim()?.[0]?.toUpperCase() ?? '?'
+
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-[#0A2540] text-white">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-          <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-20 border-b border-black/10 bg-[#0A2540] text-white">
+        <div className="mx-auto flex h-12 max-w-7xl items-center justify-between px-3 sm:px-4">
+          <div className="flex items-center gap-2.5">
             {!isCustomer && <PortalMenu groups={groups} label={PORTAL_LABEL[portal]} />}
             <PortalLogoLink label={PORTAL_LABEL[portal]} />
           </div>
-          <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-slate-200 sm:block">{user.fullName}</span>
+          <div className="flex items-center gap-2.5">
+            <div className="hidden text-right leading-tight sm:block">
+              <div className="text-xs font-medium text-white">{user.fullName}</div>
+              <div className="text-[10px] uppercase tracking-wide text-slate-300">{user.role.toLowerCase()}</div>
+            </div>
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs font-semibold text-white ring-1 ring-white/20">
+              {initial}
+            </span>
             <form action={logout}>
-              <button className="rounded border border-white/30 px-3 py-1 text-xs text-slate-100 transition hover:bg-white/10">
+              <button className="rounded-md border border-white/25 px-2.5 py-1 text-xs font-medium text-slate-100 transition hover:bg-white/10">
                 Sign out
               </button>
             </form>
@@ -124,13 +132,13 @@ export default function PortalShell({
         </nav>
       )}
 
-      <div className="mx-auto flex w-full max-w-6xl flex-1">
+      <div className="mx-auto flex w-full max-w-7xl flex-1">
         {!isCustomer && (
-          <aside className="sticky top-14 hidden max-h-[calc(100dvh-3.5rem)] w-60 shrink-0 self-start overflow-y-auto border-r border-slate-200 bg-white p-3 md:block">
+          <aside className="sticky top-12 hidden max-h-[calc(100dvh-3rem)] w-56 shrink-0 self-start overflow-y-auto border-r border-slate-200 bg-white px-2.5 py-3 md:block">
             <PortalNavList groups={groups} />
           </aside>
         )}
-        <main className={`min-w-0 flex-1 p-4 md:p-8 ${isCustomer ? 'pb-24 md:pb-8' : ''}`}>{children}</main>
+        <main className={`min-w-0 flex-1 p-4 md:p-6 ${isCustomer ? 'pb-24 md:pb-8' : ''}`}>{children}</main>
       </div>
 
       {/* Staff/vendor/admin navigate via the drawer in the header. Customer keeps

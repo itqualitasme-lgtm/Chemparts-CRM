@@ -27,14 +27,14 @@ export default function StatCard({
   return (
     <Link
       href={href}
-      className="group rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300 hover:shadow-sm"
+      className="group rounded-lg border border-slate-200 bg-white px-3 py-2.5 transition hover:border-slate-300 hover:shadow-sm"
     >
-      <div className="flex items-center gap-2">
-        <span className={`h-2 w-2 rounded-full ${DOT[tone]}`} />
-        <span className="text-[11px] font-medium uppercase tracking-wide text-slate-400">{label}</span>
+      <div className="flex items-center gap-1.5">
+        <span className={`h-1.5 w-1.5 rounded-full ${DOT[tone]}`} />
+        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-slate-400">{label}</span>
       </div>
-      <div className="mt-1.5 text-2xl font-semibold text-slate-900">{value}</div>
-      {hint ? <div className="mt-0.5 text-xs text-slate-400">{hint}</div> : null}
+      <div className="mt-1 text-xl font-semibold tabular-nums text-slate-900">{value}</div>
+      {hint ? <div className="text-[11px] text-slate-400">{hint}</div> : null}
     </Link>
   )
 }
