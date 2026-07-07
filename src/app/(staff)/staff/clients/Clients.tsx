@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState, useEffect, useRef, useState, useTransition } from 'react'
-import { createClient, toggleClient, deleteClient, type ClientState } from './actions'
+import { createClient, toggleClient, deleteClient, updateClientLogo, removeClientLogo, renameClient, type ClientState } from './actions'
 
 type Client = { id: string; name: string; logo: string | null; active: boolean }
 
@@ -17,9 +17,88 @@ const CHECKER_STYLE: React.CSSProperties = {
   backgroundPosition: '0 0,0 5px,5px -5px,-5px 0',
 }
 
+function ClientRow({ c }: { c: Client }) {
+  const [busy, start] = useTransition()
+  const [name, setName] = useState(c.name)
+  const [msg, setMsg] = useState<string | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  function replaceLogo(file: File) {
+    setMsg(null)
+    const fd = new FormData()
+    fd.set('file', file)
+    start(async () => {
+      const res = await updateClientLogo(c.id, fd)
+      setMsg(res.error ?? null)
+    })
+  }
+  function saveName() {
+    if (name.trim() && name.trim() !== c.name) start(async () => { await renameClient(c.id, name) })
+  }
+
+  return (
+    <tr className="border-b border-slate-100 last:border-0">
+      <td className="px-4 py-2.5">
+        <div className="flex h-10 w-24 items-center justify-center overflow-hidden rounded border border-slate-200" style={CHECKER_STYLE}>
+          {c.logo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={c.logo} alt={c.name} className="max-h-8 max-w-full object-contain" />
+          ) : (
+            <span className="text-[10px] text-slate-400">no logo</span>
+          )}
+        </div>
+        <div className="mt-1 flex items-center gap-2 text-[11px]">
+          <button type="button" disabled={busy} onClick={() => fileRef.current?.click()} className="text-[#0E7490] underline disabled:opacity-60">
+            {busy ? '…' : c.logo ? 'Replace' : 'Add logo'}
+          </button>
+          {c.logo ? (
+            <button type="button" disabled={busy} onClick={() => start(() => removeClientLogo(c.id))} className="text-slate-400 underline disabled:opacity-60">Remove</button>
+          ) : null}
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/svg+xml"
+            className="hidden"
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) replaceLogo(f); e.target.value = '' }}
+          />
+        </div>
+        {msg ? <p className="mt-1 text-[11px] text-red-600">{msg}</p> : null}
+      </td>
+      <td className="px-4 py-2.5">
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onBlur={saveName}
+          onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur() }}
+          className="w-full rounded border border-transparent bg-transparent px-1 py-0.5 text-sm font-medium text-slate-800 hover:border-slate-200 focus:border-[#0A2540] focus:bg-white focus:outline-none"
+        />
+      </td>
+      <td className="px-4 py-2.5">
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => start(() => toggleClient(c.id, !c.active))}
+          className={`text-xs ${c.active ? 'text-green-700' : 'text-slate-400'} underline disabled:opacity-60`}
+        >
+          {c.active ? 'Visible' : 'Hidden'}
+        </button>
+      </td>
+      <td className="px-4 py-2.5 text-right">
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => { if (confirm(`Remove ${c.name} from the clients list?`)) start(() => deleteClient(c.id)) }}
+          className="text-sm text-slate-500 underline hover:text-red-600 disabled:opacity-60"
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  )
+}
+
 export default function Clients({ clients }: { clients: Client[] }) {
   const [state, formAction, pending] = useActionState<ClientState, FormData>(createClient, {})
-  const [busy, startBusy] = useTransition()
   const formRef = useRef<HTMLFormElement>(null)
   const [fileName, setFileName] = useState<string | null>(null)
 
@@ -43,43 +122,7 @@ export default function Clients({ clients }: { clients: Client[] }) {
             </tr>
           </thead>
           <tbody>
-            {clients.map((c) => (
-              <tr key={c.id} className="border-b border-slate-100 last:border-0">
-                <td className="px-4 py-2.5">
-                  <div className="flex h-10 w-24 items-center justify-center overflow-hidden rounded border border-slate-200" style={CHECKER_STYLE}>
-                    {c.logo ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={c.logo} alt={c.name} className="max-h-8 max-w-full object-contain" />
-                    ) : (
-                      <span className="text-[10px] text-slate-400">no logo</span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-4 py-2.5 font-medium text-slate-800">{c.name}</td>
-                <td className="px-4 py-2.5">
-                  <button
-                    type="button"
-                    disabled={busy}
-                    onClick={() => startBusy(() => toggleClient(c.id, !c.active))}
-                    className={`text-xs ${c.active ? 'text-green-700' : 'text-slate-400'} underline disabled:opacity-60`}
-                  >
-                    {c.active ? 'Visible' : 'Hidden'}
-                  </button>
-                </td>
-                <td className="px-4 py-2.5 text-right">
-                  <button
-                    type="button"
-                    disabled={busy}
-                    onClick={() => {
-                      if (confirm(`Remove ${c.name} from the clients list?`)) startBusy(() => deleteClient(c.id))
-                    }}
-                    className="text-sm text-slate-500 underline hover:text-red-600 disabled:opacity-60"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {clients.map((c) => <ClientRow key={c.id} c={c} />)}
             {clients.length === 0 && (
               <tr>
                 <td colSpan={4} className="px-4 py-8 text-center text-slate-500">No clients yet.</td>

@@ -65,6 +65,40 @@ export async function createClient(_prev: ClientState, formData: FormData): Prom
   return { ok: true }
 }
 
+/** Replace a client's logo (uploads the new one, removes the old). */
+export async function updateClientLogo(clientId: string, formData: FormData): Promise<ClientState> {
+  await requirePortal('staff')
+  const client = await db.client.findUnique({ where: { id: clientId }, select: { name: true, logo: true } })
+  if (!client) return { error: 'Client not found.' }
+  const file = formData.get('file')
+  if (!(file instanceof File) || file.size === 0) return { error: 'Choose a logo image.' }
+  const up = await uploadLogo(client.name, file)
+  if (up.error) return { error: up.error }
+  await deleteStoredLogo(client.logo)
+  await db.client.update({ where: { id: clientId }, data: { logo: up.url ?? null } })
+  revalidate()
+  return { ok: true }
+}
+
+/** Remove a client's logo (falls back to text name on the site). */
+export async function removeClientLogo(clientId: string): Promise<void> {
+  await requirePortal('staff')
+  const client = await db.client.findUnique({ where: { id: clientId }, select: { logo: true } })
+  await deleteStoredLogo(client?.logo ?? null)
+  await db.client.update({ where: { id: clientId }, data: { logo: null } })
+  revalidate()
+}
+
+/** Rename a client. */
+export async function renameClient(clientId: string, name: string): Promise<ClientState> {
+  await requirePortal('staff')
+  const trimmed = name.trim()
+  if (trimmed.length < 2) return { error: 'Enter a name.' }
+  await db.client.update({ where: { id: clientId }, data: { name: trimmed } })
+  revalidate()
+  return { ok: true }
+}
+
 /** Toggle a client shown/hidden on the website. */
 export async function toggleClient(id: string, active: boolean): Promise<void> {
   await requirePortal('staff')

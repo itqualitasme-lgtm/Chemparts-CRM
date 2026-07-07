@@ -36,9 +36,9 @@ const inputCls =
   'w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-[#0A2540] focus:outline-none focus:ring-2 focus:ring-[#0A2540]/20'
 
 const TYPE_LABELS: Record<string, string> = {
-  EQUIPMENT: 'Equipment (enquiry only)',
-  SPARE_PART: 'Spare part',
-  CONSUMABLE: 'Consumable',
+  EQUIPMENT: 'Equipment (request price)',
+  SPARE_PART: 'Spare part (can set price)',
+  CONSUMABLE: 'Consumable (request price)',
 }
 
 function Err({ errors, name }: { errors?: Record<string, string[]>; name: string }) {
@@ -61,7 +61,9 @@ export default function ProductForm({
 }) {
   const [state, formAction, pending] = useActionState<ProductState, FormData>(action, {})
   const [type, setType] = useState(initial.type ?? 'EQUIPMENT')
-  const isEquipment = type === 'EQUIPMENT'
+  // Only spare parts carry a public price. Equipment and consumables are
+  // request-price / quote-only — no price is set or shown; customers request it.
+  const isPriceable = type === 'SPARE_PART'
 
   return (
     <form action={formAction} className="max-w-2xl space-y-4">
@@ -210,12 +212,12 @@ export default function ProductForm({
           <span className="mb-1 block text-sm font-medium text-slate-700">Model no. (optional)</span>
           <input name="modelNo" defaultValue={initial.modelNo} className={inputCls} />
         </label>
-        {/* Equipment is enquiry/quote-only — no list price. Hidden for EQUIPMENT
-            (and not submitted, so any stale price is cleared on save). */}
-        {!isEquipment && (
+        {/* Only spare parts carry a public list price. Equipment & consumables
+            are request-price only, so the field is hidden and cleared on save. */}
+        {isPriceable && (
           <>
             <label className="block">
-              <span className="mb-1 block text-sm font-medium text-slate-700">List price (spares/consumables)</span>
+              <span className="mb-1 block text-sm font-medium text-slate-700">List price (spare parts)</span>
               <input name="listPrice" type="number" step="0.01" min="0" defaultValue={initial.listPrice ?? ''} className={inputCls} />
               <Err errors={state.fieldErrors} name="listPrice" />
             </label>
