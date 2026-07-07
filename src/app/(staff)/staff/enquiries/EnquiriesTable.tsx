@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useState, useTransition } from 'react'
-import { updateEnquiryStatus, deleteEnquiry } from './actions'
+import { updateEnquiryStatus, deleteEnquiry, assignSalesPerson } from './actions'
 import CreateQuotationButton from './CreateQuotationButton'
 import DeleteButton from '@/components/DeleteButton'
 import Pager, { pageSlice } from '@/components/ui/Pager'
@@ -16,6 +16,7 @@ export type EnquiryRow = {
   contactName: string | null
   contactBits: string[]
   salesPerson: string | null
+  salesPersonId: string
   message: string | null
   lostReason: string | null
   createdAt: string // ISO
@@ -49,7 +50,7 @@ function fmtDate(iso: string): string {
 const selectCls =
   'rounded-lg border border-slate-300 px-2 py-1.5 text-sm text-slate-900 focus:border-[#0A2540] focus:outline-none focus:ring-2 focus:ring-[#0A2540]/20'
 
-export default function EnquiriesTable({ enquiries, isAdmin }: { enquiries: EnquiryRow[]; isAdmin: boolean }) {
+export default function EnquiriesTable({ enquiries, isAdmin, salesPeople }: { enquiries: EnquiryRow[]; isAdmin: boolean; salesPeople: { id: string; name: string }[] }) {
   const [q, setQ] = useState('')
   const [status, setStatus] = useState('ALL')
   const [channel, setChannel] = useState('ALL')
@@ -123,7 +124,7 @@ export default function EnquiriesTable({ enquiries, isAdmin }: { enquiries: Enqu
                 </td>
               </tr>
             ) : (
-              pageSlice(filtered, page, PAGE_SIZE).map((e) => <Row key={e.id} e={e} isAdmin={isAdmin} />)
+              pageSlice(filtered, page, PAGE_SIZE).map((e) => <Row key={e.id} e={e} isAdmin={isAdmin} salesPeople={salesPeople} />)
             )}
           </tbody>
         </table>
@@ -133,12 +134,24 @@ export default function EnquiriesTable({ enquiries, isAdmin }: { enquiries: Enqu
   )
 }
 
-function Row({ e, isAdmin }: { e: EnquiryRow; isAdmin: boolean }) {
+function Row({ e, isAdmin, salesPeople }: { e: EnquiryRow; isAdmin: boolean; salesPeople: { id: string; name: string }[] }) {
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState(e.status)
   const [reason, setReason] = useState(e.lostReason ?? '')
   const [pending, start] = useTransition()
   const [msg, setMsg] = useState<{ ok?: boolean; error?: string }>({})
+  const [assignee, setAssignee] = useState(e.salesPersonId)
+  const [assigning, startAssign] = useTransition()
+  const [assignMsg, setAssignMsg] = useState<{ ok?: boolean; error?: string }>({})
+
+  function saveAssignee(next: string) {
+    setAssignee(next)
+    startAssign(async () => {
+      setAssignMsg({})
+      const res = await assignSalesPerson(e.id, next)
+      setAssignMsg(res)
+    })
+  }
 
   const dirty = draft !== e.status || (draft === 'LOST' && reason.trim() !== (e.lostReason ?? ''))
   const canSave = dirty && !(draft === 'LOST' && !reason.trim())
@@ -211,6 +224,24 @@ function Row({ e, isAdmin }: { e: EnquiryRow; isAdmin: boolean }) {
                   </button>
                   {msg.ok ? <span className="text-xs text-green-700">Saved</span> : null}
                   {msg.error ? <span className="text-xs text-red-600">{msg.error}</span> : null}
+                </div>
+
+                {/* Sales-person assignment (emails the assignee) */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-medium text-slate-500">Sales person</span>
+                  <select
+                    value={assignee}
+                    onChange={(ev) => saveAssignee(ev.target.value)}
+                    disabled={assigning}
+                    className={selectCls}
+                    aria-label="Assign sales person"
+                  >
+                    <option value="">— Unassigned —</option>
+                    {salesPeople.map((sp) => <option key={sp.id} value={sp.id}>{sp.name}</option>)}
+                  </select>
+                  {assigning ? <span className="text-xs text-slate-400">Saving…</span> : null}
+                  {assignMsg.ok ? <span className="text-xs text-green-700">Assigned — emailed</span> : null}
+                  {assignMsg.error ? <span className="text-xs text-red-600">{assignMsg.error}</span> : null}
                 </div>
 
                 {e.status === 'LOST' && e.lostReason ? (

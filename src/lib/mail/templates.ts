@@ -113,6 +113,15 @@ ${button(v.link, 'Open in portal')}`,
 <p>We've received your request for the current price of <strong>${esc(v.product)}</strong>. Our team will confirm pricing and availability, usually within the working day.</p>`,
     ),
   }),
+  'enquiry-assigned': (v) => ({
+    subject: `Enquiry ${v.enquiryNo} assigned to you — Chemparts`,
+    html: layout(
+      'An enquiry is assigned to you',
+      `<p>Dear ${esc(v.name)},</p>
+<p>Enquiry <strong>${esc(v.enquiryNo)}</strong> from <strong>${esc(v.who)}</strong> has been assigned to you. Please follow up.</p>
+${button(v.link, 'Open enquiries')}`,
+    ),
+  }),
   'campaign': (v) => ({
     subject: v.subject,
     html: layout(

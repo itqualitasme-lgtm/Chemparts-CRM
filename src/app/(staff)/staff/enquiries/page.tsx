@@ -11,28 +11,32 @@ export default async function StaffEnquiriesPage() {
   const user = await requirePortal('staff')
   const isAdmin = user.role === 'ADMIN'
 
-  const enquiries = await db.enquiry.findMany({
-    orderBy: { createdAt: 'desc' },
-    take: 200,
-    select: {
-      id: true,
-      enquiryNo: true,
-      type: true,
-      status: true,
-      contactName: true,
-      guestName: true,
-      guestEmail: true,
-      guestCompany: true,
-      guestPhone: true,
-      message: true,
-      lostReason: true,
-      createdAt: true,
-      customer: { select: { companyName: true } },
-      salesPerson: { select: { name: true } },
-      items: { select: { id: true, productName: true, qty: true, priceRequested: true } },
-      quotations: { select: { id: true, quotationNo: true }, orderBy: { createdAt: 'desc' } },
-    },
-  })
+  const [enquiries, salesPeople] = await Promise.all([
+    db.enquiry.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 200,
+      select: {
+        id: true,
+        enquiryNo: true,
+        type: true,
+        status: true,
+        contactName: true,
+        guestName: true,
+        guestEmail: true,
+        guestCompany: true,
+        guestPhone: true,
+        message: true,
+        lostReason: true,
+        createdAt: true,
+        salesPersonId: true,
+        customer: { select: { companyName: true } },
+        salesPerson: { select: { name: true } },
+        items: { select: { id: true, productName: true, qty: true, priceRequested: true } },
+        quotations: { select: { id: true, quotationNo: true }, orderBy: { createdAt: 'desc' } },
+      },
+    }),
+    db.salesPerson.findMany({ where: { active: true }, orderBy: { name: 'asc' }, select: { id: true, name: true } }),
+  ])
 
   const rows: EnquiryRow[] = enquiries.map((e) => ({
     id: e.id,
@@ -43,6 +47,7 @@ export default async function StaffEnquiriesPage() {
     contactName: e.contactName,
     contactBits: [e.guestEmail, e.guestCompany, e.guestPhone].filter((x): x is string => Boolean(x)),
     salesPerson: e.salesPerson?.name ?? null,
+    salesPersonId: e.salesPersonId ?? '',
     message: e.message,
     lostReason: e.lostReason,
     createdAt: e.createdAt.toISOString(),
@@ -69,7 +74,7 @@ export default async function StaffEnquiriesPage() {
           No enquiries yet. Website cart submissions and staff-logged enquiries will appear here.
         </div>
       ) : (
-        <EnquiriesTable enquiries={rows} isAdmin={isAdmin} />
+        <EnquiriesTable enquiries={rows} isAdmin={isAdmin} salesPeople={salesPeople} />
       )}
     </div>
   )

@@ -7,9 +7,35 @@ import { requirePortal, requireAdmin } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { nextEnquiryNo } from '@/lib/enquiry-no'
 import { notify } from '@/lib/mail/notify'
+import { appUrl } from '@/lib/env'
 import type { EnquiryStatus, EnquiryType } from '@/generated/prisma/client'
 
 export type UpdateStatusState = { ok?: boolean; error?: string }
+export type AssignState = { ok?: boolean; error?: string }
+
+/** Assign (or clear) the sales person on an enquiry; email them when assigned. */
+export async function assignSalesPerson(enquiryId: string, salesPersonId: string): Promise<AssignState> {
+  await requirePortal('staff')
+  const spId = salesPersonId.trim() || null
+  const enquiry = await db.enquiry.findUnique({
+    where: { id: enquiryId },
+    select: { enquiryNo: true, guestName: true, guestCompany: true, salesPersonId: true, customer: { select: { companyName: true } } },
+  })
+  if (!enquiry) return { error: 'Enquiry not found.' }
+  const changed = spId !== enquiry.salesPersonId
+
+  await db.enquiry.update({ where: { id: enquiryId }, data: { salesPersonId: spId } })
+
+  if (changed && spId) {
+    const sp = await db.salesPerson.findUnique({ where: { id: spId }, select: { name: true, email: true, active: true } })
+    if (sp?.email && sp.active) {
+      const who = enquiry.customer?.companyName ?? enquiry.guestCompany ?? enquiry.guestName ?? 'A customer'
+      after(() => notify(sp.email, 'enquiry-assigned', { name: sp.name, enquiryNo: enquiry.enquiryNo, who, link: `${appUrl()}/staff/enquiries` }))
+    }
+  }
+  revalidatePath('/staff/enquiries')
+  return { ok: true }
+}
 export type CreateEnquiryState = { ok?: boolean; error?: string }
 
 /** Admin-only: delete an enquiry (line items cascade). */
