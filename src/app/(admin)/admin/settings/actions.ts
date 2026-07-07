@@ -2,11 +2,31 @@
 
 import { revalidatePath } from 'next/cache'
 import { requirePortal } from '@/lib/auth/session'
-import { saveTickerMessages } from '@/lib/site-settings'
+import { saveTickerMessages, saveContactInfo, DEFAULT_CONTACT } from '@/lib/site-settings'
 import { saveCompanyBranches, type CompanyBranch } from '@/lib/company'
 
 export type TickerState = { ok?: boolean; error?: string }
 export type BranchesState = { ok?: boolean; error?: string }
+export type ContactState = { ok?: boolean; error?: string }
+
+/** Save the site contact details (phone/email/WhatsApp/hours). */
+export async function saveContact(_prev: ContactState, formData: FormData): Promise<ContactState> {
+  await requirePortal('staff')
+  const str = (k: string) => ((formData.get(k) as string | null) ?? '').trim()
+  const email = str('email')
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: 'Enter a valid email address.' }
+  await saveContactInfo({
+    phone: str('phone') || DEFAULT_CONTACT.phone,
+    email: email || DEFAULT_CONTACT.email,
+    whatsapp: str('whatsapp').replace(/[^\d]/g, '') || DEFAULT_CONTACT.whatsapp,
+    whatsappDisplay: str('whatsappDisplay') || DEFAULT_CONTACT.whatsappDisplay,
+    hours: str('hours') || DEFAULT_CONTACT.hours,
+  })
+  // Contact details render in the shared header/footer on every page.
+  revalidatePath('/', 'layout')
+  revalidatePath('/contact')
+  return { ok: true }
+}
 
 /** Save the header ticker messages (one per line in the textarea). */
 export async function saveTicker(_prev: TickerState, formData: FormData): Promise<TickerState> {

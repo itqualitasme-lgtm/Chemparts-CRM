@@ -1,18 +1,24 @@
-import { getTickerMessages } from '@/lib/site-settings'
+import { getTickerMessages, getContactInfo } from '@/lib/site-settings'
 import { getCompanyBranches } from '@/lib/company'
 import TickerForm from './TickerForm'
 import CompanyBranchesForm from './CompanyBranchesForm'
+import ContactForm from './ContactForm'
 
 export const metadata = { title: 'Settings — Chemparts' }
 export const dynamic = 'force-dynamic'
 
 export default async function SettingsPage() {
-  const [ticker, branches] = await Promise.all([getTickerMessages(), getCompanyBranches()])
+  const [ticker, branches, contact] = await Promise.all([getTickerMessages(), getCompanyBranches(), getContactInfo()])
 
   return (
     <div className="max-w-3xl">
       <h1 className="mb-1 text-lg font-semibold text-slate-900">Settings</h1>
       <p className="mb-6 text-slate-500">Customise site content that staff can edit without a developer.</p>
+
+      <section className="mb-10">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Contact details</h2>
+        <ContactForm initial={contact} />
+      </section>
 
       <section className="mb-10">
         <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-slate-500">Company entities</h2>

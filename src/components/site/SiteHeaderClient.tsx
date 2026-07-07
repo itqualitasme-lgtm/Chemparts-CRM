@@ -12,6 +12,9 @@ export type SiteHeaderClientProps = {
   dashboardHref: string
   cartCount: number
   ticker: string[]
+  phone: string
+  whatsapp: string
+  whatsappDisplay: string
 }
 
 // Derive the active nav key from the current pathname so the header can live
@@ -35,6 +38,9 @@ export default function SiteHeaderClient({
   dashboardHref,
   cartCount,
   ticker,
+  phone,
+  whatsapp,
+  whatsappDisplay,
 }: SiteHeaderClientProps) {
   const pathname = usePathname() || '/'
   // Render the messages twice back-to-back so the marquee scrolls seamlessly.
@@ -93,7 +99,7 @@ export default function SiteHeaderClient({
             <div className="nav__cta">
               <span className="nav__cta-label">— Take action</span>
               <button type="button" className="btn btn--accent" data-quote="">Get a quote <span className="arrow">&rarr;</span></button>
-              <a className="btn btn--whatsapp" href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp +971 55 756 6123 <span className="arrow">&rarr;</span></a>
+              <a className="btn btn--whatsapp" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener">WhatsApp {whatsappDisplay} <span className="arrow">&rarr;</span></a>
             </div>
           </nav>
           <div className="header-cta">
@@ -165,7 +171,7 @@ export default function SiteHeaderClient({
                 <Link className="btn btn--primary btn--sm" href="/register">Register</Link>
               </>
             )}
-            <a className="btn btn--ghost btn--sm header-cta__phone" href="tel:+97165574047">+971 6 5574047</a>
+            <a className="btn btn--ghost btn--sm header-cta__phone" href={`tel:${phone.replace(/[^\d+]/g, '')}`}>{phone}</a>
             <button type="button" className="btn btn--primary btn--sm" data-quote="">Get a quote <span className="arrow">→</span></button>
             <button className="btn menu-toggle" aria-expanded="false" aria-label="Open menu"><span></span></button>
           </div>

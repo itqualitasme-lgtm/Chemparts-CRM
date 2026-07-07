@@ -1,12 +1,14 @@
 import ContactSuccessBanner from './ContactSuccessBanner'
 import ContactForm from './ContactForm'
 import { getSessionUser } from '@/lib/auth/session'
+import { getContactInfo } from '@/lib/site-settings'
 import { db } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
 export default async function ContactPage() {
   const user = await getSessionUser()
+  const contact = await getContactInfo()
   let company = ''
   if (user?.customerId) {
     const c = await db.customer.findUnique({ where: { id: user.customerId }, select: { companyName: true } })
@@ -147,12 +149,12 @@ export default async function ContactPage() {
               <span className="eyebrow">Contact form</span>
               <h2 className="h-2" style={{ marginTop: 16 }}>Send us a <em>note</em>.</h2>
               <p className="body-lg" style={{ marginTop: 16 }}>Form submissions land in our shared inbox. For urgent quotes, WhatsApp is faster:</p>
-              <a className="btn btn--whatsapp" style={{ marginTop: 16 }} href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp +971 55 756 6123 <span className="arrow">→</span></a>
+              <a className="btn btn--whatsapp" style={{ marginTop: 16 }} href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener">WhatsApp {contact.whatsappDisplay} <span className="arrow">→</span></a>
               <hr className="rule" style={{ margin: '32px 0' }} />
               <div className="stat-strip">
-                <div><div className="lbl">Phone</div><div className="val">+971 6 5574047</div></div>
-                <div><div className="lbl">Email</div><div className="val">info@chemparts-me.com</div></div>
-                <div><div className="lbl">Hours</div><div className="val">Mon–Sat 8AM–5PM GST</div></div>
+                <div><div className="lbl">Phone</div><div className="val">{contact.phone}</div></div>
+                <div><div className="lbl">Email</div><div className="val">{contact.email}</div></div>
+                <div><div className="lbl">Hours</div><div className="val">{contact.hours}</div></div>
               </div>
             </div>
 
