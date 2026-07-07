@@ -87,6 +87,42 @@ export async function addToCart(productId: string, qty = 1): Promise<CartActionS
   return { ok: true, count }
 }
 
+/**
+ * Add ANY active product to the cart as a quote-only line (no price commitment).
+ * Used for equipment and other enquiry-only items so the customer can collect a
+ * mixed basket and request a single quotation. Priced spares/consumables can
+ * also be added this way; they simply carry their snapshot price.
+ */
+export async function addToQuote(productId: string, qty = 1): Promise<CartActionState> {
+  const q = Number.isFinite(qty) && qty >= 1 ? Math.floor(qty) : 1
+
+  const product = await db.product.findUnique({
+    where: { id: productId },
+    select: { id: true, active: true, listPrice: true, priceMode: true },
+  })
+  if (!product || !product.active) return { error: 'This product is no longer available.' }
+
+  const cartId = await ensureCart()
+
+  // quoteOnly unless the product carries a confirmed public price.
+  const priced = product.priceMode === 'LISTED' && product.listPrice != null
+
+  await db.cartItem.upsert({
+    where: { cartId_productId: { cartId, productId: product.id } },
+    create: {
+      cartId,
+      productId: product.id,
+      qty: q,
+      quoteOnly: !priced,
+      unitPriceSnapshot: priced ? product.listPrice : null,
+    },
+    update: { qty: { increment: q } },
+  })
+
+  revalidateStore()
+  return { ok: true, count: await getCartCount() }
+}
+
 /** Set an exact quantity for a cart line (min 1). Removes it if qty <= 0. */
 export async function updateQty(itemId: string, qty: number): Promise<CartActionState> {
   const cartId = await getCartIdOrNull()

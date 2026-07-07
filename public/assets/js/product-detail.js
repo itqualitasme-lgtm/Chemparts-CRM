@@ -49,6 +49,34 @@ window.__cpProductDetailInit = function () {
   document.querySelectorAll('[data-pdp-quote]').forEach(b => b.dataset.quote = product.slug);
   document.querySelectorAll('[data-pdp-price]').forEach(b => b.dataset.price = product.slug);
 
+  // Add-to-cart button → POST /api/cart/add (quote-only line for equipment)
+  document.querySelectorAll('[data-pdp-cart]').forEach((btn) => {
+    if (btn.dataset.cartBound === 'true') return;
+    btn.dataset.cartBound = 'true';
+    const original = btn.innerHTML;
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      btn.textContent = 'Adding…';
+      try {
+        const res = await fetch('/api/cart/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug: product.slug, qty: 1 }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (data && data.ok) {
+          if (typeof window.__cpSetCartCount === 'function') window.__cpSetCartCount(data.count);
+          btn.innerHTML = 'Added to cart ✓';
+          setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 2000);
+        } else {
+          btn.innerHTML = original; btn.disabled = false;
+        }
+      } catch (e) {
+        btn.innerHTML = original; btn.disabled = false;
+      }
+    });
+  });
+
   // Mailto datasheet button
   const dsBtn = document.querySelector('[data-pdp-datasheet]');
   if (dsBtn) {

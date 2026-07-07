@@ -177,6 +177,15 @@
       if (submit) submit.innerHTML = copy.submit + ' <span class="arrow">→</span>';
     }
 
+    // Live-update the header cart badge after an add-to-cart (vanilla pages).
+    window.__cpSetCartCount = function (n) {
+      const count = Number(n) || 0;
+      document.querySelectorAll('[data-cart-count]').forEach((el) => {
+        el.textContent = String(count);
+        el.style.display = count > 0 ? 'inline-block' : 'none';
+      });
+    };
+
     function openModal(slug, mode) {
       if (!modal || !modalBackdrop) return;
       resetQuoteForm();

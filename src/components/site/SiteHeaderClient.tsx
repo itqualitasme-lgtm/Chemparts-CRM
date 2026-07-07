@@ -131,10 +131,31 @@ export default function SiteHeaderClient({
                     textAlign: 'center',
                     display: 'inline-block',
                   }}
+                  data-cart-count
                 >
                   {cartCount}
                 </span>
-              ) : null}
+              ) : (
+                <span
+                  aria-hidden="true"
+                  data-cart-count
+                  style={{
+                    minWidth: 18,
+                    height: 18,
+                    padding: '0 5px',
+                    borderRadius: 9,
+                    background: 'var(--crimson)',
+                    color: 'white',
+                    fontSize: 11,
+                    fontWeight: 600,
+                    lineHeight: '18px',
+                    textAlign: 'center',
+                    display: 'none',
+                  }}
+                >
+                  0
+                </span>
+              )}
             </Link>
             {isAuthed ? (
               <Link className="btn btn--ghost btn--sm" href={dashboardHref} aria-label={`Signed in as ${firstName} — go to dashboard`}>{firstName}</Link>

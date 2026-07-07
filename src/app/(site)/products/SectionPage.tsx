@@ -10,6 +10,7 @@ import { priceState, canAddToCart } from '@/lib/price'
 import { getSessionUser } from '@/lib/auth/session'
 import RequestPrice from './RequestPrice'
 import AddToCart from './AddToCart'
+import AddToQuote from './AddToQuote'
 
 // Shared renderer for the three catalog section pages. Server component; the
 // filters are link-based (searchParams), so no client JS is needed here.
@@ -86,6 +87,7 @@ function ProductCard({ p, loggedIn, section }: { p: SectionProduct; loggedIn: bo
             <span className="mono text-muted" style={{ fontSize: 11 }}>
               Indicative — confirm current price
             </span>
+            <AddToQuote productId={p.id} variant="compact" />
             <RequestPrice productId={p.id} loggedIn={loggedIn} variant="secondary" label="Request current price" />
           </div>
         ) : (
@@ -93,6 +95,7 @@ function ProductCard({ p, loggedIn, section }: { p: SectionProduct; loggedIn: bo
             <span className="mono text-muted" style={{ fontSize: 13 }}>
               Price on request
             </span>
+            <AddToQuote productId={p.id} variant="compact" />
             <RequestPrice productId={p.id} loggedIn={loggedIn} variant="secondary" label="Request current price" />
           </div>
         )}
