@@ -39,6 +39,7 @@
         <div class="card__media">
           ${featuredPill}
           <img src="${p.thumb || p.image}" onerror="this.onerror=null;this.src='${p.image}'" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">
+          ${p.brandLogo ? `<span class="card__brandlogo"><img src="${p.brandLogo}" alt="${escapeHtml(p.brand)}" loading="lazy"></span>` : ''}
         </div>
         <div class="card__body">
           <span class="card__brand">${escapeHtml(p.brand)}</span>

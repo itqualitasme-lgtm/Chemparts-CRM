@@ -16,6 +16,7 @@ export type CatalogProduct = {
   featured?: boolean
   image: string | null
   thumb: string | null
+  brandLogo: string | null
   images: string[]
   desc: string
   industries: string[]
@@ -49,7 +50,7 @@ export async function getPublicCatalog(): Promise<CatalogData> {
       slug: true, name: true, featured: true, image: true, images: true,
       desc: true, overview: true, industries: true, testTypes: true, standards: true,
       specs: true, productType: true, sample: true, output: true, datasheetUrl: true,
-      brand: { select: { name: true } },
+      brand: { select: { name: true, logo: true } },
     },
   })
 
@@ -83,6 +84,7 @@ export async function getPublicCatalog(): Promise<CatalogData> {
       featured: p.featured || undefined,
       image: absImg(p.image),
       thumb: optimizedImg(p.image, 640),
+      brandLogo: p.brand.logo ? optimizedImg(p.brand.logo, 128) : null,
       images: rawImages.map((im) => optimizedImg(im, 1080) as string),
       desc: p.desc,
       industries: p.industries,

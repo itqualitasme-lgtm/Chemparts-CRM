@@ -1,6 +1,7 @@
 import 'server-only'
 import { db } from '@/lib/db'
 import { productImageUrl } from '@/lib/product-image'
+import { optimizedImg } from '@/lib/img'
 import type { ProductType } from '@/generated/prisma/client'
 
 /** The three catalog sections, mapped to the underlying Product.type. */
@@ -52,6 +53,7 @@ export type SectionProduct = {
   name: string
   brand: string
   brandSlug: string
+  brandLogo: string | null
   image: string | null
   desc: string
   industries: string[]
@@ -122,7 +124,7 @@ export async function getSectionProducts(
       stockStatus: true,
       featured: true,
       newUntil: true,
-      brand: { select: { name: true, slug: true } },
+      brand: { select: { name: true, slug: true, logo: true } },
     },
   })
 
@@ -133,6 +135,7 @@ export async function getSectionProducts(
     name: r.name,
     brand: r.brand.name,
     brandSlug: r.brand.slug,
+    brandLogo: r.brand.logo ? optimizedImg(r.brand.logo, 128) : null,
     image: r.image,
     desc: r.desc,
     industries: r.industries,

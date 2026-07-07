@@ -56,6 +56,12 @@ function ProductCard({ p, loggedIn, section }: { p: SectionProduct; loggedIn: bo
         <div className="card__media">
           {p.isNew ? <span className="pill pill--new">New</span> : p.featured ? <span className="pill pill--crimson">Featured</span> : null}
           {src ? <img src={thumb ?? src} alt={p.name} loading="lazy" decoding="async" /> : null}
+          {p.brandLogo ? (
+            <span className="card__brandlogo">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={p.brandLogo} alt={p.brand} loading="lazy" />
+            </span>
+          ) : null}
         </div>
         <div className="card__body" style={{ paddingBottom: 8 }}>
           <span className="card__brand">{p.brand}</span>
