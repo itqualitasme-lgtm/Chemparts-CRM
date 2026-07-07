@@ -87,16 +87,21 @@ window.__cpProductDetailInit = function () {
   const main = document.querySelector('[data-pdp-main]');
   const thumbs = document.querySelector('[data-pdp-thumbs]');
   const images = (product.images && product.images.length) ? product.images : [product.image];
-  if (main) main.innerHTML = `<img src="${images[0]}" alt="${escape(product.name)}">`;
+  const rawFallback = product.image || images[0];
+  // Prioritise + eagerly load the main image; fall back to the raw Storage URL
+  // if the optimized variant ever fails.
+  const mainImg = (src) =>
+    `<img src="${src}" alt="${escape(product.name)}" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.src='${rawFallback}'">`;
+  if (main) main.innerHTML = mainImg(images[0]);
   if (thumbs) {
     thumbs.innerHTML = images.map((src, i) =>
-      `<button type="button" aria-label="View image ${i + 1}" aria-pressed="${i === 0 ? 'true' : 'false'}"><img src="${src}" alt=""></button>`
+      `<button type="button" aria-label="View image ${i + 1}" aria-pressed="${i === 0 ? 'true' : 'false'}"><img src="${src}" alt="" loading="lazy" decoding="async"></button>`
     ).join('');
     thumbs.querySelectorAll('button').forEach((btn, i) => {
       btn.addEventListener('click', () => {
         thumbs.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false'));
         btn.setAttribute('aria-pressed', 'true');
-        if (main) main.innerHTML = `<img src="${images[i]}" alt="${escape(product.name)}">`;
+        if (main) main.innerHTML = mainImg(images[i]);
       });
     });
   }

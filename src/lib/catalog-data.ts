@@ -69,8 +69,10 @@ export async function getPublicCatalog(): Promise<CatalogData> {
       : [{ title: 'Datasheet (PDF)', href: `mailto:info@chemparts-me.com?subject=Datasheet request — ${p.name}` }]
 
     // Resolve bare filenames to correct absolute paths (fixes imported catalog
-    // images) and add an optimized thumbnail for the card grid.
-    const fullImages = (p.images.length ? p.images : p.image ? [p.image] : [])
+    // images). The card grid uses `thumb` (640); the product page uses `images`
+    // optimized to 1080 (WebP/AVIF + CDN-cached) — far smaller than the raw
+    // Supabase originals. `image` stays raw as an onerror fallback.
+    const rawImages = (p.images.length ? p.images : p.image ? [p.image] : [])
       .map((im) => absImg(im))
       .filter((x): x is string => !!x)
 
@@ -81,7 +83,7 @@ export async function getPublicCatalog(): Promise<CatalogData> {
       featured: p.featured || undefined,
       image: absImg(p.image),
       thumb: optimizedImg(p.image, 640),
-      images: fullImages,
+      images: rawImages.map((im) => optimizedImg(im, 1080) as string),
       desc: p.desc,
       industries: p.industries,
       testTypes: p.testTypes,
