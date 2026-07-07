@@ -2,12 +2,31 @@
 
 import { revalidatePath } from 'next/cache'
 import { requirePortal } from '@/lib/auth/session'
-import { saveTickerMessages, saveContactInfo, DEFAULT_CONTACT } from '@/lib/site-settings'
+import { saveTickerMessages, saveContactInfo, DEFAULT_CONTACT, saveFaqs, type Faq } from '@/lib/site-settings'
 import { saveCompanyBranches, type CompanyBranch } from '@/lib/company'
 
 export type TickerState = { ok?: boolean; error?: string }
 export type BranchesState = { ok?: boolean; error?: string }
 export type ContactState = { ok?: boolean; error?: string }
+export type FaqState = { ok?: boolean; error?: string }
+
+/** Save the FAQ list (submitted as JSON). */
+export async function saveFaq(_prev: FaqState, formData: FormData): Promise<FaqState> {
+  await requirePortal('staff')
+  let parsed: unknown
+  try {
+    parsed = JSON.parse((formData.get('faqsJson') as string | null) ?? '[]')
+  } catch {
+    return { error: 'Could not read the FAQs — please try again.' }
+  }
+  if (!Array.isArray(parsed)) return { error: 'Invalid FAQ data.' }
+  const items = (parsed as Faq[]).filter((it) => it?.q?.trim() && it?.a?.trim())
+  if (items.length === 0) return { error: 'Add at least one question and answer.' }
+  await saveFaqs(items)
+  revalidatePath('/admin/settings')
+  revalidatePath('/faq')
+  return { ok: true }
+}
 
 /** Save the site contact details (phone/email/WhatsApp/hours). */
 export async function saveContact(_prev: ContactState, formData: FormData): Promise<ContactState> {

@@ -3263,6 +3263,38 @@ figure[data-reveal][data-shown="true"] img,
   .products-page-grid { grid-template-columns: 1fr; }
 }
 
+/* FAQ accordion */
+.faq-item {
+  border-bottom: 1px solid var(--rule-c);
+  padding: 4px 0;
+}
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 16px 34px 16px 0;
+  position: relative;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  color: var(--steel);
+  transition: transform 200ms var(--ease);
+}
+.faq-item[open] summary::after { content: "−"; }
+.faq-item__a {
+  padding: 0 34px 18px 0;
+  color: var(--steel);
+  line-height: 1.7;
+}
+
 /* Blog post body (rendered from Markdown) */
 .prose-post { color: var(--ink); font-size: 17px; line-height: 1.7; }
 .prose-post > * + * { margin-top: 1.1em; }

@@ -1,14 +1,15 @@
-import { getTickerMessages, getContactInfo } from '@/lib/site-settings'
+import { getTickerMessages, getContactInfo, getFaqs } from '@/lib/site-settings'
 import { getCompanyBranches } from '@/lib/company'
 import TickerForm from './TickerForm'
 import CompanyBranchesForm from './CompanyBranchesForm'
 import ContactForm from './ContactForm'
+import FaqForm from './FaqForm'
 
 export const metadata = { title: 'Settings — Chemparts' }
 export const dynamic = 'force-dynamic'
 
 export default async function SettingsPage() {
-  const [ticker, branches, contact] = await Promise.all([getTickerMessages(), getCompanyBranches(), getContactInfo()])
+  const [ticker, branches, contact, faqs] = await Promise.all([getTickerMessages(), getCompanyBranches(), getContactInfo(), getFaqs()])
 
   return (
     <div className="max-w-3xl">
@@ -26,6 +27,11 @@ export default async function SettingsPage() {
           The legal entities you issue quotations under. The default entity is used unless a quotation says otherwise.
         </p>
         <CompanyBranchesForm initial={branches} />
+      </section>
+
+      <section className="mb-10">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">FAQ page</h2>
+        <FaqForm initial={faqs} />
       </section>
 
       <section>

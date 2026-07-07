@@ -64,6 +64,47 @@ export async function saveContactInfo(info: ContactInfo): Promise<void> {
   })
 }
 
+// ---------------------------------------------------------------------------
+// FAQ — staff-editable question/answer list shown on the public /faq page.
+// ---------------------------------------------------------------------------
+
+export type Faq = { q: string; a: string }
+
+export const DEFAULT_FAQS: Faq[] = [
+  { q: 'Do you supply analytical instruments across the whole Gulf?', a: 'Yes. Chemparts supplies, installs and services analytical instruments, OEM spare parts and lab consumables across the UAE, Qatar and the wider Gulf, with offices in the UAE and Qatar and same working-day response.' },
+  { q: 'Are you an authorized distributor?', a: 'Yes — we are an authorized regional partner for the brands we carry (Hitachi, Tanaka, Oxford Instruments, KEM and more). Every instrument ships with full manufacturer warranty, not as a parallel import.' },
+  { q: 'Do you show prices, or is everything by quote?', a: 'Instruments are quoted to your exact configuration and standard. Many spares and consumables carry a listed price and can be added to a cart; for everything else, request a price or a quote and our team replies — usually within the working day.' },
+  { q: 'Which standards do you support?', a: 'Every quote references the ASTM, ISO or IP method you need to comply with — flash point, distillation, sulphur, XRF, viscosity, RoHS and more.' },
+  { q: 'Do you provide installation, calibration and service?', a: 'Yes. Factory-certified engineers handle installation, commissioning, preventive maintenance, calibration and AMC contracts, with IQ/OQ/PQ documentation matched to your audit requirements.' },
+  { q: 'Can you handle turnkey lab fit-outs?', a: 'Yes — from design and instrument selection to install, commissioning, training and ongoing support, for university, refinery, environmental and industrial labs.' },
+  { q: 'How do I get a quote?', a: 'Use the “Get a quote” button, the contact form, or WhatsApp us. Tell us the standard, sample type or model and we’ll come back with options and pricing.' },
+]
+
+const FAQ_KEY = 'site.faqs'
+
+export async function getFaqs(): Promise<Faq[]> {
+  const row = await db.setting.findUnique({ where: { key: FAQ_KEY } })
+  const v = row?.value as { items?: unknown } | null
+  const items = v?.items
+  if (Array.isArray(items)) {
+    const clean = items
+      .filter((it): it is Faq => !!it && typeof (it as Faq).q === 'string' && typeof (it as Faq).a === 'string')
+      .map((it) => ({ q: it.q.trim(), a: it.a.trim() }))
+      .filter((it) => it.q && it.a)
+    if (clean.length) return clean
+  }
+  return DEFAULT_FAQS
+}
+
+export async function saveFaqs(items: Faq[]): Promise<void> {
+  const clean = items.map((it) => ({ q: (it.q ?? '').trim(), a: (it.a ?? '').trim() })).filter((it) => it.q && it.a).slice(0, 40)
+  await db.setting.upsert({
+    where: { key: FAQ_KEY },
+    create: { key: FAQ_KEY, value: { items: clean } },
+    update: { value: { items: clean } },
+  })
+}
+
 const TICKER_KEY = 'header.ticker'
 
 /** Read the header ticker messages (falls back to defaults). */
