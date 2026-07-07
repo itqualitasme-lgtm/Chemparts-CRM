@@ -28,6 +28,7 @@ export default async function SiteFooter() {
             <li><a href="/products">Products</a></li>
             <li><a href="/application">Application</a></li>
             <li><a href="/partners">Partners</a></li>
+            <li><a href="/blog">News</a></li>
             <li><a href="/contact">Contact</a></li>
           </ul>
         </div>

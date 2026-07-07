@@ -14,6 +14,8 @@ function iconFor(href: string) {
   if (href.includes('/sales-people')) return <><circle cx="8" cy="5" r="2.4" {...P} /><path d="M3 13.5c0-2.5 2.2-4 5-4s5 1.5 5 4" {...P} /></>
   if (href.includes('/subscribers')) return <><path d="M2 4.5h10v6H2z" {...P} /><path d="M2 5.2l5 3.3 5-3.3" {...P} /><path d="M11 12.5h4M13 10.5v4" {...P} /></>
   if (href.includes('/campaigns')) return <><path d="M2 8l12-5v10L2 8z" {...P} /><path d="M2 8v3.5M6 6.5v6" {...P} /></>
+  if (href.includes('/blog')) return <><path d="M3 2h7l3 3v9H3z" {...P} /><path d="M9 2v3h3" {...P} /><path d="M5.5 8h5M5.5 10.5h5" {...P} /></>
+
 
 
   if (href.includes('/products')) return <><path d="M8 1.7l5.5 3v6.6L8 14.3l-5.5-3V4.7z" {...P} /><path d="M2.7 4.8L8 7.6l5.3-2.8M8 7.6v6.7" {...P} /></>
