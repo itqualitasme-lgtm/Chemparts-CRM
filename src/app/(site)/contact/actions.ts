@@ -7,6 +7,7 @@ import { nextEnquiryNo } from '@/lib/enquiry-no'
 import { appUrl } from '@/lib/env'
 import { notify, notifyStaff } from '@/lib/mail/notify'
 import { createNotification } from '@/lib/notifications'
+import { looksLikeSpam } from '@/lib/spam'
 
 export type ContactState = { ok?: boolean; error?: string; enquiryNo?: string }
 
@@ -28,6 +29,9 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
   if (!name || !email) return { error: 'Please enter your name and email so we can reply.' }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: 'Please enter a valid email address.' }
   if (!messageRaw) return { error: 'Please add a short message.' }
+
+  // Content spam (link/SEO spam slips past the honeypot): pretend success, record nothing.
+  if (looksLikeSpam({ name, company, message: messageRaw })) return { ok: true, enquiryNo: '—' }
 
   const user = await getSessionUser()
   const message = `Topic: ${topic}\n\n${messageRaw}`

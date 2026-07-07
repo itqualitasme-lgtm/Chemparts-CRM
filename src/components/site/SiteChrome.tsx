@@ -48,6 +48,8 @@ export default async function SiteChrome({ extraScripts = [] }: { extraScripts?:
             <div className="field"><label htmlFor="qf-email">Email</label><input id="qf-email" name="email" type="email" required defaultValue={prefillEmail} /></div>
             <div className="field"><label htmlFor="qf-instrument">Instrument</label><input id="qf-instrument" name="instrument" type="text" placeholder="e.g. LAB-X5000" /></div>
             <div className="field"><label htmlFor="qf-message">Message</label><textarea id="qf-message" name="message" rows={3} placeholder="Standards, sample type, throughput..."></textarea></div>
+            <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }} />
+
             <div className="actions">
               <button type="submit" className="btn btn--accent">Send request <span className="arrow">→</span></button>
               <button type="button" className="btn btn--ghost" data-modal-close>Cancel</button>

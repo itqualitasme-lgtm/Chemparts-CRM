@@ -4,6 +4,7 @@ import { nextEnquiryNo } from '@/lib/enquiry-no'
 import { appUrl } from '@/lib/env'
 import { notify, notifyStaff } from '@/lib/mail/notify'
 import { createNotification } from '@/lib/notifications'
+import { looksLikeSpam } from '@/lib/spam'
 
 // Public endpoint for the site-wide "Get a quote" modal. The modal still opens
 // WhatsApp; this logs a staff-portal enquiry (channel WEBSITE) in parallel.
@@ -20,10 +21,14 @@ export async function POST(req: Request) {
   const company = str(body.company) || null
   const instrument = str(body.instrument)
   const messageRaw = str(body.message)
+  const honeypot = str(body.website) // bots fill this hidden field
 
-  // Don't block the WhatsApp hand-off if fields are missing — just record nothing.
   if (!name || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ ok: false })
+  }
+  // Honeypot + content heuristics: pretend success but record nothing.
+  if (honeypot || looksLikeSpam({ name, company, message: messageRaw, instrument })) {
+    return NextResponse.json({ ok: true })
   }
 
   const parts: string[] = []
