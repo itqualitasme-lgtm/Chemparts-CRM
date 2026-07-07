@@ -77,10 +77,20 @@ window.__cpProductDetailInit = function () {
     });
   });
 
-  // Mailto datasheet button
+  // Spec-sheet button: link straight to the product's datasheet PDF (new tab)
+  // when there is one; otherwise fall back to a mailto request.
   const dsBtn = document.querySelector('[data-pdp-datasheet]');
   if (dsBtn) {
-    dsBtn.setAttribute('href', `mailto:info@chemparts-me.com?subject=Datasheet request — ${product.name}`);
+    const pdf = (product.docs || []).find(d => /^https?:\/\//i.test(d.href) && /\.pdf(\?|$)/i.test(d.href));
+    if (pdf) {
+      dsBtn.setAttribute('href', pdf.href);
+      dsBtn.setAttribute('target', '_blank');
+      dsBtn.setAttribute('rel', 'noopener');
+    } else {
+      dsBtn.setAttribute('href', `mailto:info@chemparts-me.com?subject=Datasheet request — ${product.name}`);
+      dsBtn.removeAttribute('target');
+      dsBtn.removeAttribute('rel');
+    }
   }
 
   // Gallery
@@ -137,9 +147,10 @@ window.__cpProductDetailInit = function () {
 
   const docs = document.querySelector('[data-pdp-docs]');
   if (docs) {
-    const items = (product.docs || []).map(d =>
-      `<li><a href="${d.href}" class="btn btn--ghost btn--sm">${escape(d.title)} <span class="arrow">→</span></a></li>`
-    ).join('');
+    const items = (product.docs || []).map(d => {
+      const ext = /^https?:\/\//i.test(d.href) ? ' target="_blank" rel="noopener"' : '';
+      return `<li><a href="${d.href}"${ext} class="btn btn--ghost btn--sm">${escape(d.title)} <span class="arrow">→</span></a></li>`;
+    }).join('');
     docs.innerHTML = `<ul style="list-style:none; padding:0; margin:0; display:grid; gap:12px;">${items || '<li class="text-muted">No public documentation. Contact us for application notes and SOPs.</li>'}</ul>`;
   }
 

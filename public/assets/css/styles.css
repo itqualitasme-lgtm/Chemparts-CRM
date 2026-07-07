@@ -1178,8 +1178,13 @@ html.modal-locked body { overflow: hidden; touch-action: none; }
   background: var(--slate-2);
   position: relative;
   display: grid;
+  /* minmax(0,1fr) lets the single cell shrink to the media box instead of
+     growing to a tall/portrait image's intrinsic height (which overflowed on
+     the flex-column section-page cards). */
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
   place-items: center;
   padding: 18px;
+  min-height: 0;
 }
 .card__media img {
   max-width: 100%;
