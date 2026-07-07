@@ -210,10 +210,25 @@ export async function updateQuotation(
 export async function deleteQuotation(quotationId: string): Promise<{ error?: string }> {
   const admin = await requireAdmin()
   if (!admin) return { error: 'Only administrators can delete quotations.' }
-  const q = await db.quotation.findUnique({ where: { id: quotationId }, select: { id: true } })
+  const q = await db.quotation.findUnique({ where: { id: quotationId }, select: { id: true, enquiryId: true } })
   if (!q) return { error: 'Quotation not found.' }
   await db.quotation.delete({ where: { id: quotationId } })
+
+  // Revert the source enquiry: if it has no remaining quotations and is still
+  // marked QUOTED, move it back to UNDER_REVIEW so it isn't stuck (untouched if
+  // it was already WON/LOST or has other quotations).
+  if (q.enquiryId) {
+    const remaining = await db.quotation.count({ where: { enquiryId: q.enquiryId } })
+    if (remaining === 0) {
+      await db.enquiry.updateMany({
+        where: { id: q.enquiryId, status: 'QUOTED' },
+        data: { status: 'UNDER_REVIEW' },
+      })
+    }
+  }
+
   await db.auditLog.create({ data: { actorId: admin.id, action: 'DELETE', entity: 'Quotation', entityId: quotationId } })
   revalidatePath('/staff/quotations')
+  revalidatePath('/staff/enquiries')
   redirect('/staff/quotations')
 }
