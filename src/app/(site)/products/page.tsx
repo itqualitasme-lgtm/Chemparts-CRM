@@ -2,6 +2,11 @@ import { getInstrumentCount } from '@/lib/counts'
 import SectionCards from './SectionCards'
 
 export const dynamic = 'force-dynamic'
+export const metadata = {
+  title: 'Product Catalog — Analytical Instruments, Consumables & Spares | UAE & Gulf',
+  description: 'Browse the Chemparts catalog — analytical instruments, lab consumables and OEM spare parts. Filter by brand, industry and test type. Authorized distributor across the UAE, Dubai, Qatar and the Gulf.',
+  alternates: { canonical: '/products' },
+}
 
 export default async function ProductsPage() {
   const instrumentCount = await getInstrumentCount()

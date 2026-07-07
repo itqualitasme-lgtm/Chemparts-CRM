@@ -1,4 +1,24 @@
+import type { Metadata } from 'next'
+import { db } from '@/lib/db'
+import { SITE_URL } from '@/lib/seo'
+
 export const dynamic = 'force-dynamic'
+
+// Server-rendered SEO metadata per product (the body still hydrates client-side
+// from window.PRODUCTS, but Google now sees a real, product-specific title).
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ slug?: string }> }): Promise<Metadata> {
+  const { slug } = await searchParams
+  if (!slug) return { title: 'Product' }
+  const p = await db.product.findUnique({ where: { slug }, select: { name: true, desc: true, brand: { select: { name: true } } } })
+  if (!p) return { title: 'Product' }
+  const title = `${p.brand.name} ${p.name} — Price & Quote in UAE, Qatar & Gulf`
+  return {
+    title,
+    description: `${p.desc} Authorized ${p.brand.name} distributor across the UAE, Dubai, Qatar and the Gulf — request a price or quote from Chemparts.`,
+    alternates: { canonical: `/product?slug=${slug}` },
+    openGraph: { title, description: p.desc, url: `${SITE_URL}/product?slug=${slug}`, type: 'website' },
+  }
+}
 
 // Ported from product.html. The original reads ?slug= from the query and
 // product-detail.js hydrates this static markup client-side from window.PRODUCTS.

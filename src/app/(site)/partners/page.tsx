@@ -2,6 +2,11 @@ import { db } from '@/lib/db'
 import { brandLogoUrl } from '@/lib/brand-image'
 
 export const dynamic = 'force-dynamic'
+export const metadata = {
+  title: 'Brand Partners — Authorized Distributor for Hitachi, Tanaka, Oxford & More | UAE & Gulf',
+  description: 'Chemparts is the authorized regional distributor for Hitachi, Tanaka, Oxford Instruments, Scavini, Biolab and more across the UAE, Dubai, Qatar and the Gulf. Full warranty, genuine spares, factory-certified service.',
+  alternates: { canonical: '/partners' },
+}
 
 // Partners page is rendered from the CRM `Brand` table — the single source of
 // truth. Add or edit a brand in /staff/brands (name, logo, country, focus,
@@ -23,6 +28,7 @@ export default async function PartnersPage() {
     select: {
       id: true,
       name: true,
+      slug: true,
       logo: true,
       countryOfOrigin: true,
       focus: true,
@@ -31,6 +37,9 @@ export default async function PartnersPage() {
     },
     orderBy: [{ featured: 'desc' }, { sortOrder: 'asc' }, { name: 'asc' }],
   })
+
+  const brandHref = (b: { slug: string; name: string }) =>
+    b.slug ? `/brands/${b.slug}` : `/products#${filterHash(b.name)}`
 
   const brandCount = brands.length
 
@@ -75,7 +84,7 @@ export default async function PartnersPage() {
                 <a
                   key={b.id}
                   className="partners-wall__cell"
-                  href={`/products#${filterHash(b.name)}`}
+                  href={brandHref(b)}
                   data-since={sinceLabel(b.partnerSince)}
                 >
                   {b.name}
@@ -103,7 +112,7 @@ export default async function PartnersPage() {
                 const logo = brandLogoUrl(b.logo)
                 const count = b._count.products
                 return (
-                  <a key={b.id} className="brand-card" href={`/products#${filterHash(b.name)}`}>
+                  <a key={b.id} className="brand-card" href={brandHref(b)}>
                     <div className="brand-card__logo">
                       {logo ? (
                         // eslint-disable-next-line @next/next/no-img-element

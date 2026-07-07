@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import RouteProgress from "@/components/RouteProgress";
+import { SITE_URL, SITE_NAME, organizationJsonLd } from "@/lib/seo";
 import "./globals.css";
 import "./overrides.css";
 
@@ -15,10 +16,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Chemparts Middle East — Analytical instruments, lab supplies & services",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Analytical Instruments & Lab Supplies in UAE, Qatar & the Gulf | Chemparts",
+    template: "%s | Chemparts Middle East",
+  },
   description:
-    "Chemparts Middle East FZC — an authorized partner supplying, installing and servicing analytical instruments, laboratory consumables and OEM spare parts across the Gulf since 2003.",
-  robots: { index: false, follow: false }, // noindex until public launch
+    "Chemparts Middle East FZC — authorized distributor of analytical instruments, OEM spare parts and laboratory consumables across the UAE, Dubai, Qatar and the Gulf. Authorized partner for Hitachi, Tanaka, Oxford Instruments, Scavini and Biolab. Same working-day quotes.",
+  keywords: [
+    "analytical instruments UAE", "lab equipment Dubai", "Hitachi UAE", "Tanaka UAE",
+    "Oxford Instruments Gulf", "flash point tester", "XRF analyzer", "lab consumables Qatar",
+    "OEM spare parts", "authorized distributor Gulf", "Chemparts",
+  ],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    url: SITE_URL,
+    title: "Analytical Instruments & Lab Supplies in the UAE, Qatar & Gulf | Chemparts",
+    description:
+      "Authorized distributor of analytical instruments, OEM spares and lab consumables across the Gulf since 2003.",
+  },
+  robots: { index: true, follow: true },
   // Stop the Dark Reader extension (which ignores CSS color-scheme) from
   // inverting the fixed light design — e.g. white button text → invisible.
   other: { "darkreader-lock": "1" },
@@ -43,6 +62,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }} />
         <RouteProgress />
         {children}
       </body>
