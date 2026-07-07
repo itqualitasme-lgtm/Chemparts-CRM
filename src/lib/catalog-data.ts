@@ -67,7 +67,7 @@ export async function getPublicCatalog(): Promise<CatalogData> {
       : {}
     const docs = p.datasheetUrl
       ? [{ title: 'Datasheet (PDF)', href: p.datasheetUrl }]
-      : [{ title: 'Datasheet (PDF)', href: `mailto:info@chemparts-me.com?subject=Datasheet request — ${p.name}` }]
+      : [{ title: 'Request datasheet by email', href: `mailto:info@chemparts-me.com?subject=Datasheet request — ${p.name}` }]
 
     // Resolve bare filenames to correct absolute paths (fixes imported catalog
     // images). The card grid uses `thumb` (640); the product page uses `images`

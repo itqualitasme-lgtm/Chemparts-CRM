@@ -46,7 +46,7 @@
           <h3 class="card__title">${escapeHtml(p.name)}</h3>
           <p class="card__desc">${escapeHtml(p.desc)}</p>
           <div class="card__foot">
-            <span class="mono text-muted">View instrument</span>
+            <span class="mono text-muted">View product</span>
             <svg class="card__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M3 13L13 3M13 3H5M13 3V11" stroke="currentColor" stroke-width="1.25"/>
             </svg>

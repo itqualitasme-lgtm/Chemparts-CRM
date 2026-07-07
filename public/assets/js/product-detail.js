@@ -86,10 +86,12 @@ window.__cpProductDetailInit = function () {
       dsBtn.setAttribute('href', pdf.href);
       dsBtn.setAttribute('target', '_blank');
       dsBtn.setAttribute('rel', 'noopener');
+      dsBtn.textContent = 'Download spec sheet';
     } else {
       dsBtn.setAttribute('href', `mailto:info@chemparts-me.com?subject=Datasheet request — ${product.name}`);
       dsBtn.removeAttribute('target');
       dsBtn.removeAttribute('rel');
+      dsBtn.textContent = 'Request spec sheet';
     }
   }
 
