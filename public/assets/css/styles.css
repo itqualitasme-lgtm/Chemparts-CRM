@@ -4348,6 +4348,8 @@ figure[data-reveal][data-shown="true"] img,
 .pdp-gallery__thumbs img { width: 100%; height: 100%; object-fit: contain; }
 .pdp-info { display: flex; flex-direction: column; gap: 20px; }
 .pdp-info__brand { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--crimson); font-weight: 500; }
+.pdp-info__brand--logo { display: block; margin-bottom: 10px; }
+.pdp-info__brandimg { height: 34px; width: auto; max-width: 180px; object-fit: contain; display: block; }
 .pdp-info__title { font-size: clamp(28px, 3.5vw, 44px); line-height: 1.05; letter-spacing: -0.02em; font-weight: 500; margin: 0; }
 .pdp-info__desc { color: var(--steel); font-size: 16px; line-height: 1.55; }
 .pdp-info__cta { display: flex; gap: 12px; flex-wrap: wrap; padding-top: 8px; }

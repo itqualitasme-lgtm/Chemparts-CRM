@@ -292,7 +292,14 @@ export default async function ProductDetailPage({ params }: PageProps) {
             )}
 
             <div className="pdp-info" data-reveal>
-              <span className="pdp-info__brand">{product.brand}</span>
+              {product.brandLogo ? (
+                <span className="pdp-info__brand pdp-info__brand--logo">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={product.brandLogo} alt={product.brand} className="pdp-info__brandimg" />
+                </span>
+              ) : (
+                <span className="pdp-info__brand">{product.brand}</span>
+              )}
               <h1 className="pdp-info__title">{product.name}</h1>
               <p className="pdp-info__desc">{product.desc}</p>
 

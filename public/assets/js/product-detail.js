@@ -25,8 +25,16 @@ window.__cpProductDetailInit = function () {
   const crumb = document.querySelector('[data-pdp-breadcrumb]');
   if (crumb) crumb.textContent = product.name;
 
-  // Brand / title / desc
-  setText('[data-pdp-brand]', product.brand);
+  // Brand / title / desc — show the brand logo when available, else the name.
+  document.querySelectorAll('[data-pdp-brand]').forEach((el) => {
+    if (product.brandLogo) {
+      el.innerHTML = `<img src="${product.brandLogo}" alt="${escape(product.brand)}" class="pdp-info__brandimg" loading="eager" decoding="async">`;
+      el.classList.add('pdp-info__brand--logo');
+    } else {
+      el.textContent = product.brand;
+      el.classList.remove('pdp-info__brand--logo');
+    }
+  });
   setText('[data-pdp-title]', product.name);
   setText('[data-pdp-desc]', product.desc);
 
