@@ -21,5 +21,8 @@ export function absImg(src: string | null | undefined): string | null {
 export function optimizedImg(src: string | null | undefined, width: number, quality = 72): string | null {
   const abs = absImg(src)
   if (!abs) return null
+  // Next's image optimizer can't process SVG (and errors without dangerouslyAllowSVG).
+  // SVGs are already tiny vectors — serve them raw.
+  if (/\.svg(\?|$)/i.test(abs)) return abs
   return `/_next/image?url=${encodeURIComponent(abs)}&w=${width}&q=${quality}`
 }
