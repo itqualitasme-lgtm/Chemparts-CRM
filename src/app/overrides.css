@@ -10,3 +10,20 @@
 .h-3 {
   height: auto;
 }
+
+/* Force-dark defense for the portal's dark buttons.
+   Chrome's experimental "Auto Dark Mode for Web Contents" ignores
+   color-scheme and inverts the white text on dark-navy buttons to
+   navy-on-navy (invisible). Giving the element an explicit background-image
+   opts it out of that inversion, and we pin the text white. Same-colour
+   gradient = no visual change. Targets the navy button utility used across
+   the staff/admin portal. */
+a[class*="bg-[#0A2540]"],
+button[class*="bg-[#0A2540]"] {
+  background-image: linear-gradient(#0a2540, #0a2540);
+  color: #fff !important;
+}
+a[class*="bg-[#0A2540]"]:hover,
+button[class*="bg-[#0A2540]"]:hover {
+  background-image: linear-gradient(#123a63, #123a63);
+}

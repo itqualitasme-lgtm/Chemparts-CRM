@@ -19,6 +19,9 @@ export const metadata: Metadata = {
   description:
     "Chemparts Middle East FZC — an authorized partner supplying, installing and servicing analytical instruments, laboratory consumables and OEM spare parts across the Gulf since 2003.",
   robots: { index: false, follow: false }, // noindex until public launch
+  // Stop the Dark Reader extension (which ignores CSS color-scheme) from
+  // inverting the fixed light design — e.g. white button text → invisible.
+  other: { "darkreader-lock": "1" },
 };
 
 // The whole app is a fixed light design. Emitting the color-scheme meta tag
