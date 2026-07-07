@@ -117,15 +117,23 @@ export default async function PortalShell({
             {!isCustomer && <PortalMenu groups={groups} label={PORTAL_LABEL[portal]} />}
             <PortalLogoLink label={PORTAL_LABEL[portal]} />
           </div>
-          <div className="flex items-center gap-2.5">
-            {!isCustomer && <NotificationBell items={bellItems} unread={unread} />}
-            <div className="hidden text-right leading-tight sm:block">
-              <div className="text-xs font-medium text-white">{user.fullName}</div>
-              <div className="text-[10px] uppercase tracking-wide text-slate-300">{user.role.toLowerCase()}</div>
+          <div className="flex items-center gap-3">
+            {!isCustomer && (
+              <>
+                <NotificationBell items={bellItems} unread={unread} />
+                <span className="h-6 w-px bg-white/15" aria-hidden="true" />
+              </>
+            )}
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs font-semibold text-white ring-1 ring-white/20">
+                {initial}
+              </span>
+              <div className="hidden leading-tight sm:block">
+                <div className="text-xs font-medium text-white">{user.fullName}</div>
+                <div className="text-[10px] uppercase tracking-wide text-slate-300">{user.role.toLowerCase()}</div>
+              </div>
             </div>
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs font-semibold text-white ring-1 ring-white/20">
-              {initial}
-            </span>
+            <span className="hidden h-6 w-px bg-white/15 sm:block" aria-hidden="true" />
             <form action={logout}>
               <button className="rounded-md border border-white/25 px-2.5 py-1 text-xs font-medium text-slate-100 transition hover:bg-white/10">
                 Sign out

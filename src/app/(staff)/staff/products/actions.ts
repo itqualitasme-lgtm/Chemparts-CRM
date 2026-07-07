@@ -7,8 +7,14 @@ import { db } from '@/lib/db'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { productSchema, splitList, splitTags } from '@/lib/validation/product'
 import { slugify } from '@/lib/slug'
+import { INDUSTRY_IDS, TEST_TYPE_IDS } from '@/lib/taxonomy'
 
 export type ProductState = { error?: string; fieldErrors?: Record<string, string[]> }
+
+/** Read a checkbox multi-select and keep only valid taxonomy ids. */
+function pickIds(formData: FormData, field: string, allowed: Set<string>): string[] {
+  return formData.getAll(field).map(String).filter((v) => allowed.has(v))
+}
 
 /** Staff/admin: delete a product. Blocked if referenced by enquiries, carts or
  *  price requests (hide it instead); BOM links + price history cascade. */
@@ -86,10 +92,10 @@ export async function createProduct(_prev: ProductState, formData: FormData): Pr
       desc: d.desc,
       overview: d.overview || null,
       standards: splitList(d.standards),
-      industries: splitList(d.industries),
+      industries: pickIds(formData, 'industries', INDUSTRY_IDS),
       tags: splitTags(d.tags),
       newUntil: d.newUntil ? new Date(d.newUntil) : null,
-      testTypes: [],
+      testTypes: pickIds(formData, 'testTypes', TEST_TYPE_IDS),
       productType: d.productType || null,
       sample: d.sample || null,
       output: d.output || null,
@@ -137,7 +143,8 @@ export async function updateProduct(id: string, _prev: ProductState, formData: F
       desc: d.desc,
       overview: d.overview || null,
       standards: splitList(d.standards),
-      industries: splitList(d.industries),
+      industries: pickIds(formData, 'industries', INDUSTRY_IDS),
+      testTypes: pickIds(formData, 'testTypes', TEST_TYPE_IDS),
       tags: splitTags(d.tags),
       newUntil: d.newUntil ? new Date(d.newUntil) : null,
       productType: d.productType || null,

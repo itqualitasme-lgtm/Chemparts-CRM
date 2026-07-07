@@ -1,5 +1,6 @@
 import 'server-only'
 import { db } from '@/lib/db'
+import { INDUSTRIES, TEST_TYPE_LABELS } from '@/lib/taxonomy'
 
 // The public catalog (products.js) is DB-driven: instead of the frozen static
 // public/assets/js/products.js, we read the live Product/Brand tables and inject
@@ -30,31 +31,8 @@ export type CatalogData = {
   testTypes: { id: string; label: string }[]
 }
 
-// Taxonomy — stable id→label maps for the sidebar filters. Counts are derived
-// client-side from the products list, so brands/industries with no live product
-// simply show a zero (or, for brands, are omitted below).
-const INDUSTRIES: { id: string; label: string }[] = [
-  { id: 'petroleum', label: 'Petroleum' },
-  { id: 'refineries', label: 'Refineries' },
-  { id: 'plastics', label: 'Plastics' },
-  { id: 'environmental', label: 'Environmental' },
-  { id: 'food', label: 'Food & Water' },
-  { id: 'materials', label: 'Materials' },
-]
-
-const TEST_TYPE_LABELS: Record<string, string> = {
-  analytical: 'General Analytical', 'aniline-point': 'Aniline Point', antioxidant: 'Antioxidant',
-  'carbon-residue': 'Carbon Residue', chlorine: 'Chlorine', 'cloud-point': 'Cloud Point',
-  coating: 'Coating Thickness', conductivity: 'Conductivity', corrosion: 'Corrosion',
-  distillation: 'Distillation', elemental: 'Elemental', evaporation: 'Evaporation',
-  'fire-point': 'Fire Point', 'flash-point': 'Flash Point', foaming: 'Foaming',
-  'freezing-point': 'Freezing Point', ftir: 'FTIR', 'gas-chromatography': 'Gas Chromatography',
-  halogen: 'Halogen', mercury: 'Mercury', moisture: 'Moisture', multi: 'Multi-Parameter',
-  nitrogen: 'Nitrogen', nmr: 'NMR', 'oil-condition': 'Oil Condition', oxidation: 'Oxidation',
-  ph: 'pH', 'pour-point': 'Pour Point', spectroscopy: 'Spectroscopy', sulphur: 'Sulphur',
-  'uv-vis': 'UV-Vis', 'vapor-pressure': 'Vapor Pressure', varnish: 'Varnish',
-  viscosity: 'Viscosity', wear: 'Wear', weighing: 'Weighing', xrf: 'XRF',
-}
+// Taxonomy (INDUSTRIES / TEST_TYPE_LABELS) is imported from '@/lib/taxonomy' so
+// the product form and the public filters share one source of truth.
 
 function titleCase(id: string): string {
   return id.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())

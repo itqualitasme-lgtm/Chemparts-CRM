@@ -3,6 +3,7 @@
 import { useActionState, useState } from 'react'
 import type { ProductState } from './actions'
 import { PRODUCT_TYPES } from '@/lib/validation/product'
+import { INDUSTRIES, TEST_TYPES } from '@/lib/taxonomy'
 
 type Initial = {
   name?: string
@@ -13,6 +14,7 @@ type Initial = {
   overview?: string
   standards?: string[]
   industries?: string[]
+  testTypes?: string[]
   tags?: string[]
   newUntil?: string
   productType?: string
@@ -109,16 +111,38 @@ export default function ProductForm({
         <textarea name="overview" rows={3} defaultValue={initial.overview} className={inputCls} />
       </label>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium text-slate-700">Standards (comma-separated)</span>
-          <input name="standards" defaultValue={initial.standards?.join(', ')} placeholder="ASTM, ISO, IP" className={inputCls} />
-        </label>
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium text-slate-700">Industries (comma-separated)</span>
-          <input name="industries" defaultValue={initial.industries?.join(', ')} placeholder="petroleum, materials" className={inputCls} />
-        </label>
-      </div>
+      <label className="block">
+        <span className="mb-1 block text-sm font-medium text-slate-700">Standards (comma-separated)</span>
+        <input name="standards" defaultValue={initial.standards?.join(', ')} placeholder="ASTM, ISO, IP" className={inputCls} />
+      </label>
+
+      <fieldset className="rounded-xl border border-slate-200 p-4">
+        <legend className="px-1 text-sm font-semibold text-slate-700">
+          Industries <span className="font-normal text-slate-400">— drives the website Industry filter</span>
+        </legend>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-3">
+          {INDUSTRIES.map((i) => (
+            <label key={i.id} className="flex items-center gap-2 text-sm text-slate-700">
+              <input type="checkbox" name="industries" value={i.id} defaultChecked={initial.industries?.includes(i.id)} />
+              {i.label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset className="rounded-xl border border-slate-200 p-4">
+        <legend className="px-1 text-sm font-semibold text-slate-700">
+          Test types <span className="font-normal text-slate-400">— drives the website Test-type filter</span>
+        </legend>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-3">
+          {TEST_TYPES.map((t) => (
+            <label key={t.id} className="flex items-center gap-2 text-sm text-slate-700">
+              <input type="checkbox" name="testTypes" value={t.id} defaultChecked={initial.testTypes?.includes(t.id)} />
+              {t.label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
 
       <label className="block">
         <span className="mb-1 block text-sm font-medium text-slate-700">Hashtags</span>
