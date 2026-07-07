@@ -38,7 +38,7 @@
       <a class="card" href="/product?slug=${encodeURIComponent(p.slug)}" data-industry="${inds}">
         <div class="card__media">
           ${featuredPill}
-          <img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">
+          <img src="${p.thumb || p.image}" onerror="this.onerror=null;this.src='${p.image}'" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">
         </div>
         <div class="card__body">
           <span class="card__brand">${escapeHtml(p.brand)}</span>

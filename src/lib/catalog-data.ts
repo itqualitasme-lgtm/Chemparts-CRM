@@ -1,6 +1,7 @@
 import 'server-only'
 import { db } from '@/lib/db'
 import { INDUSTRIES, TEST_TYPE_LABELS } from '@/lib/taxonomy'
+import { absImg, optimizedImg } from '@/lib/img'
 
 // The public catalog (products.js) is DB-driven: instead of the frozen static
 // public/assets/js/products.js, we read the live Product/Brand tables and inject
@@ -14,6 +15,7 @@ export type CatalogProduct = {
   brand: string
   featured?: boolean
   image: string | null
+  thumb: string | null
   images: string[]
   desc: string
   industries: string[]
@@ -66,13 +68,20 @@ export async function getPublicCatalog(): Promise<CatalogData> {
       ? [{ title: 'Datasheet (PDF)', href: p.datasheetUrl }]
       : [{ title: 'Datasheet (PDF)', href: `mailto:info@chemparts-me.com?subject=Datasheet request — ${p.name}` }]
 
+    // Resolve bare filenames to correct absolute paths (fixes imported catalog
+    // images) and add an optimized thumbnail for the card grid.
+    const fullImages = (p.images.length ? p.images : p.image ? [p.image] : [])
+      .map((im) => absImg(im))
+      .filter((x): x is string => !!x)
+
     return {
       slug: p.slug,
       name: p.name,
       brand: p.brand.name,
       featured: p.featured || undefined,
-      image: p.image,
-      images: p.images.length ? p.images : p.image ? [p.image] : [],
+      image: absImg(p.image),
+      thumb: optimizedImg(p.image, 640),
+      images: fullImages,
       desc: p.desc,
       industries: p.industries,
       testTypes: p.testTypes,

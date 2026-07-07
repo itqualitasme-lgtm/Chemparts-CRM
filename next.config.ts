@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
     remotePatterns: supabaseHost
       ? [{ protocol: 'https', hostname: supabaseHost, pathname: '/storage/v1/object/public/**' }]
       : [],
+    formats: ['image/avif', 'image/webp'],
+    qualities: [50, 60, 72, 75, 80],
   },
   // Product/brand/customer uploads are cropped + compressed client-side before
   // they reach the server action, but raise the default 1MB cap as a safety net

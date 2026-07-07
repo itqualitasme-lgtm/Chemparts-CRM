@@ -7,6 +7,7 @@ import {
   type SectionProduct,
 } from '@/lib/catalog-db'
 import { priceState, canAddToCart } from '@/lib/price'
+import { optimizedImg } from '@/lib/img'
 import { getSessionUser } from '@/lib/auth/session'
 import RequestPrice from './RequestPrice'
 import AddToCart from './AddToCart'
@@ -42,6 +43,7 @@ function formatPrice(currency: string, value: number): string {
  */
 function ProductCard({ p, loggedIn, section }: { p: SectionProduct; loggedIn: boolean; section: Section }) {
   const src = productImageUrl(p.image)
+  const thumb = src ? optimizedImg(src, 640) : null
   const state = priceState(p)
   const cartEligible = canAddToCart(p)
 
@@ -53,7 +55,7 @@ function ProductCard({ p, loggedIn, section }: { p: SectionProduct; loggedIn: bo
       >
         <div className="card__media">
           {p.isNew ? <span className="pill pill--new">New</span> : p.featured ? <span className="pill pill--crimson">Featured</span> : null}
-          {src ? <img src={src} alt={p.name} loading="lazy" decoding="async" /> : null}
+          {src ? <img src={thumb ?? src} alt={p.name} loading="lazy" decoding="async" /> : null}
         </div>
         <div className="card__body" style={{ paddingBottom: 8 }}>
           <span className="card__brand">{p.brand}</span>
