@@ -309,6 +309,32 @@ window.__cpProductsPageInit = function () {
   // Patch: extend applyFilters to include standards in search hay
   const originalApplyFilters = applyFilters;
 
+  // Re-apply the full filter state from the URL hash. Used on browser
+  // back/forward so returning to a filtered view restores it (instead of
+  // falling back to the unfiltered list).
+  function syncFromHash() {
+    state.q = '';
+    state.brands.clear();
+    state.industries.clear();
+    state.testTypes.clear();
+    state.sort = 'featured';
+    state.page = 1;
+    if (searchInput) searchInput.value = '';
+    if (sortSelect) sortSelect.value = 'featured';
+    document.querySelectorAll('[data-products-sidebar] input[type="checkbox"]').forEach((c) => { c.checked = false; });
+    readHash();
+    render();
+  }
+  // Expose the current closure's sync so a single global listener always drives
+  // the latest initialised grid (the script re-inits on client navigation).
+  window.__cpProductsSync = syncFromHash;
+  if (!window.__cpProductsHashBound) {
+    window.__cpProductsHashBound = true;
+    const onHistoryNav = () => { if (typeof window.__cpProductsSync === 'function') window.__cpProductsSync(); };
+    window.addEventListener('popstate', onHistoryNav);
+    window.addEventListener('hashchange', onHistoryNav);
+  }
+
   readHash();
   render();
 };
