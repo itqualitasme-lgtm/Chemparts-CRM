@@ -181,6 +181,21 @@ model Brand {
   updatedAt       DateTime  @updatedAt
 }
 
+// A marketing/sales campaign sent to active subscribers.
+model Campaign {
+  id             String    @id @default(cuid())
+  subject        String
+  body           String // plain text with line breaks
+  status         String    @default("DRAFT") // DRAFT | SENDING | SENT
+  recipientCount Int       @default(0)
+  sentCount      Int       @default(0)
+  createdByName  String?
+  sentAt         DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([createdAt])
+}
+
 // Newsletter / marketing subscribers (website signup → sales campaigns).
 model Subscriber {
   id               String   @id @default(cuid())
