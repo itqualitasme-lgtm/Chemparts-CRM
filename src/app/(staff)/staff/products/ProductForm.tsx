@@ -51,11 +51,13 @@ export default function ProductForm({
   brands,
   initial = {},
   submitLabel,
+  returnTo,
 }: {
   action: (prev: ProductState, formData: FormData) => Promise<ProductState>
   brands: { id: string; name: string }[]
   initial?: Initial
   submitLabel: string
+  returnTo?: string
 }) {
   const [state, formAction, pending] = useActionState<ProductState, FormData>(action, {})
   const [type, setType] = useState(initial.type ?? 'EQUIPMENT')
@@ -63,6 +65,7 @@ export default function ProductForm({
 
   return (
     <form action={formAction} className="max-w-2xl space-y-4">
+      {returnTo ? <input type="hidden" name="returnTo" value={returnTo} /> : null}
       {state.error && (
         <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
       )}

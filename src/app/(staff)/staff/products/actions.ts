@@ -16,9 +16,14 @@ function pickIds(formData: FormData, field: string, allowed: Set<string>): strin
   return formData.getAll(field).map(String).filter((v) => allowed.has(v))
 }
 
+/** Only allow returning to a products-list URL (prevents open redirects). */
+function safeReturn(to: string | null | undefined): string {
+  return to && to.startsWith('/staff/products') ? to : '/staff/products'
+}
+
 /** Staff/admin: delete a product. Blocked if referenced by enquiries, carts or
  *  price requests (hide it instead); BOM links + price history cascade. */
-export async function deleteProduct(id: string): Promise<{ error?: string }> {
+export async function deleteProduct(id: string, returnTo?: string): Promise<{ error?: string }> {
   const user = await requirePortal('staff')
 
   const p = await db.product.findUnique({
@@ -54,7 +59,7 @@ export async function deleteProduct(id: string): Promise<{ error?: string }> {
   await db.auditLog.create({ data: { actorId: user.id, action: 'DELETE', entity: 'Product', entityId: id } })
   revalidatePath('/staff/products')
   revalidatePath('/products')
-  redirect('/staff/products')
+  redirect(safeReturn(returnTo))
 }
 
 async function uniqueSlug(desired: string, excludeId?: string): Promise<string> {
@@ -169,5 +174,5 @@ export async function updateProduct(id: string, _prev: ProductState, formData: F
   revalidatePath('/staff/products')
   revalidatePath('/products')
   revalidatePath(`/products/${slug}`)
-  redirect('/staff/products')
+  redirect(safeReturn((formData.get('returnTo') as string | null) ?? undefined))
 }

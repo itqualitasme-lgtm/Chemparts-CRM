@@ -69,6 +69,19 @@ export default async function StaffProductsPage({
   const from = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1
   const to = Math.min(page * PAGE_SIZE, total)
 
+  // Current filtered list URL, threaded to Edit so saving/deleting returns here.
+  const currentListUrl = (() => {
+    const params = new URLSearchParams()
+    if (q) params.set('q', q)
+    if (type) params.set('type', type)
+    if (brandId) params.set('brand', brandId)
+    if (status) params.set('status', status)
+    if (page > 1) params.set('page', String(page))
+    const s = params.toString()
+    return s ? `/staff/products?${s}` : '/staff/products'
+  })()
+  const fromParam = `?from=${encodeURIComponent(currentListUrl)}`
+
   const pageHref = (p: number) => {
     const params = new URLSearchParams()
     if (q) params.set('q', q)
@@ -173,7 +186,7 @@ export default async function StaffProductsPage({
                   )}
                 </td>
                 <td className="px-4 py-2.5 text-right">
-                  <Link href={`/staff/products/${p.id}`} className="text-[#0A2540] underline">
+                  <Link href={`/staff/products/${p.id}${fromParam}`} className="text-[#0A2540] underline">
                     Edit
                   </Link>
                 </td>

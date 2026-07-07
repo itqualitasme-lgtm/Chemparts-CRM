@@ -10,8 +10,16 @@ import DeleteButton from '@/components/DeleteButton'
 export const metadata = { title: 'Edit product — Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
-export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditProductPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ from?: string }>
+}) {
   const { id } = await params
+  const { from } = await searchParams
+  const returnTo = from && from.startsWith('/staff/products') ? from : '/staff/products'
   const [product, brands, user] = await Promise.all([
     db.product.findUnique({ where: { id } }),
     db.brand.findMany({ select: { id: true, name: true }, orderBy: { name: 'asc' } }),
@@ -24,7 +32,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
   return (
     <div>
       <nav className="mb-4 text-sm text-slate-500">
-        <Link href="/staff/products" className="hover:underline">
+        <Link href={returnTo} className="hover:underline">
           Products
         </Link>{' '}
         / Edit
@@ -45,6 +53,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         action={updateWithId}
         brands={brands}
         submitLabel="Save changes"
+        returnTo={returnTo}
         initial={{
           name: product.name,
           slug: product.slug,
@@ -80,7 +89,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
             Permanently delete this product. Blocked if it appears in enquiries or carts — hide it instead.
           </p>
           <DeleteButton
-            action={deleteProduct.bind(null, product.id)}
+            action={deleteProduct.bind(null, product.id, returnTo)}
             label="Delete product"
             confirmText={`Delete ${product.name}? This cannot be undone.`}
           />
