@@ -8,7 +8,7 @@ import { addToQuote } from '@/lib/cart-actions'
 export default function AddToQuote({
   productId,
   variant = 'compact',
-  label = 'Add to quote list',
+  label = 'Add to cart',
 }: {
   productId: string
   variant?: 'compact' | 'full'
@@ -39,7 +39,7 @@ export default function AddToQuote({
         onClick={submit}
         disabled={pending}
       >
-        {pending ? 'Adding…' : added ? 'Added to quote ✓' : label}
+        {pending ? 'Adding…' : added ? 'Added to cart ✓' : label}
         {!pending && !added ? <span className="arrow">→</span> : null}
       </button>
       {error ? (
