@@ -1,3 +1,5 @@
+import NewsletterSignup from './NewsletterSignup'
+
 export default function SiteFooter() {
   return (
     <footer className="site-footer">
@@ -27,8 +29,9 @@ export default function SiteFooter() {
           </ul>
         </div>
         <div>
-          <h4>Worldwide shipping</h4>
-          <p>We export internationally — instruments, spares and consumables shipped anywhere, professionally packed, insured and fully documented for customs. Installation and service arranged on request.</p>
+          <h4>Updates &amp; offers</h4>
+          <p>Product news, promotions and offers on instruments, spares and consumables — straight to your inbox. No spam.</p>
+          <NewsletterSignup />
         </div>
         <div>
           <h4>Get in touch</h4>

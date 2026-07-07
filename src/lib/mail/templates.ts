@@ -113,6 +113,15 @@ ${button(v.link, 'Open in portal')}`,
 <p>We've received your request for the current price of <strong>${esc(v.product)}</strong>. Our team will confirm pricing and availability, usually within the working day.</p>`,
     ),
   }),
+  'newsletter-welcome': (v) => ({
+    subject: `You're subscribed — Chemparts updates & offers`,
+    html: layout(
+      'Welcome to Chemparts updates',
+      `<p>Dear ${esc(v.name)},</p>
+<p>Thanks for subscribing. You'll now receive Chemparts product news, promotions and offers on analytical instruments, spares and lab consumables.</p>
+<p style="color:#66788a;font-size:13px;margin-top:20px">Not interested? <a href="${esc(v.unsubscribeUrl)}" style="color:#66788a">Unsubscribe here</a>.</p>`,
+    ),
+  }),
   'price-confirmed': (v) => ({
     subject: `Your price for ${v.product} — Chemparts`,
     html: layout(

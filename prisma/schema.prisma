@@ -181,6 +181,19 @@ model Brand {
   updatedAt       DateTime  @updatedAt
 }
 
+// Newsletter / marketing subscribers (website signup → sales campaigns).
+model Subscriber {
+  id               String   @id @default(cuid())
+  email            String   @unique
+  name             String?
+  source           String? // e.g. "website-footer"
+  active           Boolean  @default(true) // false = unsubscribed
+  unsubscribeToken String   @unique @default(cuid())
+  createdAt        DateTime @default(now())
+
+  @@index([active, createdAt])
+}
+
 // Homepage "Trusted by" logo strip — staff-managed short list of clients.
 model Client {
   id        String   @id @default(cuid())

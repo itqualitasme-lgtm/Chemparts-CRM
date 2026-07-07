@@ -28,6 +28,7 @@ const SALES_ITEMS: NavItem[] = [
   { href: '/staff/price-requests', label: 'Price requests' },
   { href: '/staff/customers', label: 'Customers' },
   { href: '/staff/sales-people', label: 'Sales people' },
+  { href: '/staff/subscribers', label: 'Subscribers' },
 ]
 const CATALOG_ITEMS: NavItem[] = [
   { href: '/staff/products', label: 'Products' },

@@ -12,6 +12,8 @@ function iconFor(href: string) {
   if (href.includes('/price-requests')) return <><path d="M8 2H3v5l6 6 5-5-6-6z" {...P} /><circle cx="5.5" cy="4.5" r=".6" fill="currentColor" /></>
   if (href.includes('/customers')) return <><circle cx="6" cy="5" r="2.2" {...P} /><path d="M2 13c0-2.2 1.8-3.5 4-3.5s4 1.3 4 3.5" {...P} /><path d="M11 5.2a2 2 0 010 3.6M11.5 9.6c1.5.4 2.5 1.4 2.5 3.1" {...P} /></>
   if (href.includes('/sales-people')) return <><circle cx="8" cy="5" r="2.4" {...P} /><path d="M3 13.5c0-2.5 2.2-4 5-4s5 1.5 5 4" {...P} /></>
+  if (href.includes('/subscribers')) return <><path d="M2 4.5h10v6H2z" {...P} /><path d="M2 5.2l5 3.3 5-3.3" {...P} /><path d="M11 12.5h4M13 10.5v4" {...P} /></>
+
   if (href.includes('/products')) return <><path d="M8 1.7l5.5 3v6.6L8 14.3l-5.5-3V4.7z" {...P} /><path d="M2.7 4.8L8 7.6l5.3-2.8M8 7.6v6.7" {...P} /></>
   if (href.includes('/clients')) return <><path d="M2 14V4l4-2v12M6 14V6l5 2v6" {...P} /><path d="M8 8.5h1M8 11h1M3.5 6h1M3.5 9h1" {...P} /></>
   if (href.includes('/brands')) return <><path d="M3 2h6l5 5-6 6-5-5z" {...P} /><circle cx="6" cy="5" r="1" {...P} /></>
