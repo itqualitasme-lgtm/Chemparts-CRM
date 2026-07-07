@@ -5,8 +5,29 @@ import { revalidatePath } from 'next/cache'
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { slugify } from '@/lib/slug'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export type PostState = { error?: string }
+
+const BUCKET = 'product-images'
+const MAX_BYTES = 5 * 1024 * 1024
+const ALLOWED = ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml']
+
+/** Upload a blog cover image to Storage and return its public URL. */
+export async function uploadBlogImage(formData: FormData): Promise<{ url?: string; error?: string }> {
+  await requirePortal('staff')
+  const file = formData.get('file')
+  if (!(file instanceof File) || file.size === 0) return { error: 'Choose an image.' }
+  if (file.size > MAX_BYTES) return { error: 'Image must be 5MB or smaller.' }
+  if (!ALLOWED.includes(file.type)) return { error: 'Use PNG, JPEG, WEBP or SVG.' }
+  const ext = file.name.split('.').pop()?.toLowerCase() || 'png'
+  // No timestamp source in scripts, but here we run in the request runtime.
+  const path = `blog/${Date.now()}-${Math.round(performance.now())}.${ext}`
+  const supabase = createAdminClient()
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type, upsert: false })
+  if (error) return { error: `Upload failed: ${error.message}` }
+  return { url: supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl }
+}
 
 async function uniqueSlug(desired: string, excludeId?: string): Promise<string> {
   const base = slugify(desired) || 'post'

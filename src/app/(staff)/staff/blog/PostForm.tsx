@@ -3,6 +3,7 @@
 import { useActionState } from 'react'
 import Link from 'next/link'
 import type { PostState } from './actions'
+import CoverImageUpload from './CoverImageUpload'
 
 type Initial = {
   title?: string
@@ -46,10 +47,7 @@ export default function PostForm({
         <input name="excerpt" defaultValue={initial.excerpt} placeholder="Short summary shown on the blog list" className={inputCls} />
       </label>
 
-      <label className="block">
-        <span className="mb-1 block text-sm font-medium text-slate-700">Cover image URL (optional)</span>
-        <input name="coverImage" type="url" defaultValue={initial.coverImage} placeholder="https://…" className={inputCls} />
-      </label>
+      <CoverImageUpload initial={initial.coverImage} />
 
       <label className="block">
         <span className="mb-1 block text-sm font-medium text-slate-700">Body (Markdown)</span>
