@@ -4330,6 +4330,9 @@ figure[data-reveal][data-shown="true"] img,
   background: #fff;
   aspect-ratio: 1/1;
   display: grid;
+  /* Constrain the cell so a tall/portrait image letterboxes inside the square
+     instead of overflowing (and being clipped by overflow:hidden). */
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
   place-items: center;
   overflow: hidden;
 }
