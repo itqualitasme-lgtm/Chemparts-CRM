@@ -23,6 +23,7 @@ window.__cpProductsPageInit = function () {
     brands: new Set(),
     industries: new Set(),
     testTypes: new Set(),
+    categories: new Set(),
     sort: 'featured',
     page: 1
   };
@@ -45,6 +46,7 @@ window.__cpProductsPageInit = function () {
     const brandHost = sidebar.querySelector('[data-filter="brands"]');
     const indHost = sidebar.querySelector('[data-filter="industries"]');
     const ttHost = sidebar.querySelector('[data-filter="testTypes"]');
+    const catHost = sidebar.querySelector('[data-filter="categories"]');
 
     if (brandHost) {
       brandHost.innerHTML = makeCheckboxGroup('brand', window.BRANDS,
@@ -61,12 +63,18 @@ window.__cpProductsPageInit = function () {
         t => t.id, t => t.label,
         id => window.PRODUCTS.filter(p => (p.testTypes || []).includes(id)).length);
     }
+    if (catHost && window.CATEGORIES) {
+      catHost.innerHTML = makeCheckboxGroup('category', window.CATEGORIES,
+        c => c.id, c => c.label,
+        id => window.PRODUCTS.filter(p => p.category === id).length);
+    }
 
     sidebar.addEventListener('change', (e) => {
       const t = e.target;
       if (t.name === 'brand') toggleSet(state.brands, t.value, t.checked);
       if (t.name === 'industry') toggleSet(state.industries, t.value, t.checked);
       if (t.name === 'testType') toggleSet(state.testTypes, t.value, t.checked);
+      if (t.name === 'category') toggleSet(state.categories, t.value, t.checked);
       state.page = 1;
       render();
       writeHash();
@@ -108,6 +116,7 @@ window.__cpProductsPageInit = function () {
       if (state.brands.size && !state.brands.has(p.brand)) return false;
       if (state.industries.size && !(p.industries || []).some(i => state.industries.has(i))) return false;
       if (state.testTypes.size && !(p.testTypes || []).some(t => state.testTypes.has(t))) return false;
+      if (state.categories.size && !state.categories.has(p.category)) return false;
       return true;
     });
   }
@@ -190,7 +199,7 @@ window.__cpProductsPageInit = function () {
   }
 
   function clearAll() {
-    state.q = ''; state.brands.clear(); state.industries.clear(); state.testTypes.clear(); state.page = 1;
+    state.q = ''; state.brands.clear(); state.industries.clear(); state.testTypes.clear(); state.categories.clear(); state.page = 1;
     if (searchInput) searchInput.value = '';
     document.querySelectorAll('[data-products-sidebar] input[type="checkbox"]').forEach(c => c.checked = false);
     render();
@@ -204,6 +213,7 @@ window.__cpProductsPageInit = function () {
         b: state.brands.size ? [...state.brands] : undefined,
         i: state.industries.size ? [...state.industries] : undefined,
         t: state.testTypes.size ? [...state.testTypes] : undefined,
+        c: state.categories.size ? [...state.categories] : undefined,
         s: state.sort !== 'featured' ? state.sort : undefined
       };
       const empty = !Object.values(compact).some(v => v !== undefined);
@@ -223,6 +233,7 @@ window.__cpProductsPageInit = function () {
       if (json.b) json.b.forEach(b => state.brands.add(b));
       if (json.i) json.i.forEach(i => state.industries.add(i));
       if (json.t) json.t.forEach(t => state.testTypes.add(t));
+      if (json.c) json.c.forEach(c => state.categories.add(c));
       if (json.s) state.sort = json.s;
 
       // Sync UI
@@ -232,6 +243,7 @@ window.__cpProductsPageInit = function () {
         if (c.name === 'brand' && state.brands.has(c.value)) c.checked = true;
         if (c.name === 'industry' && state.industries.has(c.value)) c.checked = true;
         if (c.name === 'testType' && state.testTypes.has(c.value)) c.checked = true;
+        if (c.name === 'category' && state.categories.has(c.value)) c.checked = true;
       });
     } catch (e) {}
   }
@@ -317,6 +329,7 @@ window.__cpProductsPageInit = function () {
     state.brands.clear();
     state.industries.clear();
     state.testTypes.clear();
+    state.categories.clear();
     state.sort = 'featured';
     state.page = 1;
     if (searchInput) searchInput.value = '';

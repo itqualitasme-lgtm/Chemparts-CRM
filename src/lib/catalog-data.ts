@@ -24,6 +24,7 @@ export type CatalogProduct = {
   industries: string[]
   testTypes: string[]
   standards: string[]
+  category?: string
 }
 
 export type CatalogData = {
@@ -32,6 +33,7 @@ export type CatalogData = {
   brandLogos: Record<string, string>
   industries: { id: string; label: string }[]
   testTypes: { id: string; label: string }[]
+  categories: { id: string; label: string }[]
 }
 
 /** Heavy detail-only fields for one product, fetched on demand by the PDP. */
@@ -71,6 +73,7 @@ export async function getPublicCatalog(): Promise<CatalogData> {
       slug: true, name: true, featured: true, image: true,
       desc: true, industries: true, testTypes: true, standards: true,
       brand: { select: { name: true } },
+      category: { select: { slug: true, name: true } },
     },
   })
 
@@ -85,7 +88,21 @@ export async function getPublicCatalog(): Promise<CatalogData> {
     industries: p.industries,
     testTypes: p.testTypes,
     standards: p.standards,
+    ...(p.category ? { category: p.category.slug } : {}),
   }))
+
+  // Categories that have live products, with labels, sorted by product count
+  // (most-populated first) so the useful families head the filter list.
+  const catCount = new Map<string, { label: string; n: number }>()
+  for (const p of rows) {
+    if (!p.category) continue
+    const cur = catCount.get(p.category.slug) || { label: p.category.name, n: 0 }
+    cur.n++
+    catCount.set(p.category.slug, cur)
+  }
+  const categories = [...catCount.entries()]
+    .sort((a, b) => b[1].n - a[1].n || a[1].label.localeCompare(b[1].label))
+    .map(([id, v]) => ({ id, label: v.label }))
 
   // Brands that actually have live products (so deletes reflect), ordered
   // featured/partner brands first (then by sortOrder, then alphabetically) so the
@@ -110,7 +127,7 @@ export async function getPublicCatalog(): Promise<CatalogData> {
     .sort((a, b) => a.localeCompare(b))
     .map((id) => ({ id, label: TEST_TYPE_LABELS[id] ?? titleCase(id) }))
 
-  return { products, brands, brandLogos, industries: INDUSTRIES, testTypes }
+  return { products, brands, brandLogos, industries: INDUSTRIES, testTypes, categories }
 }
 
 /**

@@ -23,7 +23,8 @@ export default async function SiteChrome({ extraScripts = [] }: { extraScripts?:
     `window.BRANDS=${JSON.stringify(catalog.brands)};` +
     `window.BRAND_LOGOS=${JSON.stringify(catalog.brandLogos)};` +
     `window.INDUSTRIES=${JSON.stringify(catalog.industries)};` +
-    `window.TEST_TYPES=${JSON.stringify(catalog.testTypes)};`
+    `window.TEST_TYPES=${JSON.stringify(catalog.testTypes)};` +
+    `window.CATEGORIES=${JSON.stringify(catalog.categories)};`
   ).replace(/</g, '\\u003c')
   return (
     <>

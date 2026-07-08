@@ -62,6 +62,10 @@ export default async function ProductsPage() {
                   <h4>Test type</h4>
                   <div className="checkbox-list" data-filter="testTypes"></div>
                 </div>
+                <div className="products-sidebar__group">
+                  <h4>Category</h4>
+                  <div className="checkbox-list checkbox-list--scroll" data-filter="categories"></div>
+                </div>
                 <div className="products-sidebar__group products-sidebar__reset">
                   <button type="button" className="btn btn--ghost btn--sm" data-products-reset>Clear all filters</button>
                 </div>
