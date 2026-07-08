@@ -1,11 +1,14 @@
-import { getInstrumentCount } from '@/lib/counts'
+import { getCatalogCounts } from '@/lib/counts'
 import BrandMarquee from '@/components/site/BrandMarquee'
 import ClientMarquee from '@/components/site/ClientMarquee'
 
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const instrumentCount = await getInstrumentCount()
+  const { instruments: instrumentCount, brands: brandCount } = await getCatalogCounts()
+  // Hero names 3 flagship catalogue partners (Hitachi, Tanaka, Oxford); the rest
+  // of the live brands are "N more".
+  const moreBrands = Math.max(0, brandCount - 3)
 
   return (
     <main id="main">
@@ -30,7 +33,7 @@ export default async function HomePage() {
               <span className="word">and</span>
               <span className="word">labs.</span>
             </h1>
-            <p className="body-lg hero-banner__lede">Authorized partner for <strong>Hitachi · Tanaka · Oxford · KEM</strong> and 12 more specialist brands. <strong>{instrumentCount} analytical instruments</strong> in stock — XRF, flash point, distillation, NMR, FTIR — plus OEM spares, consumables and turnkey lab fit-outs. <strong>Same-day quotes. Working-day response.</strong></p>
+            <p className="body-lg hero-banner__lede">Authorized partner for <strong>Hitachi · Tanaka · Oxford · KEM</strong> and {moreBrands} more specialist brands. <strong>{instrumentCount} analytical instruments</strong> in stock — XRF, flash point, distillation, NMR, FTIR — plus OEM spares, consumables and turnkey lab fit-outs. <strong>Same-day quotes. Working-day response.</strong></p>
             <div className="hero-banner__cta hero-banner__fade-in">
               <a className="btn btn--accent btn--lg" href="/products">Browse {instrumentCount} instruments <span className="arrow">→</span></a>
               <a className="btn btn--inverse btn--lg" href="/contact">Talk to an expert</a>
@@ -298,7 +301,7 @@ export default async function HomePage() {
                   </svg>
                 </div>
                 <h3>Analytical instruments</h3>
-                <p>Authorized distribution for 16 specialist brands — XRF, flash point, distillation, mercury, NMR, FTIR, viscosity, RoHS and more. Full manufacturer warranty, factory-certified service.</p>
+                <p>Authorized distribution for {brandCount} specialist brands — XRF, flash point, distillation, mercury, NMR, FTIR, viscosity, RoHS and more. Full manufacturer warranty, factory-certified service.</p>
                 <a className="capability__link" href="/products">Browse {instrumentCount} instruments <span className="arrow">→</span></a>
               </article>
 

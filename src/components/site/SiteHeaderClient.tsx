@@ -7,6 +7,7 @@ type NavKey = 'home' | 'about' | 'products' | 'application' | 'services' | 'part
 
 export type SiteHeaderClientProps = {
   instrumentCount: number
+  brandCount: number
   firstName: string
   isAuthed: boolean
   dashboardHref: string
@@ -33,6 +34,7 @@ function navKeyForPath(pathname: string): NavKey | null {
 
 export default function SiteHeaderClient({
   instrumentCount,
+  brandCount,
   firstName,
   isAuthed,
   dashboardHref,
@@ -44,8 +46,9 @@ export default function SiteHeaderClient({
 }: SiteHeaderClientProps) {
   const pathname = usePathname() || '/'
   // Render the messages twice back-to-back so the marquee scrolls seamlessly.
-  // "{count}" is replaced with the live instrument count.
-  const tickerRun = [...ticker, ...ticker].map((m) => m.replace(/\{count\}/g, String(instrumentCount)))
+  // "{count}" -> live instrument count, "{brands}" -> live brand count.
+  const tickerRun = [...ticker, ...ticker].map((m) =>
+    m.replace(/\{count\}/g, String(instrumentCount)).replace(/\{brands\}/g, String(brandCount)))
   const active = navKeyForPath(pathname)
   const current = (key: NavKey) => (active === key ? { 'aria-current': 'page' as const } : {})
 

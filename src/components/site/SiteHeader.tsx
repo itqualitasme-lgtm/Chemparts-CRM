@@ -1,17 +1,17 @@
 import { getSessionUser } from '@/lib/auth/session'
 import { homePathFor } from '@/lib/auth/rbac'
-import { getInstrumentCount } from '@/lib/counts'
+import { getCatalogCounts } from '@/lib/counts'
 import { getCartCount } from '@/lib/cart'
 import { getTickerMessages, getContactInfo } from '@/lib/site-settings'
 import SiteHeaderClient from './SiteHeaderClient'
 
-// Server component: fetches session + instrument count + cart count (server-only
+// Server component: fetches session + catalog counts + cart count (server-only
 // data) and hands them to the client header, which derives the active nav item
 // from the current pathname and renders Next <Link>s for instant navigation.
 export default async function SiteHeader() {
-  const [user, instrumentCount, cartCount, ticker, contact] = await Promise.all([
+  const [user, counts, cartCount, ticker, contact] = await Promise.all([
     getSessionUser(),
-    getInstrumentCount(),
+    getCatalogCounts(),
     getCartCount(),
     getTickerMessages(),
     getContactInfo(),
@@ -20,7 +20,8 @@ export default async function SiteHeader() {
 
   return (
     <SiteHeaderClient
-      instrumentCount={instrumentCount}
+      instrumentCount={counts.instruments}
+      brandCount={counts.brands}
       firstName={firstName}
       isAuthed={!!user}
       dashboardHref={user ? homePathFor(user.role) : '/'}

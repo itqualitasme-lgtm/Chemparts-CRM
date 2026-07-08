@@ -3,12 +3,12 @@ import { db } from '@/lib/db'
 
 // Staff-editable site settings stored in the Setting table (key -> JSON value).
 
-/** Default header ticker messages. "{count}" is replaced with the live
- *  instrument count at render time. */
+/** Default header ticker messages. "{count}" -> live instrument count and
+ *  "{brands}" -> live brand count, replaced at render time. */
 export const DEFAULT_TICKER: string[] = [
   'AUTHORIZED PARTNER · Hitachi · Tanaka · Oxford Instruments · KEM',
   'WORLDWIDE SHIPPING · export-packed · insured · fully documented',
-  '{count} ANALYTICAL INSTRUMENTS · 16 brand partners · in stock',
+  '{count} ANALYTICAL INSTRUMENTS · {brands} brand partners · in stock',
   'STANDARDS · ASTM · ISO · IP · referenced on every quote',
   'SAME WORKING-DAY RESPONSE · enquiries answered worldwide',
   'OEM SPARE PARTS · genuine parts · shipped worldwide',

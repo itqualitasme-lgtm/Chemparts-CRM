@@ -1,4 +1,4 @@
-import { getInstrumentCount } from '@/lib/counts'
+import { getCatalogCounts } from '@/lib/counts'
 import SectionCards from './SectionCards'
 
 export const dynamic = 'force-dynamic'
@@ -9,7 +9,7 @@ export const metadata = {
 }
 
 export default async function ProductsPage() {
-  const instrumentCount = await getInstrumentCount()
+  const { instruments: instrumentCount, brands, industries } = await getCatalogCounts()
 
   return (
     <main id="main">
@@ -22,7 +22,7 @@ export default async function ProductsPage() {
             <div className="coord">
               <span>003 / CATALOG</span>
               <span data-catalog-count>{instrumentCount} INSTRUMENTS</span>
-              <span>16 BRANDS · 6 INDUSTRIES</span>
+              <span>{brands} BRANDS · {industries} INDUSTRIES</span>
             </div>
 
             <div className="section-head">
