@@ -23,8 +23,8 @@ export type CatalogProduct = {
   testTypes: string[]
   specs: Record<string, string>
   standards: string[]
-  overview: string
-  docs: { title: string; href: string }[]
+  overview?: string
+  docs?: { title: string; href: string }[]
 }
 
 export type CatalogData = {
@@ -65,10 +65,6 @@ export async function getPublicCatalog(): Promise<CatalogData> {
     const extra = (p.specs && typeof p.specs === 'object' && !Array.isArray(p.specs))
       ? (p.specs as Record<string, string>)
       : {}
-    const docs = p.datasheetUrl
-      ? [{ title: 'Datasheet (PDF)', href: p.datasheetUrl }]
-      : [{ title: 'Request datasheet by email', href: `mailto:info@chemparts-me.com?subject=Datasheet request — ${p.name}` }]
-
     // Resolve bare filenames to correct absolute paths (fixes imported catalog
     // images). The card grid uses `thumb` (640); the product page uses `images`
     // optimized to 1080 (WebP/AVIF + CDN-cached) — far smaller than the raw
@@ -76,7 +72,12 @@ export async function getPublicCatalog(): Promise<CatalogData> {
     const rawImages = (p.images.length ? p.images : p.image ? [p.image] : [])
       .map((im) => absImg(im))
       .filter((x): x is string => !!x)
+    const images = rawImages.map((im) => optimizedImg(im, 1080) as string)
 
+    // Payload trim (the whole catalogue is injected on every page): only carry
+    // detail-only fields that add real information. `overview` is dropped when it
+    // equals `desc` (the PDP falls back to desc), and `docs` is only sent for a
+    // real datasheet PDF — the PDP synthesises the "request by email" fallback.
     return {
       slug: p.slug,
       name: p.name,
@@ -85,14 +86,14 @@ export async function getPublicCatalog(): Promise<CatalogData> {
       image: absImg(p.image),
       thumb: optimizedImg(p.image, 640),
       brandLogo: p.brand.logo ? optimizedImg(p.brand.logo, 128) : null,
-      images: rawImages.map((im) => optimizedImg(im, 1080) as string),
+      images,
       desc: p.desc,
       industries: p.industries,
       testTypes: p.testTypes,
       specs: { ...baseSpecs, ...extra },
       standards: p.standards,
-      overview: p.overview || p.desc,
-      docs,
+      ...(p.overview && p.overview !== p.desc ? { overview: p.overview } : {}),
+      ...(p.datasheetUrl ? { docs: [{ title: 'Datasheet (PDF)', href: p.datasheetUrl }] } : {}),
     }
   })
 

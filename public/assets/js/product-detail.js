@@ -157,11 +157,16 @@ window.__cpProductDetailInit = function () {
 
   const docs = document.querySelector('[data-pdp-docs]');
   if (docs) {
-    const items = (product.docs || []).map(d => {
+    // The catalog payload only carries `docs` when there's a real datasheet PDF;
+    // otherwise synthesise the "request by email" link here (keeps the payload lean).
+    const docItems = (product.docs && product.docs.length) ? product.docs : [
+      { title: 'Request datasheet by email', href: `mailto:info@chemparts-me.com?subject=Datasheet request — ${product.name}` }
+    ];
+    const items = docItems.map(d => {
       const ext = /^https?:\/\//i.test(d.href) ? ' target="_blank" rel="noopener"' : '';
       return `<li><a href="${d.href}"${ext} class="btn btn--ghost btn--sm">${escape(d.title)} <span class="arrow">→</span></a></li>`;
     }).join('');
-    docs.innerHTML = `<ul style="list-style:none; padding:0; margin:0; display:grid; gap:12px;">${items || '<li class="text-muted">No public documentation. Contact us for application notes and SOPs.</li>'}</ul>`;
+    docs.innerHTML = `<ul style="list-style:none; padding:0; margin:0; display:grid; gap:12px;">${items}</ul>`;
   }
 
   // Related products
