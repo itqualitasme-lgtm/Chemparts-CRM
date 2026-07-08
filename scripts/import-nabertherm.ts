@@ -91,9 +91,9 @@ async function main() {
           if (url) uploaded.push(url)
         }
         if (uploaded.length) imgs += uploaded.length
-        // Glassware, tubes, vials and other labware are consumables; the
-        // instruments (testers, baths, analyzers) are equipment.
-        const ptype = (r.category === 'Glassware' || /\b(tube|vial|ampoule|pycnometer|flask|condenser|becher|beaker|glassware|test container)/i.test(r.name)) ? 'CONSUMABLE' : 'EQUIPMENT'
+        // Nabertherm sells only furnaces & ovens — all equipment. (The inherited
+        // "tube/vial/…" consumable rule wrongly matched "Tube Furnaces".)
+        const ptype = 'EQUIPMENT' as const
         await db.product.upsert({
           where: { slug: r.pslug },
           create: {
