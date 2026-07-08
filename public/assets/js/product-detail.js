@@ -8,11 +8,33 @@
 window.__cpProductDetailInit = function () {
   'use strict';
   if (!window.PRODUCTS) return;
+  // Only run on the product page — this script is loaded globally, so without
+  // this guard it would hydrate (and fetch detail for) PRODUCTS[0] on every page.
+  if (!document.querySelector('[data-pdp-main]')) return;
 
   const params = new URLSearchParams(window.location.search);
   const slug = params.get('slug');
   const product = window.PRODUCTS.find(p => p.slug === slug) || window.PRODUCTS[0];
   if (!product) return;
+
+  // The lean catalogue omits the heavy detail fields (gallery images, spec table,
+  // overview, docs). Merge them from cache if present; otherwise render now with
+  // safe fallbacks (single image, no specs) and fetch the detail, then re-run to
+  // paint the full page. The merge mutates the shared product object, so a second
+  // visit to the same product is instant.
+  const detailCache = window.__cpDetailCache || (window.__cpDetailCache = {});
+  if (detailCache[product.slug]) {
+    Object.assign(product, detailCache[product.slug]);
+  } else if (!product.__cpFetching) {
+    product.__cpFetching = true;
+    fetch('/api/catalog/detail?slug=' + encodeURIComponent(product.slug))
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => {
+        product.__cpFetching = false;
+        if (d) { detailCache[product.slug] = d; Object.assign(product, d); window.__cpProductDetailInit(); }
+      })
+      .catch(() => { product.__cpFetching = false; });
+  }
 
   const escape = window.__escapeHtml || (s => String(s));
 
@@ -26,9 +48,11 @@ window.__cpProductDetailInit = function () {
   if (crumb) crumb.textContent = product.name;
 
   // Brand / title / desc — show the brand logo when available, else the name.
+  // Logos are deduped into window.BRAND_LOGOS (not carried per product).
+  const brandLogo = (window.BRAND_LOGOS || {})[product.brand];
   document.querySelectorAll('[data-pdp-brand]').forEach((el) => {
-    if (product.brandLogo) {
-      el.innerHTML = `<img src="${product.brandLogo}" alt="${escape(product.brand)}" class="pdp-info__brandimg" loading="eager" decoding="async">`;
+    if (brandLogo) {
+      el.innerHTML = `<img src="${brandLogo}" alt="${escape(product.brand)}" class="pdp-info__brandimg" loading="eager" decoding="async">`;
       el.classList.add('pdp-info__brand--logo');
     } else {
       el.textContent = product.brand;

@@ -21,6 +21,7 @@ export default async function SiteChrome({ extraScripts = [] }: { extraScripts?:
   const catalogScript = (
     `window.PRODUCTS=${JSON.stringify(catalog.products)};` +
     `window.BRANDS=${JSON.stringify(catalog.brands)};` +
+    `window.BRAND_LOGOS=${JSON.stringify(catalog.brandLogos)};` +
     `window.INDUSTRIES=${JSON.stringify(catalog.industries)};` +
     `window.TEST_TYPES=${JSON.stringify(catalog.testTypes)};`
   ).replace(/</g, '\\u003c')

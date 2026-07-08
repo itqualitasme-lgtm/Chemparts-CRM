@@ -34,12 +34,14 @@
   function productCard(p) {
     const inds = (p.industries || []).join(',');
     const featuredPill = p.featured ? '<span class="pill pill--crimson">Featured</span>' : '';
+    // Brand logos are deduped into window.BRAND_LOGOS (not carried per product).
+    const brandLogo = (window.BRAND_LOGOS || {})[p.brand];
     return `
       <a class="card" href="/product?slug=${encodeURIComponent(p.slug)}" data-industry="${inds}">
         <div class="card__media">
           ${featuredPill}
           <img src="${p.thumb || p.image}" onerror="this.onerror=null;this.src='${p.image}'" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">
-          ${p.brandLogo ? `<span class="card__brandlogo"><img src="${p.brandLogo}" alt="${escapeHtml(p.brand)}" loading="lazy"></span>` : ''}
+          ${brandLogo ? `<span class="card__brandlogo"><img src="${brandLogo}" alt="${escapeHtml(p.brand)}" loading="lazy"></span>` : ''}
         </div>
         <div class="card__body">
           <span class="card__brand">${escapeHtml(p.brand)}</span>
@@ -481,11 +483,10 @@
           img.alt = p.brand + ' ' + p.name;
           name.textContent = p.name;
           if (link) link.href = `/product?slug=${encodeURIComponent(p.slug)}`;
-          const s = p.specs || {};
+          // `standards` is on the lean product; `specs` is detail-only (not injected).
           specs.innerHTML =
             `<tr><th>Make</th><td>${esc(p.brand)}</td></tr>` +
-            `<tr><th>Type</th><td>${esc(s.type || '—')}</td></tr>` +
-            `<tr><th>Standards</th><td>${esc(s.standards || '—')}</td></tr>`;
+            `<tr><th>Standards</th><td>${esc((p.standards || []).join(', ') || '—')}</td></tr>`;
           img.style.opacity = '1';
         };
         if (animate) {

@@ -9,6 +9,10 @@ import { absImg, optimizedImg } from '@/lib/img'
 // shape the site's client scripts (products-page.js, product-detail.js) expect.
 // This is why staff edits/deletes/logo uploads now reflect on the website.
 
+// LEAN list shape injected into window.PRODUCTS on every page. Detail-only fields
+// (images gallery, specs table, overview, docs) are NOT here — the product page
+// fetches them on demand from /api/catalog/detail (see getCatalogDetail). Brand
+// logos are deduped into window.BRAND_LOGOS (14 values, not one per product).
 export type CatalogProduct = {
   slug: string
   name: string
@@ -16,22 +20,26 @@ export type CatalogProduct = {
   featured?: boolean
   image: string | null
   thumb: string | null
-  brandLogo: string | null
-  images: string[]
   desc: string
   industries: string[]
   testTypes: string[]
-  specs: Record<string, string>
   standards: string[]
-  overview?: string
-  docs?: { title: string; href: string }[]
 }
 
 export type CatalogData = {
   products: CatalogProduct[]
   brands: string[]
+  brandLogos: Record<string, string>
   industries: { id: string; label: string }[]
   testTypes: { id: string; label: string }[]
+}
+
+/** Heavy detail-only fields for one product, fetched on demand by the PDP. */
+export type CatalogDetail = {
+  images: string[]
+  specs: Record<string, string>
+  overview?: string
+  docs?: { title: string; href: string }[]
 }
 
 // Taxonomy (INDUSTRIES / TEST_TYPE_LABELS) is imported from '@/lib/taxonomy' so
@@ -41,69 +49,51 @@ function titleCase(id: string): string {
   return id.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
-/** Live public catalog, shaped for the ported site's client scripts. */
+/** Rebuild the specs object the PDP renders (type/sample/standards/output). */
+function buildSpecs(p: { productType?: string | null; sample?: string | null; output?: string | null; standards: string[]; specs: unknown }): Record<string, string> {
+  const base: Record<string, string> = {}
+  if (p.productType) base.type = p.productType
+  if (p.sample) base.sample = p.sample
+  if (p.standards.length) base.standards = p.standards.join(', ')
+  if (p.output) base.output = p.output
+  const extra = (p.specs && typeof p.specs === 'object' && !Array.isArray(p.specs))
+    ? (p.specs as Record<string, string>)
+    : {}
+  return { ...base, ...extra }
+}
+
+/** Live public catalog (LEAN list), shaped for the ported site's client scripts. */
 export async function getPublicCatalog(): Promise<CatalogData> {
   const rows = await db.product.findMany({
     where: { active: true },
     orderBy: [{ featured: 'desc' }, { name: 'asc' }],
     select: {
-      slug: true, name: true, featured: true, image: true, images: true,
-      desc: true, overview: true, industries: true, testTypes: true, standards: true,
-      specs: true, productType: true, sample: true, output: true, datasheetUrl: true,
-      brand: { select: { name: true, logo: true } },
+      slug: true, name: true, featured: true, image: true,
+      desc: true, industries: true, testTypes: true, standards: true,
+      brand: { select: { name: true } },
     },
   })
 
-  const products: CatalogProduct[] = rows.map((p) => {
-    // Rebuild the specs object the PDP renders (type/sample/standards/output),
-    // then merge any extra rows stored in the Json `specs` column.
-    const baseSpecs: Record<string, string> = {}
-    if (p.productType) baseSpecs.type = p.productType
-    if (p.sample) baseSpecs.sample = p.sample
-    if (p.standards.length) baseSpecs.standards = p.standards.join(', ')
-    if (p.output) baseSpecs.output = p.output
-    const extra = (p.specs && typeof p.specs === 'object' && !Array.isArray(p.specs))
-      ? (p.specs as Record<string, string>)
-      : {}
-    // Resolve bare filenames to correct absolute paths (fixes imported catalog
-    // images). The card grid uses `thumb` (640); the product page uses `images`
-    // optimized to 1080 (WebP/AVIF + CDN-cached) — far smaller than the raw
-    // Supabase originals. `image` stays raw as an onerror fallback.
-    const rawImages = (p.images.length ? p.images : p.image ? [p.image] : [])
-      .map((im) => absImg(im))
-      .filter((x): x is string => !!x)
-    const images = rawImages.map((im) => optimizedImg(im, 1080) as string)
-
-    // Payload trim (the whole catalogue is injected on every page): only carry
-    // detail-only fields that add real information. `overview` is dropped when it
-    // equals `desc` (the PDP falls back to desc), and `docs` is only sent for a
-    // real datasheet PDF — the PDP synthesises the "request by email" fallback.
-    return {
-      slug: p.slug,
-      name: p.name,
-      brand: p.brand.name,
-      featured: p.featured || undefined,
-      image: absImg(p.image),
-      thumb: optimizedImg(p.image, 640),
-      brandLogo: p.brand.logo ? optimizedImg(p.brand.logo, 128) : null,
-      images,
-      desc: p.desc,
-      industries: p.industries,
-      testTypes: p.testTypes,
-      specs: { ...baseSpecs, ...extra },
-      standards: p.standards,
-      ...(p.overview && p.overview !== p.desc ? { overview: p.overview } : {}),
-      ...(p.datasheetUrl ? { docs: [{ title: 'Datasheet (PDF)', href: p.datasheetUrl }] } : {}),
-    }
-  })
+  const products: CatalogProduct[] = rows.map((p) => ({
+    slug: p.slug,
+    name: p.name,
+    brand: p.brand.name,
+    featured: p.featured || undefined,
+    image: absImg(p.image),
+    thumb: optimizedImg(p.image, 640),
+    desc: p.desc,
+    industries: p.industries,
+    testTypes: p.testTypes,
+    standards: p.standards,
+  }))
 
   // Brands that actually have live products (so deletes reflect), ordered
   // featured/partner brands first (then by sortOrder, then alphabetically) so the
-  // authorized partners head the website's Brand filter.
+  // authorized partners head the website's Brand filter. Logos are deduped here.
   const liveBrandNames = new Set(products.map((p) => p.brand))
   const brandMeta = await db.brand.findMany({
     where: { name: { in: [...liveBrandNames] } },
-    select: { name: true, featured: true, sortOrder: true },
+    select: { name: true, featured: true, sortOrder: true, logo: true },
   })
   const rank = new Map(brandMeta.map((b) => [b.name, b]))
   const brands = [...liveBrandNames].sort((a, b) => {
@@ -112,10 +102,40 @@ export async function getPublicCatalog(): Promise<CatalogData> {
       || (ma?.sortOrder ?? 0) - (mb?.sortOrder ?? 0)
       || a.localeCompare(b)
   })
+  const brandLogos: Record<string, string> = {}
+  for (const b of brandMeta) if (b.logo) brandLogos[b.name] = optimizedImg(b.logo, 128) as string
+
   const usedTestTypes = new Set(products.flatMap((p) => p.testTypes))
   const testTypes = Array.from(usedTestTypes)
     .sort((a, b) => a.localeCompare(b))
     .map((id) => ({ id, label: TEST_TYPE_LABELS[id] ?? titleCase(id) }))
 
-  return { products, brands, industries: INDUSTRIES, testTypes }
+  return { products, brands, brandLogos, industries: INDUSTRIES, testTypes }
+}
+
+/**
+ * Heavy detail-only fields for one product (gallery images, spec table,
+ * overview, docs). Served by /api/catalog/detail and merged into the lean
+ * product on the client when the product page renders.
+ */
+export async function getCatalogDetail(slug: string): Promise<CatalogDetail | null> {
+  const p = await db.product.findFirst({
+    where: { slug, active: true },
+    select: {
+      image: true, images: true, desc: true, overview: true,
+      standards: true, specs: true, productType: true, sample: true, output: true, datasheetUrl: true,
+    },
+  })
+  if (!p) return null
+
+  const rawImages = (p.images.length ? p.images : p.image ? [p.image] : [])
+    .map((im) => absImg(im))
+    .filter((x): x is string => !!x)
+
+  return {
+    images: rawImages.map((im) => optimizedImg(im, 1080) as string),
+    specs: buildSpecs(p),
+    ...(p.overview && p.overview !== p.desc ? { overview: p.overview } : {}),
+    ...(p.datasheetUrl ? { docs: [{ title: 'Datasheet (PDF)', href: p.datasheetUrl }] } : {}),
+  }
 }
