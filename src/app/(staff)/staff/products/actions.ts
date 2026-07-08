@@ -8,8 +8,25 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { productSchema, splitList, splitTags } from '@/lib/validation/product'
 import { slugify } from '@/lib/slug'
 import { INDUSTRY_IDS, TEST_TYPE_IDS } from '@/lib/taxonomy'
+import { categorizeProduct } from '@/lib/categorize'
 
 export type ProductState = { error?: string; fieldErrors?: Record<string, string[]> }
+
+/**
+ * Industry / test-type ids for a product: use the staff picks when present,
+ * else auto-derive from the name/description/brand so the public filters stay
+ * populated for newly-added products.
+ */
+function resolveTaxonomy(formData: FormData, d: { name: string; desc: string }, brandName?: string) {
+  const industries = pickIds(formData, 'industries', INDUSTRY_IDS)
+  const testTypes = pickIds(formData, 'testTypes', TEST_TYPE_IDS)
+  if (industries.length && testTypes.length) return { industries, testTypes }
+  const auto = categorizeProduct({ brand: brandName, name: d.name, desc: d.desc })
+  return {
+    industries: industries.length ? industries : auto.industries,
+    testTypes: testTypes.length ? testTypes : auto.testTypes,
+  }
+}
 
 /** Read a checkbox multi-select and keep only valid taxonomy ids. */
 function pickIds(formData: FormData, field: string, allowed: Set<string>): string[] {
@@ -84,9 +101,10 @@ export async function createProduct(_prev: ProductState, formData: FormData): Pr
   if (!parsed.success) return { fieldErrors: parsed.error.flatten().fieldErrors as Record<string, string[]> }
   const d = parsed.data
 
-  const brand = await db.brand.findUnique({ where: { id: d.brandId }, select: { id: true } })
+  const brand = await db.brand.findUnique({ where: { id: d.brandId }, select: { id: true, name: true } })
   if (!brand) return { error: 'Selected brand no longer exists.' }
 
+  const tax = resolveTaxonomy(formData, d, brand.name)
   const slug = await uniqueSlug(d.slug || d.name)
   const product = await db.product.create({
     data: {
@@ -97,10 +115,10 @@ export async function createProduct(_prev: ProductState, formData: FormData): Pr
       desc: d.desc,
       overview: d.overview || null,
       standards: splitList(d.standards),
-      industries: pickIds(formData, 'industries', INDUSTRY_IDS),
+      industries: tax.industries,
       tags: splitTags(d.tags),
       newUntil: d.newUntil ? new Date(d.newUntil) : null,
-      testTypes: pickIds(formData, 'testTypes', TEST_TYPE_IDS),
+      testTypes: tax.testTypes,
       productType: d.productType || null,
       sample: d.sample || null,
       output: d.output || null,
@@ -136,9 +154,10 @@ export async function updateProduct(id: string, _prev: ProductState, formData: F
   const existing = await db.product.findUnique({ where: { id }, select: { id: true, slug: true } })
   if (!existing) return { error: 'Product not found.' }
 
-  const brand = await db.brand.findUnique({ where: { id: d.brandId }, select: { id: true } })
+  const brand = await db.brand.findUnique({ where: { id: d.brandId }, select: { id: true, name: true } })
   if (!brand) return { error: 'Selected brand no longer exists.' }
 
+  const tax = resolveTaxonomy(formData, d, brand.name)
   const slug = d.slug ? await uniqueSlug(d.slug, id) : existing.slug
   await db.product.update({
     where: { id },
@@ -150,8 +169,8 @@ export async function updateProduct(id: string, _prev: ProductState, formData: F
       desc: d.desc,
       overview: d.overview || null,
       standards: splitList(d.standards),
-      industries: pickIds(formData, 'industries', INDUSTRY_IDS),
-      testTypes: pickIds(formData, 'testTypes', TEST_TYPE_IDS),
+      industries: tax.industries,
+      testTypes: tax.testTypes,
       tags: splitTags(d.tags),
       newUntil: d.newUntil ? new Date(d.newUntil) : null,
       productType: d.productType || null,

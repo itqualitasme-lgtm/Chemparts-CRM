@@ -96,8 +96,21 @@ export async function getPublicCatalog(): Promise<CatalogData> {
     }
   })
 
-  // Brands & test types that actually have live products (so deletes reflect).
-  const brands = Array.from(new Set(products.map((p) => p.brand))).sort((a, b) => a.localeCompare(b))
+  // Brands that actually have live products (so deletes reflect), ordered
+  // featured/partner brands first (then by sortOrder, then alphabetically) so the
+  // authorized partners head the website's Brand filter.
+  const liveBrandNames = new Set(products.map((p) => p.brand))
+  const brandMeta = await db.brand.findMany({
+    where: { name: { in: [...liveBrandNames] } },
+    select: { name: true, featured: true, sortOrder: true },
+  })
+  const rank = new Map(brandMeta.map((b) => [b.name, b]))
+  const brands = [...liveBrandNames].sort((a, b) => {
+    const ma = rank.get(a), mb = rank.get(b)
+    return Number(mb?.featured ?? false) - Number(ma?.featured ?? false)
+      || (ma?.sortOrder ?? 0) - (mb?.sortOrder ?? 0)
+      || a.localeCompare(b)
+  })
   const usedTestTypes = new Set(products.flatMap((p) => p.testTypes))
   const testTypes = Array.from(usedTestTypes)
     .sort((a, b) => a.localeCompare(b))
