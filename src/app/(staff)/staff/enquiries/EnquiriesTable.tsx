@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useState, useTransition } from 'react'
-import { updateEnquiryStatus, deleteEnquiry, assignSalesPerson } from './actions'
+import { updateEnquiryStatus, deleteEnquiry, assignSalesPerson, rejectAsSpam } from './actions'
 import CreateQuotationButton from './CreateQuotationButton'
 import DeleteButton from '@/components/DeleteButton'
 import Pager, { pageSlice } from '@/components/ui/Pager'
@@ -27,7 +27,7 @@ export type EnquiryRow = {
   quotations: { id: string; quotationNo: string }[]
 }
 
-const STATUSES = ['NEW', 'UNDER_REVIEW', 'QUOTED', 'WON', 'LOST'] as const
+const STATUSES = ['NEW', 'UNDER_REVIEW', 'QUOTED', 'WON', 'LOST', 'SPAM'] as const
 
 const STATUS_BADGE: Record<string, string> = {
   NEW: 'bg-amber-100 text-amber-800',
@@ -35,6 +35,7 @@ const STATUS_BADGE: Record<string, string> = {
   QUOTED: 'bg-indigo-100 text-indigo-800',
   WON: 'bg-green-100 text-green-800',
   LOST: 'bg-slate-200 text-slate-600',
+  SPAM: 'bg-rose-100 text-rose-700',
 }
 
 const TYPE_LABEL: Record<string, string> = {
@@ -69,7 +70,9 @@ export default function EnquiriesTable({ enquiries, isAdmin, salesPeople }: { en
 
   const filtered = useMemo(() => {
     let rows = enquiries
-    if (status !== 'ALL') rows = rows.filter((r) => r.status === status)
+    // "All statuses" hides spam — you only see it when you explicitly filter to it.
+    if (status === 'ALL') rows = rows.filter((r) => r.status !== 'SPAM')
+    else rows = rows.filter((r) => r.status === status)
     if (channel !== 'ALL') rows = rows.filter((r) => r.type === channel)
     const s = q.trim().toLowerCase()
     if (s) {
@@ -146,6 +149,12 @@ function Row({ e, isAdmin, salesPeople }: { e: EnquiryRow; isAdmin: boolean; sal
   const [assignee, setAssignee] = useState(e.salesPersonId)
   const [assigning, startAssign] = useTransition()
   const [assignMsg, setAssignMsg] = useState<{ ok?: boolean; error?: string }>({})
+  const [spamming, startSpam] = useTransition()
+
+  function reject() {
+    if (!window.confirm(`Mark ${e.enquiryNo} as spam? It will be hidden from the enquiries list.`)) return
+    startSpam(async () => { await rejectAsSpam(e.id) })
+  }
 
   function saveAssignee(next: string) {
     setAssignee(next)
@@ -309,6 +318,16 @@ function Row({ e, isAdmin, salesPeople }: { e: EnquiryRow; isAdmin: boolean; sal
                   </div>
                 ) : (
                   <CreateQuotationButton enquiryId={e.id} />
+                )}
+                {e.status !== 'SPAM' && (
+                  <button
+                    type="button"
+                    onClick={reject}
+                    disabled={spamming}
+                    className="rounded-lg border border-rose-300 px-3 py-1.5 text-xs font-medium text-rose-700 transition hover:bg-rose-50 disabled:opacity-40"
+                  >
+                    {spamming ? 'Rejecting…' : 'Reject as spam'}
+                  </button>
                 )}
                 {isAdmin && (
                   <DeleteButton

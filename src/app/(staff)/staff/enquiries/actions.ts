@@ -164,7 +164,20 @@ export async function createEnquiry(_prev: CreateEnquiryState, formData: FormDat
   redirect('/staff/enquiries')
 }
 
-const VALID: EnquiryStatus[] = ['NEW', 'UNDER_REVIEW', 'QUOTED', 'WON', 'LOST']
+const VALID: EnquiryStatus[] = ['NEW', 'UNDER_REVIEW', 'QUOTED', 'WON', 'LOST', 'SPAM']
+
+/** Staff one-click reject: mark an enquiry as spam. Never notifies the sender. */
+export async function rejectAsSpam(enquiryId: string): Promise<UpdateStatusState> {
+  const user = await requirePortal('staff')
+  const e = await db.enquiry.findUnique({ where: { id: enquiryId }, select: { id: true, enquiryNo: true } })
+  if (!e) return { error: 'Enquiry not found.' }
+  await db.enquiry.update({ where: { id: enquiryId }, data: { status: 'SPAM', lostReason: null } })
+  await db.auditLog.create({
+    data: { actorId: user.id, action: 'UPDATE', entity: 'Enquiry', entityId: enquiryId, detail: { status: 'SPAM', enquiryNo: e.enquiryNo } },
+  })
+  revalidatePath('/staff/enquiries')
+  return { ok: true }
+}
 
 /** Staff move an enquiry through its lifecycle (NEW → UNDER_REVIEW → QUOTED → WON/LOST). */
 export async function updateEnquiryStatus(
@@ -200,8 +213,8 @@ export async function updateEnquiryStatus(
 
   await db.enquiry.update({ where: { id: enquiryId }, data: { status, lostReason } })
 
-  // Tell the customer about meaningful status changes (not the internal LOST).
-  if (status !== enquiry.status && status !== 'LOST' && status !== 'NEW') {
+  // Tell the customer about meaningful status changes (not internal LOST/SPAM).
+  if (status !== enquiry.status && status !== 'LOST' && status !== 'SPAM' && status !== 'NEW') {
     const to = enquiry.guestEmail ?? enquiry.customer?.email ?? enquiry.customer?.contacts[0]?.email
     const name = enquiry.guestName ?? enquiry.customer?.companyName ?? 'there'
     after(() => notify(to, 'enquiry-status-update', { name, enquiryNo: enquiry.enquiryNo, status: status.replace(/_/g, ' ') }))

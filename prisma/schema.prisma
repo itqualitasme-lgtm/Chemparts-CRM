@@ -421,6 +421,7 @@ enum EnquiryStatus {
   QUOTED
   WON
   LOST
+  SPAM
 }
 
 // How the enquiry reached us — we get them many ways.
