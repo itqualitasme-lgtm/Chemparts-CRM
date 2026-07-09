@@ -14,6 +14,9 @@ export type EnquiryRow = {
   status: string
   who: string
   contactName: string | null
+  email: string | null
+  phone: string | null
+  company: string | null
   contactBits: string[]
   salesPerson: string | null
   salesPersonId: string
@@ -176,7 +179,12 @@ function Row({ e, isAdmin, salesPeople }: { e: EnquiryRow; isAdmin: boolean; sal
         </td>
         <td className="px-3 py-2">
           <div className="font-medium text-slate-800">{e.who}</div>
-          {e.contactName ? <div className="text-xs text-slate-500">{e.contactName}</div> : null}
+          {e.contactName && e.contactName !== e.who ? <div className="text-xs text-slate-500">{e.contactName}</div> : null}
+          {e.email ? (
+            <a href={`mailto:${e.email}`} className="block truncate text-xs text-[#0E7490] hover:underline" title={e.email}>{e.email}</a>
+          ) : (
+            <div className="text-xs text-slate-300">no email</div>
+          )}
         </td>
         <td className="px-3 py-2 text-center text-slate-600">{e.items.length}</td>
         <td className="px-3 py-2 text-slate-600">{e.salesPerson ?? <span className="text-slate-300">—</span>}</td>
@@ -243,6 +251,19 @@ function Row({ e, isAdmin, salesPeople }: { e: EnquiryRow; isAdmin: boolean; sal
                   {assignMsg.ok ? <span className="text-xs text-green-700">Assigned — emailed</span> : null}
                   {assignMsg.error ? <span className="text-xs text-red-600">{assignMsg.error}</span> : null}
                 </div>
+
+                {/* Contact details — so staff can reach the enquirer directly */}
+                {(e.email || e.phone || e.company) ? (
+                  <div className="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg bg-white px-3 py-2 text-sm ring-1 ring-slate-200">
+                    {e.email ? (
+                      <span><span className="text-slate-400">Email:</span> <a href={`mailto:${e.email}?subject=Re: ${e.enquiryNo}`} className="font-medium text-[#0E7490] hover:underline">{e.email}</a></span>
+                    ) : null}
+                    {e.phone ? (
+                      <span><span className="text-slate-400">Phone:</span> <a href={`tel:${e.phone}`} className="font-medium text-[#0E7490] hover:underline">{e.phone}</a></span>
+                    ) : null}
+                    {e.company ? <span><span className="text-slate-400">Company:</span> <span className="text-slate-700">{e.company}</span></span> : null}
+                  </div>
+                ) : null}
 
                 {e.status === 'LOST' && e.lostReason ? (
                   <p className="text-sm text-slate-600"><span className="text-slate-400">Lost reason:</span> {e.lostReason}</p>
