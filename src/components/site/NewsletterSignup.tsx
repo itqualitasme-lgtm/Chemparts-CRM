@@ -10,7 +10,7 @@ export default function NewsletterSignup() {
   if (state.ok) {
     return (
       <p style={{ fontSize: 14, color: '#9fb3c8', marginTop: 8 }}>
-        ✓ You're subscribed. Watch your inbox for product news and offers.
+        ✓ Almost there — check your inbox and click the link to confirm your subscription.
       </p>
     )
   }

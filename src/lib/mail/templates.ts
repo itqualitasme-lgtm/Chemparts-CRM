@@ -133,6 +133,16 @@ ${button(v.link, 'Open enquiries')}`,
         `<p style="color:#66788a;font-size:12px;margin-top:28px;border-top:1px solid #e6e9ee;padding-top:14px">You're receiving this because you subscribed to Chemparts updates. <a href="${esc(v.unsubscribeUrl)}" style="color:#66788a">Unsubscribe</a>.</p>`,
     ),
   }),
+  'newsletter-confirm': (v) => ({
+    subject: `Confirm your subscription — Chemparts`,
+    html: layout(
+      'One more step — confirm your email',
+      `<p>Hello${v.name && v.name !== 'there' ? ` ${esc(v.name)}` : ''},</p>
+<p>Please confirm you'd like to receive Chemparts product news, promotions and offers. We won't send anything until you click below.</p>
+${button(v.confirmUrl, 'Confirm subscription')}
+<p style="color:#66788a;font-size:13px;margin-top:20px">If you didn't request this, just ignore this email — no subscription will be created.</p>`,
+    ),
+  }),
   'newsletter-welcome': (v) => ({
     subject: `You're subscribed — Chemparts updates & offers`,
     html: layout(

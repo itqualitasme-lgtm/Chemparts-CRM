@@ -3,22 +3,35 @@
 import { useTransition } from 'react'
 import { toggleSubscriber, removeSubscriber } from './actions'
 
-type Sub = { id: string; email: string; name: string | null; source: string | null; active: boolean; createdAt: string }
+type Sub = { id: string; email: string; name: string | null; source: string | null; active: boolean; confirmedAt: string | null; createdAt: string }
+
+// active === confirmed (only set true once the opt-in link is clicked).
+// Pending = signed up but never confirmed; Unsubscribed = previously confirmed then opted out.
+function statusOf(s: Sub): 'confirmed' | 'pending' | 'unsubscribed' {
+  if (s.active) return 'confirmed'
+  return s.confirmedAt ? 'unsubscribed' : 'pending'
+}
 
 export default function Subscribers({ subs }: { subs: Sub[] }) {
   const [busy, start] = useTransition()
 
+  const confirmed = subs.filter((s) => s.active)
+  const pending = subs.filter((s) => statusOf(s) === 'pending')
+
   function copyEmails() {
-    const list = subs.filter((s) => s.active).map((s) => s.email).join(', ')
+    // Only confirmed, opted-in addresses are campaign-safe.
+    const list = confirmed.map((s) => s.email).join(', ')
     navigator.clipboard?.writeText(list)
   }
 
   return (
     <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
       <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5">
-        <span className="text-sm text-slate-500">{subs.filter((s) => s.active).length} active · {subs.length} total</span>
+        <span className="text-sm text-slate-500">
+          {confirmed.length} confirmed{pending.length ? ` · ${pending.length} pending` : ''} · {subs.length} total
+        </span>
         <button type="button" onClick={copyEmails} className="text-xs font-medium text-[#0E7490] hover:underline">
-          Copy active emails
+          Copy confirmed emails
         </button>
       </div>
       <table className="w-full min-w-[520px] text-sm">
@@ -38,14 +51,23 @@ export default function Subscribers({ subs }: { subs: Sub[] }) {
               <td className="px-4 py-2.5 text-slate-600">{s.name || '—'}</td>
               <td className="px-4 py-2.5 text-slate-500">{s.source || '—'}</td>
               <td className="px-4 py-2.5">
-                <button
-                  type="button"
-                  disabled={busy}
-                  onClick={() => start(() => toggleSubscriber(s.id, !s.active))}
-                  className={`text-xs underline disabled:opacity-60 ${s.active ? 'text-green-700' : 'text-slate-400'}`}
-                >
-                  {s.active ? 'Subscribed' : 'Unsubscribed'}
-                </button>
+                {statusOf(s) === 'pending' ? (
+                  <span
+                    title="Signed up but hasn't clicked the confirmation email yet — excluded from campaigns."
+                    className="rounded bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800"
+                  >
+                    Pending
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => start(() => toggleSubscriber(s.id, !s.active))}
+                    className={`text-xs underline disabled:opacity-60 ${s.active ? 'text-green-700' : 'text-slate-400'}`}
+                  >
+                    {s.active ? 'Confirmed' : 'Unsubscribed'}
+                  </button>
+                )}
               </td>
               <td className="px-4 py-2.5 text-right">
                 <button

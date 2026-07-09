@@ -23,6 +23,24 @@ function isGibberishToken(value: string | null | undefined): boolean {
   return vowelRatio < 0.28 || manyCaseSwitches
 }
 
+/**
+ * True when an email address itself looks machine-generated. Catches the
+ * Gmail dot-injection trick bots use to spam a signup form with endless
+ * "unique" addresses that all deliver to one inbox (e.g. "n.as.s.erb.aw.a.b.13"),
+ * and other heavily-dotted local parts.
+ */
+export function isBotEmail(email: string | null | undefined): boolean {
+  const [local, domain] = (email ?? '').toLowerCase().trim().split('@')
+  if (!local || !domain) return false
+  const dots = (local.match(/\./g) || []).length
+  const isGmail = domain === 'gmail.com' || domain === 'googlemail.com'
+  // Gmail ignores dots, so 3+ of them is a deliberate abuse pattern.
+  if (isGmail && dots >= 3) return true
+  // Four or more single-char dotted tokens anywhere is bot-fill.
+  if (/(\.[a-z0-9]){4,}/.test(local)) return true
+  return false
+}
+
 /** True when a public-form submission is almost certainly spam. */
 export function looksLikeSpam(fields: {
   name?: string | null

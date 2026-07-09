@@ -220,6 +220,8 @@ model Subscriber {
   name             String?
   source           String? // e.g. "website-footer"
   active           Boolean  @default(true) // false = unsubscribed
+  confirmedAt      DateTime? // set when the double opt-in link is clicked; null = pending
+  confirmToken     String?  @unique // one-time token for the confirmation link
   unsubscribeToken String   @unique @default(cuid())
   createdAt        DateTime @default(now())
 
