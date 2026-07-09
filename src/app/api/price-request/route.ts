@@ -16,6 +16,7 @@ export async function POST(req: Request) {
   const str = (v: unknown) => (typeof v === 'string' ? v.trim() : '')
   const name = str(body.name)
   const email = str(body.email)
+  const phone = str(body.phone) || null
   const company = str(body.company) || null
   const slug = str(body.slug)
   const message = str(body.message) || null
@@ -35,7 +36,9 @@ export async function POST(req: Request) {
       guestName: name,
       guestEmail: email,
       qty,
-      message: company ? `${message ? message + '\n\n' : ''}Company: ${company}` : message,
+      message: [message, company ? `Company: ${company}` : null, phone ? `Phone: ${phone}` : null]
+        .filter(Boolean)
+        .join('\n\n') || null,
       status: 'OPEN',
     },
   })

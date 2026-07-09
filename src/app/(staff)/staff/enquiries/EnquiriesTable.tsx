@@ -217,71 +217,90 @@ function Row({ e, isAdmin, salesPeople }: { e: EnquiryRow; isAdmin: boolean; sal
           <td colSpan={8} className="px-3 py-4">
             <div className="grid gap-4 md:grid-cols-[1fr_auto]">
               <div className="space-y-3">
-                {/* Status editor */}
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-medium text-slate-500">Status</span>
-                  <select value={draft} onChange={(ev) => setDraft(ev.target.value)} className={selectCls}>
-                    {STATUSES.map((s) => <option key={s} value={s}>{label(s)}</option>)}
-                  </select>
-                  {draft === 'LOST' && (
-                    <input
-                      value={reason}
-                      onChange={(ev) => setReason(ev.target.value)}
-                      placeholder="Reason lost (e.g. price, competitor, no budget)"
-                      className={`${selectCls} min-w-[16rem] flex-1`}
-                    />
-                  )}
-                  <button
-                    type="button"
-                    onClick={save}
-                    disabled={pending || !canSave}
-                    className="rounded-lg bg-[#0A2540] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#123a63] disabled:opacity-40"
-                  >
-                    {pending ? 'Saving…' : 'Save'}
-                  </button>
-                  {msg.ok ? <span className="text-xs text-green-700">Saved</span> : null}
-                  {msg.error ? <span className="text-xs text-red-600">{msg.error}</span> : null}
+                {/* Contact card — the first thing staff need: who they are and how to reach them. */}
+                <div className="rounded-lg bg-white ring-1 ring-slate-200">
+                  <div className="border-b border-slate-100 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Contact</div>
+                  <dl className="grid grid-cols-1 gap-x-6 gap-y-2 px-3 py-2.5 text-sm sm:grid-cols-2">
+                    <div className="flex gap-2">
+                      <dt className="w-20 shrink-0 text-slate-400">Person</dt>
+                      <dd className="min-w-0 font-medium text-slate-800">{e.contactName || e.who}</dd>
+                    </div>
+                    <div className="flex gap-2">
+                      <dt className="w-20 shrink-0 text-slate-400">Company</dt>
+                      <dd className="min-w-0 truncate text-slate-700">{e.company || <span className="text-slate-300">—</span>}</dd>
+                    </div>
+                    <div className="flex gap-2">
+                      <dt className="w-20 shrink-0 text-slate-400">Email</dt>
+                      <dd className="min-w-0 truncate">
+                        {e.email ? <a href={`mailto:${e.email}?subject=Re: ${e.enquiryNo}`} className="font-medium text-[#0E7490] hover:underline">{e.email}</a> : <span className="text-slate-300">—</span>}
+                      </dd>
+                    </div>
+                    <div className="flex gap-2">
+                      <dt className="w-20 shrink-0 text-slate-400">Phone</dt>
+                      <dd className="min-w-0 truncate">
+                        {e.phone ? <a href={`tel:${e.phone}`} className="font-medium text-[#0E7490] hover:underline">{e.phone}</a> : <span className="text-slate-300">not provided</span>}
+                      </dd>
+                    </div>
+                  </dl>
                 </div>
 
-                {/* Sales-person assignment (emails the assignee) */}
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-medium text-slate-500">Sales person</span>
-                  <select
-                    value={assignee}
-                    onChange={(ev) => saveAssignee(ev.target.value)}
-                    disabled={assigning}
-                    className={selectCls}
-                    aria-label="Assign sales person"
-                  >
-                    <option value="">— Unassigned —</option>
-                    {salesPeople.map((sp) => <option key={sp.id} value={sp.id}>{sp.name}</option>)}
-                  </select>
-                  {assigning ? <span className="text-xs text-slate-400">Saving…</span> : null}
-                  {assignMsg.ok ? <span className="text-xs text-green-700">Assigned — emailed</span> : null}
-                  {assignMsg.error ? <span className="text-xs text-red-600">{assignMsg.error}</span> : null}
-                </div>
-
-                {/* Contact details — so staff can reach the enquirer directly */}
-                {(e.email || e.phone || e.company) ? (
-                  <div className="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg bg-white px-3 py-2 text-sm ring-1 ring-slate-200">
-                    {e.email ? (
-                      <span><span className="text-slate-400">Email:</span> <a href={`mailto:${e.email}?subject=Re: ${e.enquiryNo}`} className="font-medium text-[#0E7490] hover:underline">{e.email}</a></span>
-                    ) : null}
-                    {e.phone ? (
-                      <span><span className="text-slate-400">Phone:</span> <a href={`tel:${e.phone}`} className="font-medium text-[#0E7490] hover:underline">{e.phone}</a></span>
-                    ) : null}
-                    {e.company ? <span><span className="text-slate-400">Company:</span> <span className="text-slate-700">{e.company}</span></span> : null}
+                {/* Controls: status (+ lost reason) and, for non-website channels, sales-person assignment. */}
+                <div className="space-y-2.5 rounded-lg bg-white px-3 py-3 ring-1 ring-slate-200">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="w-24 text-xs font-medium text-slate-500">Status</span>
+                    <select value={draft} onChange={(ev) => setDraft(ev.target.value)} className={selectCls}>
+                      {STATUSES.map((s) => <option key={s} value={s}>{label(s)}</option>)}
+                    </select>
+                    {draft === 'LOST' && (
+                      <input
+                        value={reason}
+                        onChange={(ev) => setReason(ev.target.value)}
+                        placeholder="Reason lost (e.g. price, competitor, no budget)"
+                        className={`${selectCls} min-w-[16rem] flex-1`}
+                      />
+                    )}
+                    <button
+                      type="button"
+                      onClick={save}
+                      disabled={pending || !canSave}
+                      className="rounded-lg bg-[#0A2540] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#123a63] disabled:opacity-40"
+                    >
+                      {pending ? 'Saving…' : 'Save'}
+                    </button>
+                    {msg.ok ? <span className="text-xs text-green-700">Saved</span> : null}
+                    {msg.error ? <span className="text-xs text-red-600">{msg.error}</span> : null}
                   </div>
-                ) : null}
+
+                  {/* Website enquiries are handled by the shared team, so no per-lead sales-person assignment. */}
+                  {e.type !== 'WEBSITE' && (
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="w-24 text-xs font-medium text-slate-500">Sales person</span>
+                      <select
+                        value={assignee}
+                        onChange={(ev) => saveAssignee(ev.target.value)}
+                        disabled={assigning}
+                        className={selectCls}
+                        aria-label="Assign sales person"
+                      >
+                        <option value="">— Unassigned —</option>
+                        {salesPeople.map((sp) => <option key={sp.id} value={sp.id}>{sp.name}</option>)}
+                      </select>
+                      {assigning ? <span className="text-xs text-slate-400">Saving…</span> : null}
+                      {assignMsg.ok ? <span className="text-xs text-green-700">Assigned — emailed</span> : null}
+                      {assignMsg.error ? <span className="text-xs text-red-600">{assignMsg.error}</span> : null}
+                    </div>
+                  )}
+                </div>
 
                 {e.status === 'LOST' && e.lostReason ? (
                   <p className="text-sm text-slate-600"><span className="text-slate-400">Lost reason:</span> {e.lostReason}</p>
                 ) : null}
 
                 {e.message ? (
-                  <p className="rounded-lg bg-white px-3 py-2 text-sm text-slate-600 ring-1 ring-slate-200">
-                    <span className="text-slate-400">Message:</span> {e.message}
-                  </p>
+                  <div className="rounded-lg bg-white ring-1 ring-slate-200">
+                    <div className="border-b border-slate-100 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Message</div>
+                    <p className="whitespace-pre-line px-3 py-2.5 text-sm leading-relaxed text-slate-600">{e.message}</p>
+                  </div>
                 ) : null}
 
                 {/* Items */}

@@ -267,6 +267,7 @@
         const name = (fd.get('name') || '').toString().trim();
         const company = (fd.get('company') || '').toString().trim();
         const email = (fd.get('email') || '').toString().trim();
+        const phone = (fd.get('phone') || '').toString().trim();
         const slug = (fd.get('instrument') || '').toString().trim();
         const message = (fd.get('message') || '').toString().trim();
         const website = (fd.get('website') || '').toString().trim(); // honeypot
@@ -274,8 +275,8 @@
         const mode = quoteForm.dataset.mode === 'price' ? 'price' : 'quote';
         const endpoint = mode === 'price' ? '/api/price-request' : '/api/quote-enquiry';
         const payload = mode === 'price'
-          ? { name, company, email, slug, qty: 1, message }
-          : { name, company, email, instrument: slug, message, website };
+          ? { name, company, email, phone, slug, qty: 1, message }
+          : { name, company, email, phone, instrument: slug, message, website };
 
         const submitBtn = quoteForm.querySelector('button[type="submit"]');
         if (submitBtn) { submitBtn.disabled = true; submitBtn.dataset.busy = 'true'; }

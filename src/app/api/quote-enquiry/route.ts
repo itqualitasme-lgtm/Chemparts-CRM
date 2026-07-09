@@ -18,6 +18,7 @@ export async function POST(req: Request) {
   const str = (v: unknown) => (typeof v === 'string' ? v.trim() : '')
   const name = str(body.name)
   const email = str(body.email)
+  const phone = str(body.phone) || null
   const company = str(body.company) || null
   const instrument = str(body.instrument)
   const messageRaw = str(body.message)
@@ -44,6 +45,7 @@ export async function POST(req: Request) {
       contactName: name,
       guestName: name,
       guestEmail: email,
+      guestPhone: phone,
       guestCompany: company,
       message,
       status: 'NEW',
