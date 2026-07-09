@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { db } from '@/lib/db'
 import { productImageUrl } from '@/lib/product-image'
 import PageHeader from '@/components/ui/PageHeader'
+import DeleteButton from '@/components/DeleteButton'
+import { deleteProduct } from './actions'
 import type { Prisma } from '@/generated/prisma/client'
 
 export const metadata = { title: 'Products — Chemparts Staff' }
@@ -9,10 +11,15 @@ export const dynamic = 'force-dynamic'
 
 const PAGE_SIZE = 25
 
-const TYPE_BADGE: Record<string, string> = {
-  EQUIPMENT: 'bg-slate-100 text-slate-700',
-  SPARE_PART: 'bg-amber-100 text-amber-800',
-  CONSUMABLE: 'bg-sky-100 text-sky-800',
+const TYPE_LABEL: Record<string, string> = {
+  EQUIPMENT: 'Equipment',
+  SPARE_PART: 'Spare part',
+  CONSUMABLE: 'Consumable',
+}
+const STOCK: Record<string, { label: string; cls: string }> = {
+  IN_STOCK: { label: 'In stock', cls: 'text-green-700' },
+  ON_ORDER: { label: 'On order', cls: 'text-amber-600' },
+  OUT_OF_STOCK: { label: 'Out of stock', cls: 'text-red-600' },
 }
 const TYPES = [
   { value: '', label: 'All types' },
@@ -56,7 +63,7 @@ export default async function StaffProductsPage({
       where,
       select: {
         id: true, slug: true, name: true, type: true, active: true, featured: true, modelNo: true,
-        image: true, listPrice: true, currency: true, brand: { select: { name: true } },
+        image: true, listPrice: true, currency: true, stockStatus: true, brand: { select: { name: true } },
       },
       orderBy: [{ updatedAt: 'desc' }],
       skip: (page - 1) * PAGE_SIZE,
@@ -99,8 +106,9 @@ export default async function StaffProductsPage({
         title="Products"
         subtitle={`${total} products in the catalog.`}
         action={
-          <Link href="/staff/products/new" className="rounded-md bg-[#0A2540] px-3 py-1.5 text-[13px] font-medium text-white transition hover:bg-[#123a63]">
-            + New product
+          <Link href="/staff/products/new" className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A2540] px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-[#123a63]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3.5v9M3.5 8h9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
+            Add product
           </Link>
         }
       />
@@ -140,61 +148,77 @@ export default async function StaffProductsPage({
         )}
       </form>
 
-      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-200 bg-slate-50 text-left text-slate-600">
-              <th className="px-4 py-2.5 font-medium"></th>
-              <th className="px-4 py-2.5 font-medium">Name</th>
-              <th className="px-4 py-2.5 font-medium">Model no.</th>
-              <th className="px-4 py-2.5 font-medium">Brand</th>
-              <th className="px-4 py-2.5 font-medium">Type</th>
-              <th className="px-4 py-2.5 font-medium">Price</th>
-              <th className="px-4 py-2.5 font-medium">Status</th>
-              <th className="px-4 py-2.5"></th>
+            <tr className="border-b border-slate-200 bg-slate-50 text-left text-[11px] font-semibold uppercase tracking-[0.06em] text-slate-500">
+              <th className="px-5 py-3">Name</th>
+              <th className="px-5 py-3">Type</th>
+              <th className="px-5 py-3">Price</th>
+              <th className="px-5 py-3">Stock</th>
+              <th className="px-5 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((p) => (
-              <tr key={p.id} className="border-b border-slate-100 last:border-0">
-                <td className="py-2 pl-4">
-                  <div className="flex h-11 w-14 items-center justify-center overflow-hidden rounded border border-slate-200 bg-white">
-                    {productImageUrl(p.image) ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={productImageUrl(p.image)!} alt="" className="max-h-10 max-w-full object-contain" />
-                    ) : (
-                      <span className="text-[9px] text-slate-300">no image</span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-4 py-2.5 font-medium text-slate-800">{p.name}</td>
-                <td className="px-4 py-2.5 font-mono text-xs text-slate-600">{p.modelNo || <span className="text-slate-300">—</span>}</td>
-                <td className="px-4 py-2.5 text-slate-600">{p.brand.name}</td>
-                <td className="px-4 py-2.5">
-                  <span className={`rounded px-2 py-0.5 text-xs ${TYPE_BADGE[p.type]}`}>
-                    {p.type.replace('_', ' ').toLowerCase()}
-                  </span>
-                </td>
-                <td className="px-4 py-2.5 text-slate-600">
-                  {p.listPrice != null ? `${p.currency} ${Number(p.listPrice).toFixed(2)}` : '—'}
-                </td>
-                <td className="px-4 py-2.5">
-                  {p.active ? (
-                    <span className="text-xs text-green-700">Active</span>
-                  ) : (
-                    <span className="text-xs text-slate-400">Hidden</span>
-                  )}
-                </td>
-                <td className="px-4 py-2.5 text-right">
-                  <Link href={`/staff/products/${p.id}${fromParam}`} className="text-[#0A2540] underline">
-                    Edit
-                  </Link>
-                </td>
-              </tr>
-            ))}
+            {rows.map((p) => {
+              const stock = STOCK[p.stockStatus] ?? STOCK.IN_STOCK
+              const img = productImageUrl(p.image)
+              return (
+                <tr key={p.id} className="border-b border-slate-100 transition last:border-0 hover:bg-slate-50/70">
+                  {/* Name = two-line: name + brand, with a small thumbnail */}
+                  <td className="px-5 py-3.5">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-md border border-slate-200 bg-white">
+                        {img ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={img} alt="" className="max-h-9 max-w-full object-contain" />
+                        ) : (
+                          <span className="text-[8px] text-slate-300">—</span>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-slate-800">{p.name}</div>
+                        <div className="truncate text-xs text-slate-500">
+                          {p.brand.name}
+                          {p.modelNo ? <span className="ml-1.5 font-mono text-slate-400">· {p.modelNo}</span> : null}
+                          {!p.active ? <span className="ml-1.5 text-slate-400">· Hidden</span> : null}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-5 py-3.5 text-slate-600">{TYPE_LABEL[p.type] ?? p.type}</td>
+                  <td className="px-5 py-3.5 tabular-nums text-slate-700">
+                    {p.listPrice != null ? `${p.currency} ${Number(p.listPrice).toLocaleString('en-US')}` : <span className="text-slate-500">On request</span>}
+                  </td>
+                  <td className="px-5 py-3.5">
+                    <span className={`text-[13px] font-medium ${stock.cls}`}>{stock.label}</span>
+                  </td>
+                  <td className="px-5 py-3.5">
+                    <div className="flex items-center justify-end gap-1">
+                      <Link
+                        href={`/staff/products/${p.id}${fromParam}`}
+                        title="Edit"
+                        aria-label={`Edit ${p.name}`}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M11.5 2.5l2 2L6 12l-2.5.5L4 10l7.5-7.5z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" /></svg>
+                      </Link>
+                      <DeleteButton
+                        action={deleteProduct.bind(null, p.id, currentListUrl)}
+                        title={`Delete ${p.name}`}
+                        confirmText={`Delete "${p.name}"? This cannot be undone.`}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 4.5h10M6.5 4V3h3v1M5 4.5l.5 8h5l.5-8" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      </DeleteButton>
+                    </div>
+                  </td>
+                </tr>
+              )
+            })}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-slate-500">
+                <td colSpan={5} className="px-5 py-10 text-center text-slate-500">
                   No products match your filters.
                 </td>
               </tr>

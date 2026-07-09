@@ -1,27 +1,34 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, type ReactNode } from 'react'
 
 // Admin-only destructive action button. `action` is a bound server action that
 // deletes the entity and either redirects (success) or returns { error }. Guards
-// with a confirm() and surfaces any returned error inline.
+// with a confirm() and surfaces any returned error inline. Pass `children` (e.g.
+// a trash icon) + `title` to render it as an icon-only action.
 export default function DeleteButton({
   action,
   label = 'Delete',
   confirmText = 'Are you sure? This cannot be undone.',
   className,
+  children,
+  title,
 }: {
   action: () => Promise<{ error?: string } | void>
   label?: string
   confirmText?: string
   className?: string
+  children?: ReactNode
+  title?: string
 }) {
   const [pending, start] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
   return (
-    <div>
+    <div className={children ? 'inline-block' : undefined}>
       <button
+        title={title}
+        aria-label={title || (typeof label === 'string' ? label : undefined)}
         type="button"
         disabled={pending}
         onClick={() => {
@@ -37,7 +44,7 @@ export default function DeleteButton({
           'rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-50 disabled:opacity-60'
         }
       >
-        {pending ? 'Deleting…' : label}
+        {pending ? (children ? '…' : 'Deleting…') : (children ?? label)}
       </button>
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>
