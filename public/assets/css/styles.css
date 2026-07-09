@@ -1425,6 +1425,16 @@ html.modal-locked body { overflow: hidden; touch-action: none; }
   outline-offset: 2px;
 }
 .btn:focus-visible { outline-offset: 3px; }
+/* Restore the keyboard focus ring on inputs whose :focus rule sets outline:none
+   (search box + .field form controls) — the border-color change alone is a weak
+   focus indicator. focus-visible keeps mouse clicks clean. */
+.field input:focus-visible,
+.field textarea:focus-visible,
+.field select:focus-visible,
+.products-sidebar input[type="search"]:focus-visible {
+  outline: 2px solid var(--crimson);
+  outline-offset: 2px;
+}
 
 /* Reveal on scroll */
 /* Staggered reveal: container with [data-stagger] hides children, then JS adds .is-staggered to fade them in one-by-one */
@@ -3223,6 +3233,12 @@ figure[data-reveal][data-shown="true"] img,
   font-size: 13px;
   cursor: pointer;
   color: var(--ink);
+}
+/* Touch devices: enlarge filter rows + pager to the 44px tap-target minimum.
+   Desktop (fine pointer) stays compact. */
+@media (pointer: coarse) {
+  .checkbox-list label { padding: 8px 2px; }
+  .products-pager__btn { min-height: 44px; }
 }
 .checkbox-list input { accent-color: var(--navy); }
 .checkbox-list .count {
