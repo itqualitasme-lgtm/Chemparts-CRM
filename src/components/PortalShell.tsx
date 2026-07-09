@@ -156,7 +156,7 @@ export default async function PortalShell({
         <div className="border-b border-white/10 px-4 py-4 text-white">
           <PortalLogoLink label={PORTAL_LABEL[portal]} />
         </div>
-        <div className="flex-1 overflow-y-auto px-2.5 py-3">
+        <div className="sidebar-scroll flex-1 overflow-y-auto px-2.5 py-3">
           <PortalNavList groups={groups} theme="dark" />
         </div>
         <div className="border-t border-white/10 px-3 py-3">
