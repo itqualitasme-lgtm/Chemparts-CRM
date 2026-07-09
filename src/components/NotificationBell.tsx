@@ -33,7 +33,7 @@ function timeAgo(iso: string): string {
   return `${d}d ago`
 }
 
-export default function NotificationBell({ items, unread }: { items: BellItem[]; unread: number }) {
+export default function NotificationBell({ items, unread, placement = 'topbar' }: { items: BellItem[]; unread: number; placement?: 'topbar' | 'sidebar' }) {
   const [open, setOpen] = useState(false)
   const [pending, start] = useTransition()
   const ref = useRef<HTMLDivElement>(null)
@@ -85,7 +85,7 @@ export default function NotificationBell({ items, unread }: { items: BellItem[];
       </button>
 
       {open ? (
-        <div className="absolute right-0 top-10 z-50 w-80 max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-lg border border-slate-200 bg-white text-slate-800 shadow-xl">
+        <div className={`absolute z-50 w-80 max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-lg border border-slate-200 bg-white text-slate-800 shadow-xl ${placement === 'sidebar' ? 'bottom-10 left-0' : 'right-0 top-10'}`}>
           <div className="flex items-center justify-between border-b border-slate-100 px-3 py-2">
             <span className="text-sm font-semibold text-slate-800">Notifications</span>
             {unread > 0 ? (
