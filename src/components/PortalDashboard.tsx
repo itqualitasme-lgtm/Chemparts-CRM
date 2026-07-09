@@ -7,7 +7,7 @@ function fmtDate(d: Date): string {
   return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
 }
 
-function RecentList({ title, rows, hrefFor, viewAll }: { title: string; rows: RecentRow[]; hrefFor: (r: RecentRow) => string; viewAll: string }) {
+function RecentList({ title, rows, hrefFor, viewAll, emptyText, emptyAction }: { title: string; rows: RecentRow[]; hrefFor: (r: RecentRow) => string; viewAll: string; emptyText: string; emptyAction?: { label: string; href: string } }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-white">
       <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
@@ -15,7 +15,15 @@ function RecentList({ title, rows, hrefFor, viewAll }: { title: string; rows: Re
         <Link href={viewAll} className="text-xs font-medium text-[#0A2540] hover:underline">View all →</Link>
       </div>
       {rows.length === 0 ? (
-        <p className="px-4 py-8 text-center text-sm text-slate-400">Nothing yet.</p>
+        <div className="flex flex-col items-center gap-2 px-4 py-8 text-center">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-slate-300">
+            <path d="M4 13h4l2 3h4l2-3h4M4 13V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7M4 13v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <p className="text-sm text-slate-500">{emptyText}</p>
+          {emptyAction ? (
+            <Link href={emptyAction.href} className="text-xs font-medium text-[#0E7490] hover:underline">{emptyAction.label} →</Link>
+          ) : null}
+        </div>
       ) : (
         <ul className="divide-y divide-slate-100">
           {rows.map((r) => (
@@ -64,12 +72,16 @@ export default function PortalDashboard({ data, firstName, title }: { data: Dash
           rows={data.recentEnquiries}
           hrefFor={() => '/staff/enquiries'}
           viewAll="/staff/enquiries"
+          emptyText="No enquiries yet"
+          emptyAction={{ label: 'New enquiry', href: '/staff/enquiries/new' }}
         />
         <RecentList
           title="Recent quotations"
           rows={data.recentQuotations}
           hrefFor={(r) => `/staff/quotations/${r.id}`}
           viewAll="/staff/quotations"
+          emptyText="No quotations yet"
+          emptyAction={{ label: 'Create from an enquiry', href: '/staff/enquiries' }}
         />
       </div>
     </div>
