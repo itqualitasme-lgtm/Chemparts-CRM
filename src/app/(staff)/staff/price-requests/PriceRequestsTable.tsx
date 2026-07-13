@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import RespondForm from './RespondForm'
 import Pager, { pageSlice } from '@/components/ui/Pager'
+import DetailModal from '@/components/ui/DetailModal'
 
 const PAGE_SIZE = 15
 
@@ -137,30 +138,57 @@ function Row({ r }: { r: PriceRow }) {
         <td className="px-3 py-2 text-right">
           <button
             type="button"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setOpen(true)}
             className="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50"
-            aria-expanded={open}
+            aria-haspopup="dialog"
           >
-            {open ? 'Close' : r.status === 'OPEN' ? 'Respond' : 'View'}
+            {r.status === 'OPEN' ? 'Respond' : 'View'}
           </button>
         </td>
       </tr>
-      {open && (
-        <tr className="border-b border-slate-100 bg-slate-50/60">
-          <td colSpan={8} className="px-3 py-4">
-            {r.message ? (
-              <p className="mb-3 rounded-lg bg-white px-3 py-2 text-sm text-slate-600 ring-1 ring-slate-200">
-                <span className="text-slate-400">Message:</span> {r.message}
-              </p>
-            ) : null}
-            {r.status === 'OPEN' ? (
-              <RespondForm requestId={r.id} defaultCurrency={r.defaultCurrency} defaultPrice={r.defaultPrice} />
-            ) : (
-              <p className="text-sm text-green-700">{r.quotedText}</p>
-            )}
-          </td>
-        </tr>
-      )}
+      <DetailModal
+        open={open}
+        onClose={() => setOpen(false)}
+        header={
+          <>
+            <span className={`rounded px-2 py-0.5 text-xs font-medium ${STATUS_BADGE[r.status]}`}>{r.status}</span>
+            <span className="text-sm font-semibold text-slate-900">{r.productName}</span>
+            {r.modelNo ? <span className="font-mono text-xs text-slate-400">{r.modelNo}</span> : null}
+            <span className="text-xs text-slate-400">{fmtDate(r.createdAt)}</span>
+          </>
+        }
+      >
+        {/* Requester + current price */}
+        <div className="rounded-lg bg-white ring-1 ring-slate-200">
+          <div className="border-b border-slate-100 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Request</div>
+          <dl className="grid grid-cols-1 gap-x-6 gap-y-2 px-3 py-2.5 text-sm sm:grid-cols-2">
+            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Requester</dt><dd className="min-w-0 font-medium text-slate-800">{r.requester}</dd></div>
+            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Contact</dt><dd className="min-w-0 truncate text-slate-700">{r.contact || <span className="text-slate-300">—</span>}</dd></div>
+            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Brand</dt><dd className="min-w-0 text-slate-700">{r.brand}</dd></div>
+            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Quantity</dt><dd className="min-w-0 text-slate-700">{r.qty}</dd></div>
+            <div className="flex gap-2">
+              <dt className="w-24 shrink-0 text-slate-400">Current price</dt>
+              <dd className="min-w-0 text-slate-700">
+                <span className="font-medium text-slate-800">{r.currentPrice}</span>{' '}
+                <span className={`rounded px-2 py-0.5 text-xs ${MODE_BADGE[r.currentMode]}`}>{r.currentMode.replace('_', ' ')}</span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        {r.message ? (
+          <div className="rounded-lg bg-white ring-1 ring-slate-200">
+            <div className="border-b border-slate-100 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Message</div>
+            <p className="whitespace-pre-line px-3 py-2.5 text-sm leading-relaxed text-slate-600">{r.message}</p>
+          </div>
+        ) : null}
+
+        {r.status === 'OPEN' ? (
+          <RespondForm requestId={r.id} defaultCurrency={r.defaultCurrency} defaultPrice={r.defaultPrice} />
+        ) : (
+          <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700 ring-1 ring-green-200">{r.quotedText}</p>
+        )}
+      </DetailModal>
     </>
   )
 }

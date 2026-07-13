@@ -5,6 +5,7 @@ import StatusBadge from '@/components/ui/StatusBadge'
 import Pager, { pageSlice } from '@/components/ui/Pager'
 import StatusForm from './StatusForm'
 import DeleteButton from '@/components/DeleteButton'
+import DetailModal from '@/components/ui/DetailModal'
 import { deleteServiceRequest } from './actions'
 
 export type ServiceRow = {
@@ -107,37 +108,55 @@ function Row({ r, salesPeople, isAdmin }: { r: ServiceRow; salesPeople: { id: st
         <td className="px-3 py-2"><StatusBadge status={r.status} /></td>
         <td className="px-3 py-2 whitespace-nowrap text-xs text-slate-500">{fmtDate(r.createdAt)}</td>
         <td className="px-3 py-2 text-right">
-          <button type="button" onClick={() => setOpen((v) => !v)} className="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50" aria-expanded={open}>
-            {open ? 'Close' : 'Manage'}
+          <button type="button" onClick={() => setOpen(true)} className="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50" aria-haspopup="dialog">
+            Manage
           </button>
         </td>
       </tr>
-      {open && (
-        <tr className="border-b border-slate-100 bg-slate-50/60">
-          <td colSpan={7} className="px-3 py-4">
-            <div className="grid gap-4 md:grid-cols-[1fr_auto]">
-              <div className="space-y-3">
-                <StatusForm id={r.id} status={r.status} salesPersonId={r.salesPersonId} salesPeople={salesPeople} />
-                {r.contact ? <p className="text-sm text-slate-600"><span className="text-slate-400">Contact:</span> {r.contact}</p> : null}
-                {r.preferredDate ? <p className="text-sm text-slate-500">Preferred: {r.preferredDate}</p> : null}
-                {r.message ? (
-                  <p className="rounded-lg bg-white px-3 py-2 text-sm text-slate-600 ring-1 ring-slate-200"><span className="text-slate-400">Details:</span> {r.message}</p>
-                ) : null}
-              </div>
-              {isAdmin && (
-                <div className="md:text-right">
-                  <DeleteButton
-                    action={deleteServiceRequest.bind(null, r.id)}
-                    label="Delete"
-                    confirmText={`Delete ${r.requestNo}? This cannot be undone.`}
-                    className="text-xs text-red-600 underline hover:text-red-700"
-                  />
-                </div>
-              )}
-            </div>
-          </td>
-        </tr>
-      )}
+      <DetailModal
+        open={open}
+        onClose={() => setOpen(false)}
+        header={
+          <>
+            <span className="font-mono text-sm font-semibold text-slate-900">{r.requestNo}</span>
+            <StatusBadge status={r.status} />
+            <span className="text-xs text-slate-400">{r.typeLabel} · {fmtDate(r.createdAt)}</span>
+          </>
+        }
+        footer={
+          isAdmin ? (
+            <DeleteButton
+              action={deleteServiceRequest.bind(null, r.id)}
+              label="Delete"
+              confirmText={`Delete ${r.requestNo}? This cannot be undone.`}
+              className="text-xs text-red-600 underline hover:text-red-700"
+            />
+          ) : undefined
+        }
+      >
+        {/* Requester / equipment / preferred date */}
+        <div className="rounded-lg bg-white ring-1 ring-slate-200">
+          <div className="border-b border-slate-100 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Request</div>
+          <dl className="grid grid-cols-1 gap-x-6 gap-y-2 px-3 py-2.5 text-sm sm:grid-cols-2">
+            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Requester</dt><dd className="min-w-0 font-medium text-slate-800">{r.who}</dd></div>
+            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Contact</dt><dd className="min-w-0 truncate text-slate-700">{r.contact || <span className="text-slate-300">—</span>}</dd></div>
+            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Equipment</dt><dd className="min-w-0 text-slate-700">{r.equipment || <span className="text-slate-300">—</span>}</dd></div>
+            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Preferred</dt><dd className="min-w-0 text-slate-700">{r.preferredDate || <span className="text-slate-300">—</span>}</dd></div>
+          </dl>
+        </div>
+
+        {r.message ? (
+          <div className="rounded-lg bg-white ring-1 ring-slate-200">
+            <div className="border-b border-slate-100 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Details</div>
+            <p className="whitespace-pre-line px-3 py-2.5 text-sm leading-relaxed text-slate-600">{r.message}</p>
+          </div>
+        ) : null}
+
+        {/* Status + assignment controls */}
+        <div className="rounded-lg bg-white px-3 py-3 ring-1 ring-slate-200">
+          <StatusForm id={r.id} status={r.status} salesPersonId={r.salesPersonId} salesPeople={salesPeople} />
+        </div>
+      </DetailModal>
     </>
   )
 }
