@@ -23,6 +23,7 @@ export default async function VendorBillsPage() {
             note: true,
             dueDate: true,
             createdAt: true,
+            fileUrl: true,
             po: { select: { poNo: true } },
           },
         }),
@@ -45,6 +46,7 @@ export default async function VendorBillsPage() {
     dueDate: b.dueDate ? b.dueDate.toISOString() : null,
     createdAt: b.createdAt.toISOString(),
     poNo: b.po?.poNo ?? null,
+    fileUrl: b.fileUrl,
   }))
 
   return (

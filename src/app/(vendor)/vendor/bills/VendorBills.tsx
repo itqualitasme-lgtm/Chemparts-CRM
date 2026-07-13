@@ -14,6 +14,7 @@ export type VendorBillRow = {
   dueDate: string | null
   createdAt: string
   poNo: string | null
+  fileUrl: string | null
 }
 
 const STATUS_BADGE: Record<string, string> = {
@@ -86,6 +87,7 @@ export default function VendorBills({
                   <td className="px-3 py-3">
                     <div className="font-mono text-slate-800">{b.billNo}</div>
                     {b.note ? <div className="text-xs text-slate-500">{b.note}</div> : null}
+                    {b.fileUrl ? <a href={b.fileUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-[#0E7490] hover:underline">View invoice ↗</a> : null}
                   </td>
                   <td className="px-3 py-3 font-mono text-xs text-slate-500">{b.poNo ?? '—'}</td>
                   <td className="px-3 py-3 font-medium text-slate-800">{money(b.amount, b.currency)}</td>
@@ -130,6 +132,10 @@ function SubmitForm({ pos, onDone }: { pos: { id: string; poNo: string }[]; onDo
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">Due date (optional)</span>
           <input name="dueDate" type="date" className={inputCls} />
+        </label>
+        <label className="block sm:col-span-2">
+          <span className="mb-1 block text-xs font-medium text-slate-500">Invoice file (optional — PDF, PNG, JPEG, WEBP · max 15MB)</span>
+          <input name="file" type="file" accept="application/pdf,image/png,image/jpeg,image/webp" className={`${inputCls} file:mr-3 file:rounded file:border-0 file:bg-slate-100 file:px-3 file:py-1 file:text-sm file:text-slate-700`} />
         </label>
       </div>
       <label className="block">

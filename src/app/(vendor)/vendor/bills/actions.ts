@@ -2,9 +2,14 @@
 
 import { revalidatePath } from 'next/cache'
 import { requirePortal } from '@/lib/auth/session'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { db } from '@/lib/db'
 
 export type SubmitBillState = { ok?: boolean; error?: string }
+
+const BUCKET = 'product-images' // shared storage bucket used across the app
+const MAX_BYTES = 15 * 1024 * 1024
+const ALLOWED = ['application/pdf', 'image/png', 'image/jpeg', 'image/webp']
 
 /** A vendor submits an invoice (bill) against one of their purchase orders. */
 export async function submitBill(_prev: SubmitBillState, formData: FormData): Promise<SubmitBillState> {
@@ -28,6 +33,20 @@ export async function submitBill(_prev: SubmitBillState, formData: FormData): Pr
   const dueRaw = (formData.get('dueDate') as string | null)?.trim()
   const note = (formData.get('note') as string | null)?.trim() || null
 
+  // Optional invoice file — upload to storage and keep the public URL.
+  let fileUrl: string | null = null
+  const file = formData.get('file')
+  if (file instanceof File && file.size > 0) {
+    if (file.size > MAX_BYTES) return { error: 'File must be 15MB or smaller.' }
+    if (!ALLOWED.includes(file.type)) return { error: 'Use PDF, PNG, JPEG or WEBP.' }
+    const ext = file.name.split('.').pop()?.toLowerCase() || 'pdf'
+    const path = `bills/${user.vendorId}/${Date.now()}.${ext}`
+    const supabase = createAdminClient()
+    const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type, upsert: false })
+    if (upErr) return { error: `Invoice upload failed: ${upErr.message}` }
+    fileUrl = supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
+  }
+
   await db.bill.create({
     data: {
       billNo,
@@ -36,6 +55,7 @@ export async function submitBill(_prev: SubmitBillState, formData: FormData): Pr
       amount,
       currency: vendor?.currency ?? 'USD',
       note,
+      fileUrl,
       dueDate: dueRaw ? new Date(dueRaw) : null,
       status: 'SUBMITTED',
       submittedByProfile: user.id,

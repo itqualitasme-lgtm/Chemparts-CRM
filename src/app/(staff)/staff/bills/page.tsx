@@ -21,6 +21,7 @@ export default async function StaffBillsPage() {
       note: true,
       dueDate: true,
       createdAt: true,
+      fileUrl: true,
       vendor: { select: { companyName: true } },
       po: { select: { poNo: true } },
     },
@@ -37,6 +38,7 @@ export default async function StaffBillsPage() {
     createdAt: b.createdAt.toISOString(),
     vendor: b.vendor.companyName,
     poNo: b.po?.poNo ?? null,
+    fileUrl: b.fileUrl,
   }))
 
   const pending = rows.filter((r) => r.status === 'SUBMITTED').length

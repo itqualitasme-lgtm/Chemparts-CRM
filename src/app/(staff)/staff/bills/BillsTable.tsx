@@ -15,6 +15,7 @@ export type BillRow = {
   createdAt: string
   vendor: string
   poNo: string | null
+  fileUrl: string | null
 }
 
 const STATUS_BADGE: Record<string, string> = {
@@ -101,6 +102,7 @@ function Row({ r }: { r: BillRow }) {
       <td className="px-3 py-3">
         <div className="font-mono text-slate-800">{r.billNo}</div>
         {r.note ? <div className="text-xs text-slate-500">{r.note}</div> : null}
+        {r.fileUrl ? <a href={r.fileUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-[#0E7490] hover:underline">View invoice ↗</a> : <span className="text-xs text-slate-300">no file</span>}
       </td>
       <td className="px-3 py-3 text-slate-700">{r.vendor}</td>
       <td className="px-3 py-3 font-mono text-xs text-slate-500">{r.poNo ?? '—'}</td>
