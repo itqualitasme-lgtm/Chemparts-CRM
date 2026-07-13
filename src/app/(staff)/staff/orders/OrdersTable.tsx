@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import StatusBadge from '@/components/ui/StatusBadge'
+import FilterPills, { type PillOption } from '@/components/ui/FilterPills'
 import Pager, { pageSlice } from '@/components/ui/Pager'
 
 export type OrderRow = {
@@ -38,18 +39,26 @@ export default function OrdersTable({ rows }: { rows: OrderRow[] }) {
 
   const pageRows = pageSlice(filtered, page, PAGE_SIZE)
 
+  const pills: PillOption[] = useMemo(() => [
+    { value: 'ALL', label: 'All', count: rows.length },
+    ...STATUSES.map((s) => ({
+      value: s,
+      label: s.replace('_', ' ').charAt(0) + s.replace('_', ' ').slice(1).toLowerCase(),
+      count: rows.filter((r) => r.status === s).length,
+    })),
+  ], [rows])
+
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-center gap-2">
+      <div className="mb-3 flex flex-wrap items-center gap-2">
         <input value={q} onChange={(e) => { setQ(e.target.value); setPage(1) }} placeholder="Search no., customer, quotation…" className={`${selectCls} min-w-0 flex-1`} />
-        <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1) }} className={selectCls} aria-label="Filter by status">
-          <option value="ALL">All statuses</option>
-          {STATUSES.map((s) => <option key={s} value={s}>{s.replace('_', ' ')}</option>)}
-        </select>
         <select value={sort} onChange={(e) => setSort(e.target.value as 'newest' | 'oldest')} className={selectCls} aria-label="Sort">
           <option value="newest">Newest first</option>
           <option value="oldest">Oldest first</option>
         </select>
+      </div>
+      <div className="mb-4">
+        <FilterPills options={pills} value={status} onChange={(v) => { setStatus(v); setPage(1) }} ariaLabel="Filter by status" />
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
