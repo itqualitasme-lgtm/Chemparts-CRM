@@ -116,7 +116,7 @@ export default function RegisterPage() {
             inputMode="numeric"
             autoComplete="one-time-code"
             required
-            placeholder="123456"
+            placeholder="000000"
             className={`${inputCls} text-center text-lg tracking-[0.4em]`}
           />
           {verState.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{verState.error}</p>}

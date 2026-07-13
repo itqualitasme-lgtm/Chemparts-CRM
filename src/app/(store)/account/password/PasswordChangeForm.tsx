@@ -88,7 +88,7 @@ function VerifyThenChange() {
               autoComplete="one-time-code"
               required
               className={`${inputCls} tracking-[0.4em]`}
-              placeholder="123456"
+              placeholder="000000"
             />
           </label>
           <button type="submit" disabled={confirming} className={btnCls}>

@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useState, useTransition } from 'react'
+import { createPortal } from 'react-dom'
 import { updateEnquiryStatus, deleteEnquiry, assignSalesPerson, rejectAsSpam } from './actions'
 import CreateQuotationButton from './CreateQuotationButton'
 import DeleteButton from '@/components/DeleteButton'
@@ -150,6 +151,22 @@ function Row({ e, isAdmin, salesPeople }: { e: EnquiryRow; isAdmin: boolean; sal
   const [assigning, startAssign] = useTransition()
   const [assignMsg, setAssignMsg] = useState<{ ok?: boolean; error?: string }>({})
   const [spamming, startSpam] = useTransition()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+
+  // While the modal is open: lock body scroll and close on Escape.
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = (ev: KeyboardEvent) => ev.key === 'Escape' && setOpen(false)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
 
   function reject() {
     if (!window.confirm(`Mark ${e.enquiryNo} as spam? It will be hidden from the enquiries list.`)) return
@@ -204,19 +221,45 @@ function Row({ e, isAdmin, salesPeople }: { e: EnquiryRow; isAdmin: boolean; sal
         <td className="px-3 py-2 text-right">
           <button
             type="button"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setOpen(true)}
             className="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50"
-            aria-expanded={open}
+            aria-haspopup="dialog"
           >
-            {open ? 'Close' : 'Manage'}
+            Manage
           </button>
         </td>
       </tr>
-      {open && (
-        <tr className="border-b border-slate-100 bg-slate-50/60">
-          <td colSpan={8} className="px-3 py-4">
-            <div className="grid gap-4 md:grid-cols-[1fr_auto]">
-              <div className="space-y-3">
+      {open && mounted && createPortal(
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Enquiry ${e.enquiryNo}`}
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/50 p-4 sm:p-6"
+        >
+          <div
+            onClick={(ev) => ev.stopPropagation()}
+            className="my-2 w-full max-w-2xl rounded-xl bg-white shadow-2xl sm:my-6"
+          >
+            {/* Modal header */}
+            <div className="sticky top-0 z-10 flex items-center justify-between gap-3 rounded-t-xl border-b border-slate-200 bg-white px-4 py-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="font-mono text-sm font-semibold text-slate-900">{e.enquiryNo}</span>
+                <span className={`rounded px-2 py-0.5 text-xs font-medium ${STATUS_BADGE[e.status]}`}>{label(e.status)}</span>
+                <span className="text-xs text-slate-400">{TYPE_LABEL[e.type] ?? e.type} · {fmtDate(e.createdAt)}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label="Close"
+                className="shrink-0 rounded-md p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+              >
+                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+              </button>
+            </div>
+
+            {/* Modal body */}
+            <div className="space-y-3 p-4">
                 {/* Contact card — the first thing staff need: who they are and how to reach them. */}
                 <div className="rounded-lg bg-white ring-1 ring-slate-200">
                   <div className="border-b border-slate-100 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Contact</div>
@@ -306,60 +349,61 @@ function Row({ e, isAdmin, salesPeople }: { e: EnquiryRow; isAdmin: boolean; sal
                 {/* Items */}
                 <div>
                   <div className="mb-1 text-xs font-medium text-slate-500">Line items</div>
-                  <ul className="divide-y divide-slate-100 rounded-lg bg-white ring-1 ring-slate-200">
-                    {e.items.map((it) => (
-                      <li key={it.id} className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
-                        <span className="text-slate-800">{it.productName}</span>
-                        <span className="flex items-center gap-2">
-                          {it.priceRequested ? <span className="rounded bg-amber-100 px-2 py-0.5 text-xs text-amber-800">price to confirm</span> : null}
-                          <span className="font-mono text-slate-500">× {it.qty}</span>
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                  {e.items.length === 0 ? (
+                    <p className="rounded-lg bg-white px-3 py-2 text-sm text-slate-400 ring-1 ring-slate-200">No products listed on this enquiry.</p>
+                  ) : (
+                    <ul className="divide-y divide-slate-100 rounded-lg bg-white ring-1 ring-slate-200">
+                      {e.items.map((it) => (
+                        <li key={it.id} className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
+                          <span className="text-slate-800">{it.productName}</span>
+                          <span className="flex items-center gap-2">
+                            {it.priceRequested ? <span className="rounded bg-amber-100 px-2 py-0.5 text-xs text-amber-800">price to confirm</span> : null}
+                            <span className="font-mono text-slate-500">× {it.qty}</span>
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex flex-row flex-wrap items-start gap-2 md:flex-col md:items-end">
-                {e.quotations.length > 0 ? (
-                  <div className="flex flex-col items-start gap-1 md:items-end">
-                    {e.quotations.map((qt) => (
-                      <Link
-                        key={qt.id}
-                        href={`/staff/quotations/${qt.id}`}
-                        className="rounded-lg border border-[#0A2540] px-3 py-1.5 font-mono text-xs font-medium text-[#0A2540] transition hover:bg-[#0A2540] hover:text-white"
-                      >
-                        View {qt.quotationNo} →
-                      </Link>
-                    ))}
-                    <span className="text-[11px] text-slate-400">Already quoted</span>
-                  </div>
-                ) : (
-                  <CreateQuotationButton enquiryId={e.id} />
-                )}
-                {e.status !== 'SPAM' && (
-                  <button
-                    type="button"
-                    onClick={reject}
-                    disabled={spamming}
-                    className="rounded-lg border border-rose-300 px-3 py-1.5 text-xs font-medium text-rose-700 transition hover:bg-rose-50 disabled:opacity-40"
-                  >
-                    {spamming ? 'Rejecting…' : 'Reject as spam'}
-                  </button>
-                )}
-                {isAdmin && (
-                  <DeleteButton
-                    action={deleteEnquiry.bind(null, e.id)}
-                    label="Delete"
-                    confirmText={`Delete ${e.enquiryNo}? This cannot be undone.`}
-                    className="text-xs text-red-600 underline hover:text-red-700"
-                  />
-                )}
-              </div>
             </div>
-          </td>
-        </tr>
+
+            {/* Modal footer — primary actions */}
+            <div className="flex flex-wrap items-center justify-end gap-2 rounded-b-xl border-t border-slate-200 bg-slate-50 px-4 py-3">
+              {isAdmin && (
+                <DeleteButton
+                  action={deleteEnquiry.bind(null, e.id)}
+                  label="Delete"
+                  confirmText={`Delete ${e.enquiryNo}? This cannot be undone.`}
+                  className="mr-auto text-xs text-red-600 underline hover:text-red-700"
+                />
+              )}
+              {e.status !== 'SPAM' && (
+                <button
+                  type="button"
+                  onClick={reject}
+                  disabled={spamming}
+                  className="rounded-lg border border-rose-300 px-3 py-1.5 text-xs font-medium text-rose-700 transition hover:bg-rose-50 disabled:opacity-40"
+                >
+                  {spamming ? 'Rejecting…' : 'Reject as spam'}
+                </button>
+              )}
+              {e.quotations.length > 0 ? (
+                e.quotations.map((qt) => (
+                  <Link
+                    key={qt.id}
+                    href={`/staff/quotations/${qt.id}`}
+                    className="rounded-lg border border-[#0A2540] px-3 py-1.5 font-mono text-xs font-medium text-[#0A2540] transition hover:bg-[#0A2540] hover:text-white"
+                  >
+                    View {qt.quotationNo} →
+                  </Link>
+                ))
+              ) : (
+                <CreateQuotationButton enquiryId={e.id} />
+              )}
+            </div>
+          </div>
+        </div>,
+        document.body,
       )}
     </>
   )

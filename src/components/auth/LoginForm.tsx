@@ -123,7 +123,7 @@ function OtpForm({ next, onUsePassword }: { next?: string; onUsePassword: () => 
                 autoComplete="one-time-code"
                 required
                 className={`${inputCls} text-center tracking-[0.4em]`}
-                placeholder="123456"
+                placeholder="000000"
               />
             </label>
             <button type="submit" disabled={verifying} className={btnCls}>
