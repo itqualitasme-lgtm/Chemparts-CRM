@@ -2,9 +2,8 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useState, useTransition } from 'react'
-import { updateEnquiryStatus, deleteEnquiry, assignSalesPerson, rejectAsSpam } from './actions'
+import { updateEnquiryStatus, assignSalesPerson, rejectAsSpam } from './actions'
 import CreateQuotationButton from './CreateQuotationButton'
-import DeleteButton from '@/components/DeleteButton'
 import DetailModal from '@/components/ui/DetailModal'
 import Pager, { pageSlice } from '@/components/ui/Pager'
 
@@ -55,7 +54,7 @@ function fmtDate(iso: string): string {
 const selectCls =
   'rounded-lg border border-slate-300 px-2 py-1.5 text-sm text-slate-900 focus:border-[#0A2540] focus:outline-none focus:ring-2 focus:ring-[#0A2540]/20'
 
-export default function EnquiriesTable({ enquiries, isAdmin, salesPeople }: { enquiries: EnquiryRow[]; isAdmin: boolean; salesPeople: { id: string; name: string }[] }) {
+export default function EnquiriesTable({ enquiries, salesPeople }: { enquiries: EnquiryRow[]; salesPeople: { id: string; name: string }[] }) {
   const [q, setQ] = useState('')
   const [status, setStatus] = useState('ALL')
   const [channel, setChannel] = useState('ALL')
@@ -131,7 +130,7 @@ export default function EnquiriesTable({ enquiries, isAdmin, salesPeople }: { en
                 </td>
               </tr>
             ) : (
-              pageSlice(filtered, page, PAGE_SIZE).map((e) => <Row key={e.id} e={e} isAdmin={isAdmin} salesPeople={salesPeople} />)
+              pageSlice(filtered, page, PAGE_SIZE).map((e) => <Row key={e.id} e={e} salesPeople={salesPeople} />)
             )}
           </tbody>
         </table>
@@ -141,7 +140,7 @@ export default function EnquiriesTable({ enquiries, isAdmin, salesPeople }: { en
   )
 }
 
-function Row({ e, isAdmin, salesPeople }: { e: EnquiryRow; isAdmin: boolean; salesPeople: { id: string; name: string }[] }) {
+function Row({ e, salesPeople }: { e: EnquiryRow; salesPeople: { id: string; name: string }[] }) {
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState(e.status)
   const [reason, setReason] = useState(e.lostReason ?? '')
@@ -225,14 +224,6 @@ function Row({ e, isAdmin, salesPeople }: { e: EnquiryRow; isAdmin: boolean; sal
         }
         footer={
           <>
-            {isAdmin && (
-              <DeleteButton
-                action={deleteEnquiry.bind(null, e.id)}
-                label="Delete"
-                confirmText={`Delete ${e.enquiryNo}? This cannot be undone.`}
-                className="mr-auto text-xs text-red-600 underline hover:text-red-700"
-              />
-            )}
             {e.status !== 'SPAM' && (
               <button
                 type="button"

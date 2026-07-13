@@ -8,8 +8,7 @@ export const metadata = { title: 'Enquiries — Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function StaffEnquiriesPage() {
-  const user = await requirePortal('staff')
-  const isAdmin = user.role === 'ADMIN'
+  await requirePortal('staff')
 
   const [enquiries, salesPeople] = await Promise.all([
     db.enquiry.findMany({
@@ -77,7 +76,7 @@ export default async function StaffEnquiriesPage() {
           No enquiries yet. Website cart submissions and staff-logged enquiries will appear here.
         </div>
       ) : (
-        <EnquiriesTable enquiries={rows} isAdmin={isAdmin} salesPeople={salesPeople} />
+        <EnquiriesTable enquiries={rows} salesPeople={salesPeople} />
       )}
     </div>
   )
