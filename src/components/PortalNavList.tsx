@@ -30,7 +30,7 @@ export default function PortalNavList({
       {groups.map((g, i) => (
         <div key={g.title ?? `g${i}`} className="mb-1.5">
           {g.title ? (
-            <div className={`px-2.5 pb-1 pt-4 text-[10px] font-semibold uppercase tracking-[0.14em] ${dark ? 'text-slate-500' : 'text-slate-400'}`}>
+            <div className={`px-2.5 pb-1 pt-4 text-[10px] font-semibold uppercase tracking-[0.14em] ${dark ? 'text-slate-400' : 'text-slate-400'}`}>
               {g.title}
             </div>
           ) : null}
@@ -48,7 +48,7 @@ export default function PortalNavList({
                       ? 'border-[#22D3EE] bg-white/10 font-semibold text-white'
                       : 'border-[#0E7490] bg-slate-100 font-semibold text-[#0A2540]'
                     : dark
-                      ? 'border-transparent text-slate-300 hover:bg-white/5 hover:text-white'
+                      ? 'border-transparent text-slate-200 hover:bg-white/5 hover:text-white'
                       : 'border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                 }`}
               >
@@ -57,7 +57,7 @@ export default function PortalNavList({
                   className={
                     active
                       ? dark ? 'text-[#22D3EE]' : 'text-[#0E7490]'
-                      : dark ? 'text-slate-400 group-hover:text-slate-200' : 'text-slate-400 group-hover:text-slate-500'
+                      : dark ? 'text-slate-300 group-hover:text-white' : 'text-slate-400 group-hover:text-slate-500'
                   }
                 />
                 <span className="truncate">{item.label}</span>
