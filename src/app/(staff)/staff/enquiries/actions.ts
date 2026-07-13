@@ -143,7 +143,7 @@ export async function createEnquiry(_prev: CreateEnquiryState, formData: FormDat
       salesPersonId,
       createdByProfile: user.id,
       message,
-      status: 'NEW',
+      status: 'OPEN',
       items: {
         create: validItems.map((i) => ({
           productId: i.productId,
@@ -164,7 +164,7 @@ export async function createEnquiry(_prev: CreateEnquiryState, formData: FormDat
   redirect('/staff/enquiries')
 }
 
-const VALID: EnquiryStatus[] = ['NEW', 'UNDER_REVIEW', 'QUOTED', 'WON', 'LOST', 'SPAM']
+const VALID: EnquiryStatus[] = ['OPEN', 'WON', 'REJECTED', 'SPAM']
 
 /** Staff one-click reject: mark an enquiry as spam. Never notifies the sender. */
 export async function rejectAsSpam(enquiryId: string): Promise<UpdateStatusState> {
@@ -179,7 +179,7 @@ export async function rejectAsSpam(enquiryId: string): Promise<UpdateStatusState
   return { ok: true }
 }
 
-/** Staff move an enquiry through its lifecycle (NEW → UNDER_REVIEW → QUOTED → WON/LOST). */
+/** Staff move an enquiry through its lifecycle (Open → Won / Rejected / Spam). */
 export async function updateEnquiryStatus(
   enquiryId: string,
   formData: FormData,
@@ -191,34 +191,18 @@ export async function updateEnquiryStatus(
     return { error: 'Invalid status.' }
   }
 
-  const enquiry = await db.enquiry.findUnique({
-    where: { id: enquiryId },
-    select: {
-      id: true,
-      status: true,
-      enquiryNo: true,
-      guestName: true,
-      guestEmail: true,
-      customer: { select: { companyName: true, email: true, contacts: { where: { isPrimary: true }, take: 1, select: { email: true } } } },
-    },
-  })
+  const enquiry = await db.enquiry.findUnique({ where: { id: enquiryId }, select: { id: true } })
   if (!enquiry) return { error: 'Enquiry not found.' }
 
-  // Capture a reason when marking LOST; clear it if moving away from LOST.
+  // Capture a reason when rejecting; clear it otherwise. (Field reused as the
+  // reject reason.) The four statuses are all internal, so no customer email.
   const reasonRaw = (formData.get('lostReason') as string | null)?.trim() || null
-  if (status === 'LOST' && !reasonRaw) {
-    return { error: 'Add a reason for marking this enquiry lost.' }
+  if (status === 'REJECTED' && !reasonRaw) {
+    return { error: 'Add a reason for rejecting this enquiry.' }
   }
-  const lostReason = status === 'LOST' ? reasonRaw : null
+  const lostReason = status === 'REJECTED' ? reasonRaw : null
 
   await db.enquiry.update({ where: { id: enquiryId }, data: { status, lostReason } })
-
-  // Tell the customer about meaningful status changes (not internal LOST/SPAM).
-  if (status !== enquiry.status && status !== 'LOST' && status !== 'SPAM' && status !== 'NEW') {
-    const to = enquiry.guestEmail ?? enquiry.customer?.email ?? enquiry.customer?.contacts[0]?.email
-    const name = enquiry.guestName ?? enquiry.customer?.companyName ?? 'there'
-    after(() => notify(to, 'enquiry-status-update', { name, enquiryNo: enquiry.enquiryNo, status: status.replace(/_/g, ' ') }))
-  }
 
   revalidatePath('/staff/enquiries')
   return { ok: true }

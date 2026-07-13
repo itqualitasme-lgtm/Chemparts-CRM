@@ -48,7 +48,7 @@ export async function POST(req: Request) {
       guestPhone: phone,
       guestCompany: company,
       message,
-      status: 'NEW',
+      status: 'OPEN',
     },
   })
 

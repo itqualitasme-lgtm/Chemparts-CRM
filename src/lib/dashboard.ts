@@ -36,8 +36,8 @@ export async function getDashboardData(): Promise<DashboardData> {
     recentEnquiries,
     recentQuotations,
   ] = await Promise.all([
-    db.enquiry.count({ where: { status: 'NEW' } }),
-    db.enquiry.count({ where: { status: { in: ['NEW', 'UNDER_REVIEW', 'QUOTED'] } } }),
+    db.enquiry.count({ where: { status: 'OPEN' } }),
+    db.enquiry.count({ where: { status: { in: ['OPEN', 'WON'] } } }),
     db.quotation.count({ where: { status: 'DRAFT' } }),
     db.quotation.count({ where: { status: 'SENT' } }),
     db.order.count({ where: { status: { in: ['PENDING', 'CONFIRMED', 'IN_PROGRESS'] } } }),

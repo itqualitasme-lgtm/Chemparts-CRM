@@ -55,7 +55,7 @@ export default function PortalDashboard({ data, firstName, title }: { data: Dash
       </div>
 
       <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 xl:grid-cols-7">
-        <StatCard label="New enquiries" value={data.enquiriesNew} href="/staff/enquiries" tone={data.enquiriesNew > 0 ? 'amber' : 'default'} hint={`${data.enquiriesOpen} open`} />
+        <StatCard label="Open enquiries" value={data.enquiriesNew} href="/staff/enquiries" tone={data.enquiriesNew > 0 ? 'amber' : 'default'} hint={`${data.enquiriesOpen} in pipeline`} />
         <StatCard label="Quotations sent" value={data.quotationsSent} href="/staff/quotations" tone="indigo" hint={`${data.quotationsDraft} draft`} />
         <StatCard label="Active orders" value={data.ordersActive} href="/staff/orders" tone="blue" />
         <StatCard label="Price requests" value={data.priceOpen} href="/staff/price-requests" tone={data.priceOpen > 0 ? 'amber' : 'default'} hint="open" />

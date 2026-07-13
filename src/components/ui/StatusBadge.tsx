@@ -24,6 +24,7 @@ const MAP: Record<string, string> = {
   EXPIRED: 'bg-slate-200 text-slate-600',
   CLOSED: 'bg-slate-100 text-slate-600',
   CANCELLED: 'bg-rose-100 text-rose-700',
+  SPAM: 'bg-rose-100 text-rose-700',
 }
 
 export default function StatusBadge({ status, className = '' }: { status: string; className?: string }) {

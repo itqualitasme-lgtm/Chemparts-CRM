@@ -8,11 +8,9 @@ export const dynamic = 'force-dynamic'
 // Customer-facing status labels — internal states are collapsed into ones that
 // make sense to the person who sent the enquiry.
 const STATUS: Record<string, { label: string; cls: string }> = {
-  NEW: { label: 'Received', cls: 'bg-amber-100 text-amber-800' },
-  UNDER_REVIEW: { label: 'In review', cls: 'bg-blue-100 text-blue-800' },
-  QUOTED: { label: 'Quoted', cls: 'bg-indigo-100 text-indigo-800' },
-  WON: { label: 'Confirmed', cls: 'bg-green-100 text-green-800' },
-  LOST: { label: 'Closed', cls: 'bg-slate-200 text-slate-600' },
+  OPEN: { label: 'Received', cls: 'bg-amber-100 text-amber-800' },
+  WON: { label: 'In progress', cls: 'bg-green-100 text-green-800' },
+  REJECTED: { label: 'Closed', cls: 'bg-slate-200 text-slate-600' },
 }
 
 function fmtDate(d: Date): string {

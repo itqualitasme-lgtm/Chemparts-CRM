@@ -27,14 +27,12 @@ export type EnquiryRow = {
   quotations: { id: string; quotationNo: string }[]
 }
 
-const STATUSES = ['NEW', 'UNDER_REVIEW', 'QUOTED', 'WON', 'LOST', 'SPAM'] as const
+const STATUSES = ['OPEN', 'WON', 'REJECTED', 'SPAM'] as const
 
 const STATUS_BADGE: Record<string, string> = {
-  NEW: 'bg-amber-100 text-amber-800',
-  UNDER_REVIEW: 'bg-blue-100 text-blue-800',
-  QUOTED: 'bg-indigo-100 text-indigo-800',
+  OPEN: 'bg-amber-100 text-amber-800',
   WON: 'bg-green-100 text-green-800',
-  LOST: 'bg-slate-200 text-slate-600',
+  REJECTED: 'bg-slate-200 text-slate-600',
   SPAM: 'bg-rose-100 text-rose-700',
 }
 
@@ -165,15 +163,15 @@ function Row({ e, salesPeople }: { e: EnquiryRow; salesPeople: { id: string; nam
     })
   }
 
-  const dirty = draft !== e.status || (draft === 'LOST' && reason.trim() !== (e.lostReason ?? ''))
-  const canSave = dirty && !(draft === 'LOST' && !reason.trim())
+  const dirty = draft !== e.status || (draft === 'REJECTED' && reason.trim() !== (e.lostReason ?? ''))
+  const canSave = dirty && !(draft === 'REJECTED' && !reason.trim())
 
   function save() {
     start(async () => {
       setMsg({})
       const fd = new FormData()
       fd.set('status', draft)
-      if (draft === 'LOST') fd.set('lostReason', reason)
+      if (draft === 'REJECTED') fd.set('lostReason', reason)
       const res = await updateEnquiryStatus(e.id, fd)
       setMsg(res)
     })
@@ -244,8 +242,10 @@ function Row({ e, salesPeople }: { e: EnquiryRow; salesPeople: { id: string; nam
                   View {qt.quotationNo} →
                 </Link>
               ))
-            ) : (
+            ) : e.status === 'WON' ? (
               <CreateQuotationButton enquiryId={e.id} />
+            ) : (
+              <span className="text-xs text-slate-400">Mark “Won” to create a quotation</span>
             )}
           </>
         }
@@ -277,18 +277,18 @@ function Row({ e, salesPeople }: { e: EnquiryRow; salesPeople: { id: string; nam
                   </dl>
                 </div>
 
-                {/* Controls: status (+ lost reason) and, for non-website channels, sales-person assignment. */}
+                {/* Controls: status (+ reject reason) and, for non-website channels, sales-person assignment. */}
                 <div className="space-y-2.5 rounded-lg bg-white px-3 py-3 ring-1 ring-slate-200">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="w-24 text-xs font-medium text-slate-500">Status</span>
                     <select value={draft} onChange={(ev) => setDraft(ev.target.value)} className={selectCls}>
                       {STATUSES.map((s) => <option key={s} value={s}>{label(s)}</option>)}
                     </select>
-                    {draft === 'LOST' && (
+                    {draft === 'REJECTED' && (
                       <input
                         value={reason}
                         onChange={(ev) => setReason(ev.target.value)}
-                        placeholder="Reason lost (e.g. price, competitor, no budget)"
+                        placeholder="Reason for rejecting (e.g. price, competitor, out of scope)"
                         className={`${selectCls} min-w-[16rem] flex-1`}
                       />
                     )}
@@ -325,8 +325,8 @@ function Row({ e, salesPeople }: { e: EnquiryRow; salesPeople: { id: string; nam
                   )}
                 </div>
 
-                {e.status === 'LOST' && e.lostReason ? (
-                  <p className="text-sm text-slate-600"><span className="text-slate-400">Lost reason:</span> {e.lostReason}</p>
+                {e.status === 'REJECTED' && e.lostReason ? (
+                  <p className="text-sm text-slate-600"><span className="text-slate-400">Reject reason:</span> {e.lostReason}</p>
                 ) : null}
 
                 {e.message ? (

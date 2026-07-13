@@ -200,7 +200,7 @@ export async function submitEnquiry(formData: FormData): Promise<SubmitEnquirySt
       guestCompany,
       guestPhone,
       message,
-      status: 'NEW',
+      status: 'OPEN',
       items: {
         create: cart.lines.map((l) => ({
           productId: l.productId,

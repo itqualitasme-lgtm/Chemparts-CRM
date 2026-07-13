@@ -12,11 +12,9 @@ function money(n: number, currency = 'AED'): string {
 }
 
 const ENQUIRY_STAGES = [
-  { key: 'NEW', label: 'New', cls: 'bg-amber-500' },
-  { key: 'UNDER_REVIEW', label: 'In review', cls: 'bg-blue-500' },
-  { key: 'QUOTED', label: 'Quoted', cls: 'bg-indigo-500' },
+  { key: 'OPEN', label: 'Open', cls: 'bg-amber-500' },
   { key: 'WON', label: 'Won', cls: 'bg-green-500' },
-  { key: 'LOST', label: 'Lost', cls: 'bg-slate-400' },
+  { key: 'REJECTED', label: 'Rejected', cls: 'bg-slate-400' },
 ]
 
 export default async function ReportsPage() {
@@ -40,7 +38,7 @@ export default async function ReportsPage() {
   const enqTotal = enquiryGroups.filter((g) => g.status !== 'SPAM').reduce((n, g) => n + g._count._all, 0)
   const enqSpam = enqCount('SPAM')
   const won = enqCount('WON')
-  const decided = won + enqCount('LOST')
+  const decided = won + enqCount('REJECTED')
   const winRate = decided > 0 ? Math.round((won / decided) * 100) : 0
 
   const quoteCount = (s: string) => quotationGroups.find((g) => g.status === s)?._count._all ?? 0
@@ -87,8 +85,8 @@ export default async function ReportsPage() {
       <h2 className="mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">Sales pipeline</h2>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         <StatCard label="Enquiries" value={enqTotal} href="/staff/enquiries" hint={enqSpam ? `${enqSpam} spam filtered` : 'all channels'} />
-        <StatCard label="Open enquiries" value={enqCount('NEW') + enqCount('UNDER_REVIEW')} href="/staff/enquiries" tone="amber" hint="awaiting action" />
-        <StatCard label="Win rate" value={`${winRate}%`} href="/staff/enquiries" tone="green" hint={`${won} won · ${enqCount('LOST')} lost`} />
+        <StatCard label="Open enquiries" value={enqCount('OPEN')} href="/staff/enquiries" tone="amber" hint="awaiting action" />
+        <StatCard label="Win rate" value={`${winRate}%`} href="/staff/enquiries" tone="green" hint={`${won} won · ${enqCount('REJECTED')} rejected`} />
         <StatCard label="Quotations" value={quoteTotal} href="/staff/quotations" hint={`${quoteSent} sent`} />
         <StatCard label="Quote accept rate" value={`${acceptRate}%`} href="/staff/quotations" tone="indigo" hint={`${quoteAccepted} accepted`} />
         <StatCard label="Open price requests" value={openPriceReqs} href="/staff/price-requests" tone={openPriceReqs ? 'amber' : 'default'} hint="need a price" />

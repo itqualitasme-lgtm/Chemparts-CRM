@@ -57,13 +57,13 @@ export default async function StaffEnquiriesPage() {
     quotations: e.quotations.map((qt) => ({ id: qt.id, quotationNo: qt.quotationNo })),
   }))
 
-  const newCount = rows.filter((e) => e.status === 'NEW').length
+  const openCount = rows.filter((e) => e.status === 'OPEN').length
 
   return (
     <div>
       <PageHeader
         title="Enquiries"
-        subtitle={`${rows.length} total · ${newCount} new ${newCount === 1 ? 'enquiry' : 'enquiries'} awaiting review.`}
+        subtitle={`${rows.length} total · ${openCount} open ${openCount === 1 ? 'enquiry' : 'enquiries'} awaiting review.`}
         action={
           <Link href="/staff/enquiries/new" className="rounded-md bg-[#0A2540] px-3 py-1.5 text-[13px] font-medium text-white transition hover:bg-[#123a63]">
             + New enquiry

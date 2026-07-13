@@ -49,7 +49,7 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
       guestCompany: company,
       guestPhone: phone,
       message,
-      status: 'NEW',
+      status: 'OPEN',
     },
   })
 

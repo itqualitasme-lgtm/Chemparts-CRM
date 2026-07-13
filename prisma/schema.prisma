@@ -420,11 +420,9 @@ model CartItem {
 
 // ---- Enquiry (from the website cart OR created by staff for any channel) ----
 enum EnquiryStatus {
-  NEW
-  UNDER_REVIEW
-  QUOTED
+  OPEN
   WON
-  LOST
+  REJECTED
   SPAM
 }
 
@@ -454,7 +452,7 @@ model Enquiry {
   guestCompany String?
   guestPhone   String?
   message      String?
-  status       EnquiryStatus @default(NEW)
+  status       EnquiryStatus @default(OPEN)
   lostReason   String? // why the enquiry was marked LOST
   items        EnquiryItem[]
   quotations   Quotation[]

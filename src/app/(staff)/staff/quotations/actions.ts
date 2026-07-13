@@ -66,6 +66,7 @@ export async function createQuotationFromEnquiry(enquiryId: string): Promise<{ e
     where: { id: enquiryId },
     select: {
       id: true,
+      status: true,
       customerId: true,
       salesPersonId: true,
       items: {
@@ -79,6 +80,8 @@ export async function createQuotationFromEnquiry(enquiryId: string): Promise<{ e
     },
   })
   if (!enquiry) return { error: 'Enquiry not found.' }
+  // Quotations are only raised from vetted, won enquiries.
+  if (enquiry.status !== 'WON') return { error: 'Mark the enquiry “Won” before creating a quotation.' }
 
   const currency = enquiry.items[0]?.product?.currency ?? 'AED'
   const quotationNo = await nextQuotationNo()
@@ -107,7 +110,7 @@ export async function createQuotationFromEnquiry(enquiryId: string): Promise<{ e
     select: { id: true },
   })
 
-  await db.enquiry.update({ where: { id: enquiry.id }, data: { status: 'QUOTED' } })
+  // The enquiry stays WON — quoting no longer changes its status.
   await db.auditLog.create({
     data: { actorId: user.id, action: 'CREATE', entity: 'Quotation', entityId: quotation.id, detail: { quotationNo, fromEnquiry: enquiryId } },
   })
@@ -214,19 +217,7 @@ export async function deleteQuotation(quotationId: string): Promise<{ error?: st
   if (!q) return { error: 'Quotation not found.' }
   await db.quotation.delete({ where: { id: quotationId } })
 
-  // Revert the source enquiry: if it has no remaining quotations and is still
-  // marked QUOTED, move it back to UNDER_REVIEW so it isn't stuck (untouched if
-  // it was already WON/LOST or has other quotations).
-  if (q.enquiryId) {
-    const remaining = await db.quotation.count({ where: { enquiryId: q.enquiryId } })
-    if (remaining === 0) {
-      await db.enquiry.updateMany({
-        where: { id: q.enquiryId, status: 'QUOTED' },
-        data: { status: 'UNDER_REVIEW' },
-      })
-    }
-  }
-
+  // The source enquiry stays WON — deleting a quotation doesn't change it.
   await db.auditLog.create({ data: { actorId: admin.id, action: 'DELETE', entity: 'Quotation', entityId: quotationId } })
   revalidatePath('/staff/quotations')
   revalidatePath('/staff/enquiries')
