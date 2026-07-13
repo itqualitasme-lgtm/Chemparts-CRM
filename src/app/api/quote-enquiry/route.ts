@@ -33,7 +33,7 @@ export async function POST(req: Request) {
   }
 
   const parts: string[] = []
-  if (instrument) parts.push(`Instrument: ${instrument}`)
+  if (instrument) parts.push(`Product / part: ${instrument}`)
   parts.push(messageRaw || 'Quote request from the website.')
   const message = `Topic: Quote\n\n${parts.join('\n\n')}`
 

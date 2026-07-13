@@ -22,12 +22,12 @@ export default async function HomePage() {
             <span className="hero-banner__line hero-banner__line--3"></span>
           </div>
           <div className="banner-section__inner container">
-            <span className="eyebrow hero-banner__eyebrow"><span className="hero-banner__pulse"></span>UAE · Qatar · Since 2003</span>
+            <span className="eyebrow hero-banner__eyebrow"><span className="hero-banner__pulse"></span>GCC · Since 2003</span>
             <h1 className="h-1 hero-banner__title" data-words-reveal>
               <span className="word">Trusted</span>
               <span className="word">by</span>
               <span className="word">the</span>
-              <span className="word">UAE&apos;s</span>
+              <span className="word">GCC&apos;s</span>
               <span className="word"><em>refineries</em>,</span>
               <span className="word">terminals</span>
               <span className="word">and</span>

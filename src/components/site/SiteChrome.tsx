@@ -51,7 +51,7 @@ export default async function SiteChrome({ extraScripts = [] }: { extraScripts?:
             <div className="field"><label htmlFor="qf-company">Company</label><input id="qf-company" name="company" type="text" required defaultValue={prefillCompany} /></div>
             <div className="field"><label htmlFor="qf-email">Email</label><input id="qf-email" name="email" type="email" required defaultValue={prefillEmail} /></div>
             <div className="field"><label htmlFor="qf-phone">Phone</label><input id="qf-phone" name="phone" type="tel" required placeholder="+971 50 000 0000" defaultValue={prefillPhone} /></div>
-            <div className="field"><label htmlFor="qf-instrument">Instrument</label><input id="qf-instrument" name="instrument" type="text" placeholder="e.g. LAB-X5000" /></div>
+            <div className="field"><label htmlFor="qf-instrument">Product / part</label><input id="qf-instrument" name="instrument" type="text" placeholder="Instrument, spare part or consumable — e.g. LAB-X5000, XRF sample cups" /></div>
             <div className="field"><label htmlFor="qf-message">Message</label><textarea id="qf-message" name="message" rows={3} placeholder="Standards, sample type, throughput..."></textarea></div>
             <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }} />
 
