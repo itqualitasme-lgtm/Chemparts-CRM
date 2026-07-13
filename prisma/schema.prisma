@@ -145,15 +145,17 @@ model CustomerDocument {
 }
 
 model Vendor {
-  id           String    @id @default(cuid())
-  companyName  String
-  country      String
-  currency     String    @default("USD")
-  paymentTerms String?
-  bankDetails  String?
-  profiles     Profile[]
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id             String          @id @default(cuid())
+  companyName    String
+  country        String
+  currency       String          @default("USD")
+  paymentTerms   String?
+  bankDetails    String?
+  profiles       Profile[]
+  purchaseOrders PurchaseOrder[]
+  bills          Bill[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }
 
 enum ProductType {
@@ -582,6 +584,71 @@ model OrderDocument {
   label     String
   url       String // Supabase Storage public URL
   createdAt DateTime     @default(now())
+}
+
+// ---- Procurement (Phase 5) — staff raise POs to vendors; vendors view them
+//      and submit bills against them, which staff approve and mark paid. ----
+enum PurchaseOrderStatus {
+  DRAFT
+  SENT
+  CONFIRMED
+  RECEIVED
+  CANCELLED
+}
+
+enum BillStatus {
+  SUBMITTED
+  APPROVED
+  PAID
+  REJECTED
+}
+
+model PurchaseOrder {
+  id                 String              @id @default(cuid())
+  poNo               String              @unique
+  vendor             Vendor              @relation(fields: [vendorId], references: [id])
+  vendorId           String
+  status             PurchaseOrderStatus @default(DRAFT)
+  currency           String              @default("USD")
+  expectedDate       DateTime?
+  notes              String?
+  items              PurchaseOrderItem[]
+  bills              Bill[]
+  createdByProfile   String? // profile id of the staff who raised it
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  @@index([vendorId, status])
+}
+
+model PurchaseOrderItem {
+  id          String        @id @default(cuid())
+  po          PurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade)
+  poId        String
+  description String
+  qty         Int           @default(1)
+  unitCost    Decimal       @default(0) @db.Decimal(12, 2)
+  sortOrder   Int           @default(0)
+}
+
+model Bill {
+  id                 String         @id @default(cuid())
+  billNo             String // the vendor's own invoice number
+  vendor             Vendor         @relation(fields: [vendorId], references: [id])
+  vendorId           String
+  po                 PurchaseOrder? @relation(fields: [poId], references: [id])
+  poId               String?
+  amount             Decimal        @db.Decimal(12, 2)
+  currency           String         @default("USD")
+  status             BillStatus     @default(SUBMITTED)
+  fileUrl            String? // uploaded invoice (Supabase Storage URL)
+  note               String?
+  dueDate            DateTime?
+  submittedByProfile String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  @@index([vendorId, status])
 }
 
 model Setting {

@@ -38,12 +38,17 @@ const CATALOG_ITEMS: NavItem[] = [
   { href: '/staff/blog', label: 'Blog / news' },
   { href: '/staff/stock', label: 'Stock' },
 ]
+const PURCHASING_ITEMS: NavItem[] = [
+  { href: '/staff/purchase-orders', label: 'Purchase orders' },
+  { href: '/staff/bills', label: 'Bills' },
+]
 
 const GROUPS: Record<'staff' | 'vendor' | 'admin', NavGroup[]> = {
   staff: [
     { items: [{ href: '/staff', label: 'Dashboard' }] },
     { title: 'Sales', items: SALES_ITEMS },
     { title: 'Catalog', items: CATALOG_ITEMS },
+    { title: 'Purchasing', items: PURCHASING_ITEMS },
   ],
   vendor: [
     { items: [{ href: '/vendor', label: 'Overview' }] },
@@ -59,6 +64,7 @@ const GROUPS: Record<'staff' | 'vendor' | 'admin', NavGroup[]> = {
     { items: [{ href: '/admin', label: 'Dashboard' }] },
     { title: 'Sales', items: SALES_ITEMS },
     { title: 'Catalog', items: CATALOG_ITEMS },
+    { title: 'Purchasing', items: PURCHASING_ITEMS },
     {
       title: 'Administration',
       items: [
