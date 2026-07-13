@@ -1,9 +1,12 @@
 'use server'
 
+import { after } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { nextPoNo } from '@/lib/po-no'
+import { notify } from '@/lib/mail/notify'
+import { appUrl } from '@/lib/env'
 import type { PurchaseOrderStatus } from '@/generated/prisma/client'
 
 export type POState = { ok?: boolean; error?: string }
@@ -68,9 +71,29 @@ export async function createPurchaseOrder(_prev: POState, formData: FormData): P
 export async function setPOStatus(id: string, status: string): Promise<POState> {
   await requirePortal('staff')
   if (!STATUSES.includes(status as PurchaseOrderStatus)) return { error: 'Invalid status.' }
-  const po = await db.purchaseOrder.findUnique({ where: { id }, select: { id: true } })
+  const next = status as PurchaseOrderStatus
+  const po = await db.purchaseOrder.findUnique({
+    where: { id },
+    select: {
+      id: true, poNo: true, status: true, currency: true,
+      items: { select: { qty: true, unitCost: true } },
+      vendor: { select: { profiles: { where: { status: 'ACTIVE' }, select: { email: true } } } },
+    },
+  })
   if (!po) return { error: 'Purchase order not found.' }
-  await db.purchaseOrder.update({ where: { id }, data: { status: status as PurchaseOrderStatus } })
+
+  await db.purchaseOrder.update({ where: { id }, data: { status: next } })
+
+  // Tell the vendor when we send them a PO.
+  if (next === 'SENT' && po.status !== 'SENT') {
+    const total = po.items.reduce((n, it) => n + it.qty * Number(it.unitCost), 0)
+    const totalStr = `${po.currency} ${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    const link = `${appUrl()}/vendor/purchase-orders`
+    for (const p of po.vendor.profiles) {
+      after(() => notify(p.email, 'po-sent', { poNo: po.poNo, total: totalStr, link }))
+    }
+  }
+
   revalidatePath('/staff/purchase-orders')
   revalidatePath('/vendor/purchase-orders')
   return { ok: true }

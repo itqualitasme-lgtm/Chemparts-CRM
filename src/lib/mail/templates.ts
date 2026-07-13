@@ -21,6 +21,40 @@ type TemplateVars = Record<string, string>
 type Rendered = { subject: string; html: string }
 
 const templates: Record<string, (v: TemplateVars) => Rendered> = {
+  // ---- Procurement (Phase 5) ----
+  'po-sent': (v) => ({
+    subject: `New purchase order ${v.poNo} from Chemparts`,
+    html: layout(
+      'You have a new purchase order',
+      `<p>Chemparts Middle East has raised purchase order <strong>${esc(v.poNo)}</strong> to you${v.total ? ` for <strong>${esc(v.total)}</strong>` : ''}.</p>
+<p>Please review the items and confirm the ones you can fulfil.</p>
+${button(v.link, 'View purchase order')}`,
+    ),
+  }),
+  'staff-po-confirmed': (v) => ({
+    subject: `PO ${v.poNo} confirmed by ${v.vendor}`,
+    html: layout(
+      'Purchase order confirmed',
+      `<p><strong>${esc(v.vendor)}</strong> has confirmed purchase order <strong>${esc(v.poNo)}</strong>.</p>
+${button(v.link, 'Open in portal')}`,
+    ),
+  }),
+  'staff-bill-submitted': (v) => ({
+    subject: `New bill ${v.billNo} from ${v.vendor}`,
+    html: layout(
+      'A vendor submitted a bill',
+      `<p><strong>${esc(v.vendor)}</strong> submitted invoice <strong>${esc(v.billNo)}</strong> for <strong>${esc(v.amount)}</strong>${v.poNo ? ` against ${esc(v.poNo)}` : ''}.</p>
+${button(v.link, 'Review bill')}`,
+    ),
+  }),
+  'bill-status': (v) => ({
+    subject: `Your bill ${v.billNo} is now ${v.status}`,
+    html: layout(
+      'Bill status update',
+      `<p>Your invoice <strong>${esc(v.billNo)}</strong> (${esc(v.amount)}) has been marked <strong>${esc(v.status)}</strong> by Chemparts.</p>
+${button(v.link, 'View your bills')}`,
+    ),
+  }),
   welcome: (v) => ({
     subject: 'Welcome to Chemparts — your account is ready',
     html: layout(

@@ -1,9 +1,13 @@
 'use server'
 
+import { after } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { requirePortal } from '@/lib/auth/session'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { db } from '@/lib/db'
+import { notifyStaff } from '@/lib/mail/notify'
+import { createNotification } from '@/lib/notifications'
+import { appUrl } from '@/lib/env'
 
 export type SubmitBillState = { ok?: boolean; error?: string }
 
@@ -29,7 +33,7 @@ export async function submitBill(_prev: SubmitBillState, formData: FormData): Pr
     if (!po) return { error: 'That purchase order was not found.' }
   }
 
-  const vendor = await db.vendor.findUnique({ where: { id: user.vendorId }, select: { currency: true } })
+  const vendor = await db.vendor.findUnique({ where: { id: user.vendorId }, select: { currency: true, companyName: true } })
   const dueRaw = (formData.get('dueDate') as string | null)?.trim()
   const note = (formData.get('note') as string | null)?.trim() || null
 
@@ -47,13 +51,14 @@ export async function submitBill(_prev: SubmitBillState, formData: FormData): Pr
     fileUrl = supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
   }
 
+  const currency = vendor?.currency ?? 'USD'
   await db.bill.create({
     data: {
       billNo,
       vendorId: user.vendorId,
       poId,
       amount,
-      currency: vendor?.currency ?? 'USD',
+      currency,
       note,
       fileUrl,
       dueDate: dueRaw ? new Date(dueRaw) : null,
@@ -61,6 +66,16 @@ export async function submitBill(_prev: SubmitBillState, formData: FormData): Pr
       submittedByProfile: user.id,
     },
   })
+
+  const vendorName = vendor?.companyName ?? 'A vendor'
+  const poNo = poId ? (await db.purchaseOrder.findUnique({ where: { id: poId }, select: { poNo: true } }))?.poNo ?? '' : ''
+  const amountStr = `${currency} ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  const link = `${appUrl()}/staff/bills`
+  after(async () => {
+    await notifyStaff('staff-bill-submitted', { billNo, vendor: vendorName, amount: amountStr, poNo, link })
+    await createNotification({ kind: 'INFO', title: `New bill ${billNo}`, body: `${vendorName} · ${amountStr}`, link: '/staff/bills', entity: 'Bill' })
+  })
+
   revalidatePath('/vendor/bills')
   revalidatePath('/staff/bills')
   return { ok: true }
