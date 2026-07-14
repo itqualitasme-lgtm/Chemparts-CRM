@@ -69,6 +69,13 @@ export default function ChatWidget() {
 
   const shown: Msg[] = msgs.length ? msgs : [{ id: 'greet', sender: 'BOT', body: BOT_GREETING, createdAt: '' }]
 
+  // If an agent was requested but nobody has replied within 2 minutes, nudge
+  // the visitor to call. Re-evaluated on every 4s poll while the panel is open.
+  const last = msgs[msgs.length - 1]
+  const staffReplied = msgs.some((m) => m.sender === 'STAFF')
+  const waitingBusy =
+    status === 'LIVE' && !staffReplied && !!last && Date.now() - new Date(last.createdAt).getTime() > 120000
+
   return (
     <>
       {/* Launcher */}
@@ -128,6 +135,15 @@ export default function ChatWidget() {
               )
             })}
           </div>
+
+          {waitingBusy && (
+            <div style={{ margin: '0 14px 8px', padding: '10px 12px', borderRadius: 10, background: '#fff7ed', border: '1px solid #fed7aa', fontSize: 13, lineHeight: 1.45, color: '#9a3412' }}>
+              Our team is currently busy. For a faster response, please call{' '}
+              <a href="tel:+97165574047" style={{ color: '#0E7490', fontWeight: 600 }}>+971 6 557 4047</a>
+              {' '}or{' '}
+              <a href="https://wa.me/971557566123" target="_blank" rel="noopener" style={{ color: '#0E7490', fontWeight: 600 }}>WhatsApp us</a>.
+            </div>
+          )}
 
           {status !== 'LIVE' && (
             <button
