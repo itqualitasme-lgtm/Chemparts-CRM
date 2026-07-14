@@ -145,15 +145,10 @@ export default function ChatWidget() {
             </div>
           )}
 
-          {status !== 'LIVE' && (
-            <button
-              type="button"
-              onClick={() => send('I would like to talk to an agent, please.', true)}
-              disabled={sending}
-              style={{ margin: '0 14px', padding: '7px', fontSize: 12, fontWeight: 600, color: '#0E7490', background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left' }}
-            >
-              Talk to a real person →
-            </button>
+          {status === 'CLOSED' && (
+            <div style={{ margin: '0 14px 8px', padding: '10px 12px', borderRadius: 10, background: '#f1f5f9', border: '1px solid #e2e8f0', fontSize: 13, lineHeight: 1.45, color: '#475569', textAlign: 'center' }}>
+              This chat has been closed by our team. Type below to start a new one.
+            </div>
           )}
 
           <form

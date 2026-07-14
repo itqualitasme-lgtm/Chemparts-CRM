@@ -49,6 +49,12 @@ export async function POST(req: Request) {
     conv = created
   }
 
+  // A visitor writing into a closed chat reopens it (back to the bot).
+  if (conv.status === 'CLOSED') {
+    await db.chatConversation.update({ where: { id: conv.id }, data: { status: 'BOT', agentRequested: false } })
+    conv = { ...conv, status: 'BOT', agentRequested: false }
+  }
+
   // Capture the visitor's email/name if we learn it.
   const emailFromMsg = message.match(EMAIL_RE)?.[0] ?? null
   const email = conv.visitorEmail ?? emailIn ?? emailFromMsg

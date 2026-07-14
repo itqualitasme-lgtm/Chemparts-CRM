@@ -69,6 +69,7 @@ export async function createQuotationFromEnquiry(enquiryId: string): Promise<{ e
       status: true,
       customerId: true,
       salesPersonId: true,
+      message: true,
       items: {
         select: {
           productId: true,
@@ -97,6 +98,9 @@ export async function createQuotationFromEnquiry(enquiryId: string): Promise<{ e
       vatPercent: 5,
       salesPersonId: enquiry.salesPersonId,
       publicToken: publicToken(),
+      // Website enquiries carry the request as free text — surface it in the
+      // quotation notes so a message-only enquiry isn't a blank quote.
+      notes: enquiry.message ?? null,
       items: {
         create: enquiry.items.map((it, i) => ({
           productId: it.productId,
