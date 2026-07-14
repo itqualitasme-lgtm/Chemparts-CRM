@@ -4,7 +4,7 @@ import { getActiveSalesPeople } from '@/lib/sales'
 import CustomerForm from '../CustomerForm'
 import { createCustomer } from '../actions'
 
-export const metadata = { title: 'New customer — Chemparts Staff' }
+export const metadata = { title: 'New customer - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function NewCustomerPage() {

@@ -3,7 +3,7 @@ import { brandLogoUrl } from '@/lib/brand-image'
 
 export const dynamic = 'force-dynamic'
 export const metadata = {
-  title: 'Brand Partners — Authorized Distributor for Hitachi, Tanaka, Oxford & More | UAE & Gulf',
+  title: 'Brand Partners - Authorized Distributor for Hitachi, Tanaka, Oxford & More | UAE & Gulf',
   description: 'Chemparts is the authorized regional distributor for Hitachi, Tanaka, Oxford Instruments, Scavini, Biolab and more across the UAE, Dubai, Qatar and the Gulf. Full warranty, genuine spares, factory-certified service.',
   alternates: { canonical: '/partners' },
 }

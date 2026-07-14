@@ -2,7 +2,7 @@ import { getFaqs } from '@/lib/site-settings'
 
 export const dynamic = 'force-dynamic'
 export const metadata = {
-  title: 'FAQ — Chemparts Middle East',
+  title: 'FAQ - Chemparts Middle East',
   description: 'Answers to common questions about Chemparts — analytical instruments, spares, consumables, quotes, service and delivery across the UAE, Qatar and the Gulf.',
 }
 

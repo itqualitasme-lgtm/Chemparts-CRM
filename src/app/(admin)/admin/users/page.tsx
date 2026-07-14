@@ -4,7 +4,7 @@ import { db } from '@/lib/db'
 import PageHeader from '@/components/ui/PageHeader'
 import UsersTable, { type UserRow } from './UsersTable'
 
-export const metadata = { title: 'Users & approvals — Chemparts' }
+export const metadata = { title: 'Users & approvals - Chemparts' }
 export const dynamic = 'force-dynamic'
 
 export default async function UsersPage() {

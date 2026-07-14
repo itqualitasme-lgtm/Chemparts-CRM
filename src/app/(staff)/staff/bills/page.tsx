@@ -3,7 +3,7 @@ import { db } from '@/lib/db'
 import PageHeader from '@/components/ui/PageHeader'
 import BillsTable, { type BillRow } from './BillsTable'
 
-export const metadata = { title: 'Bills — Chemparts Staff' }
+export const metadata = { title: 'Bills - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function StaffBillsPage() {

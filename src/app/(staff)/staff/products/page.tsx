@@ -6,7 +6,7 @@ import DeleteButton from '@/components/DeleteButton'
 import { deleteProduct } from './actions'
 import type { Prisma } from '@/generated/prisma/client'
 
-export const metadata = { title: 'Products — Chemparts Staff' }
+export const metadata = { title: 'Products - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 const PAGE_SIZE = 25

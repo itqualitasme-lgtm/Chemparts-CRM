@@ -8,7 +8,7 @@ import { updateCustomer, deleteCustomer } from '../actions'
 import DocumentsPanel from './DocumentsPanel'
 import DeleteButton from '@/components/DeleteButton'
 
-export const metadata = { title: 'Customer — Chemparts Staff' }
+export const metadata = { title: 'Customer - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function CustomerDetailPage({ params }: { params: Promise<{ id: string }> }) {

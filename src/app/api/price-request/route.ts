@@ -51,7 +51,7 @@ export async function POST(req: Request) {
       qty: String(qty),
       link: `${appUrl()}/staff/price-requests`,
     })
-    await createNotification({ kind: 'PRICE', title: `Price request — ${product.name}`, body: `${company || name} · qty ${qty}`, link: '/staff/price-requests', entity: 'PriceRequest' })
+    await createNotification({ kind: 'PRICE', title: `Price request - ${product.name}`, body: `${company || name} · qty ${qty}`, link: '/staff/price-requests', entity: 'PriceRequest' })
   })
 
   return NextResponse.json({ ok: true })

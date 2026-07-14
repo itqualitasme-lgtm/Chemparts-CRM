@@ -8,7 +8,7 @@ import BrandLogoUpload from './BrandLogoUpload'
 import DeleteButton from '@/components/DeleteButton'
 import { deleteBrand } from '../actions'
 
-export const metadata = { title: 'Edit brand — Chemparts Staff' }
+export const metadata = { title: 'Edit brand - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function EditBrandPage({ params }: { params: Promise<{ id: string }> }) {

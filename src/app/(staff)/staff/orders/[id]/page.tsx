@@ -8,7 +8,7 @@ import OrderDocuments from './OrderDocuments'
 import DeleteButton from '@/components/DeleteButton'
 import { deleteOrder } from '../actions'
 
-export const metadata = { title: 'Order — Chemparts Staff' }
+export const metadata = { title: 'Order - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {

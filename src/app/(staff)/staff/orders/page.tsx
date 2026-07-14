@@ -4,7 +4,7 @@ import { quoteTotals } from '@/lib/quotation'
 import PageHeader from '@/components/ui/PageHeader'
 import OrdersTable, { type OrderRow } from './OrdersTable'
 
-export const metadata = { title: 'Orders — Chemparts Staff' }
+export const metadata = { title: 'Orders - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 function fmtDate(d: Date): string {

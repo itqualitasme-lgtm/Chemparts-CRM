@@ -3,7 +3,7 @@ import { db } from '@/lib/db'
 import PageHeader from '@/components/ui/PageHeader'
 import type { Prisma } from '@/generated/prisma/client'
 
-export const metadata = { title: 'Customers — Chemparts Staff' }
+export const metadata = { title: 'Customers - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 const PAGE_SIZE = 25

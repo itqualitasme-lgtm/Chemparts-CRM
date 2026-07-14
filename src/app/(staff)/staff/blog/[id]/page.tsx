@@ -4,7 +4,7 @@ import { db } from '@/lib/db'
 import PostForm from '../PostForm'
 import { updatePost } from '../actions'
 
-export const metadata = { title: 'Edit post — Chemparts Staff' }
+export const metadata = { title: 'Edit post - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function EditPostPage({ params }: { params: Promise<{ id: string }> }) {

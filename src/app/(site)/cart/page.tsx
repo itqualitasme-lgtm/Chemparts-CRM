@@ -9,7 +9,7 @@ import EnquiryForm from './EnquiryForm'
 // the (site) group is excluded from Tailwind, so NO Tailwind utilities here.
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = { title: 'Your cart — Chemparts Middle East' }
+export const metadata: Metadata = { title: 'Your cart - Chemparts Middle East' }
 
 function formatPrice(currency: string, value: number): string {
   const n = value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })

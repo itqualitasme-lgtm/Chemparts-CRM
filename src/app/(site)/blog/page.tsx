@@ -2,7 +2,7 @@ import { db } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 export const metadata = {
-  title: 'News & insights — Chemparts Middle East',
+  title: 'News & insights - Chemparts Middle East',
   description: 'Product news, application notes and updates from Chemparts Middle East.',
 }
 

@@ -4,7 +4,7 @@ import { quoteTotals } from '@/lib/quotation'
 import PageHeader from '@/components/ui/PageHeader'
 import QuotationsTable, { type QuotationRow } from './QuotationsTable'
 
-export const metadata = { title: 'Quotations — Chemparts Staff' }
+export const metadata = { title: 'Quotations - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 function fmtDate(d: Date): string {

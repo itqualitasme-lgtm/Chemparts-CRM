@@ -3,7 +3,7 @@ import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import BlogList from './BlogList'
 
-export const metadata = { title: 'Blog — Chemparts Staff' }
+export const metadata = { title: 'Blog - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function StaffBlogPage() {

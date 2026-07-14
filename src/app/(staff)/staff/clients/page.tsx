@@ -2,7 +2,7 @@ import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import Clients from './Clients'
 
-export const metadata = { title: 'Clients — Chemparts Staff' }
+export const metadata = { title: 'Clients - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function ClientsPage() {

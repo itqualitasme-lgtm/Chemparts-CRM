@@ -4,7 +4,7 @@ import { db } from '@/lib/db'
 import PageHeader from '@/components/ui/PageHeader'
 import StatCard from '@/components/ui/StatCard'
 
-export const metadata = { title: 'Reports — Chemparts' }
+export const metadata = { title: 'Reports - Chemparts' }
 export const dynamic = 'force-dynamic'
 
 function money(n: number, currency = 'AED'): string {

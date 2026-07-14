@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { getSessionUser } from '@/lib/auth/session'
 
-export const metadata = { title: 'My Account — Chemparts' }
+export const metadata = { title: 'My Account - Chemparts' }
 
 const CARDS = [
   { title: 'Browse the store', note: 'Equipment, spare parts & consumables.', href: '/products' },

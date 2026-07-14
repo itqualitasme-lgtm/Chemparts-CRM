@@ -5,7 +5,7 @@ import CompanyBranchesForm from './CompanyBranchesForm'
 import ContactForm from './ContactForm'
 import FaqForm from './FaqForm'
 
-export const metadata = { title: 'Settings — Chemparts' }
+export const metadata = { title: 'Settings - Chemparts' }
 export const dynamic = 'force-dynamic'
 
 export default async function SettingsPage() {

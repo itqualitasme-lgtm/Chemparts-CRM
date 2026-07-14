@@ -5,7 +5,7 @@ import { SERVICE_TYPE_LABEL } from '@/lib/service'
 import PageHeader from '@/components/ui/PageHeader'
 import ServiceRequestsTable, { type ServiceRow } from './ServiceRequestsTable'
 
-export const metadata = { title: 'Service requests — Chemparts Staff' }
+export const metadata = { title: 'Service requests - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 function fmtPref(d: Date | null): string | null {

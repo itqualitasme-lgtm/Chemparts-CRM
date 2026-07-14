@@ -2,7 +2,7 @@ import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import CampaignForm from './CampaignForm'
 
-export const metadata = { title: 'Campaigns — Chemparts Staff' }
+export const metadata = { title: 'Campaigns - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 const STATUS_CLS: Record<string, string> = {

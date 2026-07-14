@@ -2,7 +2,7 @@ import { db } from '@/lib/db'
 import { confirmUnsubscribe } from '../newsletter-actions'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'Unsubscribe — Chemparts' }
+export const metadata = { title: 'Unsubscribe - Chemparts' }
 
 export default async function UnsubscribePage({
   searchParams,

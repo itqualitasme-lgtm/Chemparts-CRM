@@ -32,9 +32,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params
   const product = await getProductDetail(slug)
   if (!product) {
-    return { title: 'Product not found — Chemparts Middle East' }
+    return { title: 'Product not found - Chemparts Middle East' }
   }
-  const title = `${product.name} · ${product.brand} — Chemparts Middle East`
+  const title = `${product.name} · ${product.brand} - Chemparts Middle East`
   return {
     title,
     description: product.overview || product.desc,

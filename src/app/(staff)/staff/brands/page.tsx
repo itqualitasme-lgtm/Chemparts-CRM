@@ -3,7 +3,7 @@ import { db } from '@/lib/db'
 import { brandLogoUrl } from '@/lib/brand-image'
 import BrandForm from './BrandForm'
 
-export const metadata = { title: 'Brands — Chemparts Staff' }
+export const metadata = { title: 'Brands - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function StaffBrandsPage() {

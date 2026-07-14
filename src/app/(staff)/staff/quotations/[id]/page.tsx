@@ -9,7 +9,7 @@ import CreateOrderButton from './CreateOrderButton'
 import DeleteButton from '@/components/DeleteButton'
 import { deleteQuotation } from '../actions'
 
-export const metadata = { title: 'Quotation — Chemparts Staff' }
+export const metadata = { title: 'Quotation - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 function toDateInput(d: Date | null): string {

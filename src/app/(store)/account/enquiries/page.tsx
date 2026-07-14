@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 
-export const metadata = { title: 'My enquiries — Chemparts' }
+export const metadata = { title: 'My enquiries - Chemparts' }
 export const dynamic = 'force-dynamic'
 
 // Customer-facing status labels — internal states are collapsed into ones that

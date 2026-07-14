@@ -2,7 +2,7 @@ import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { quoteTotals } from '@/lib/quotation'
 
-export const metadata = { title: 'My quotations — Chemparts' }
+export const metadata = { title: 'My quotations - Chemparts' }
 export const dynamic = 'force-dynamic'
 
 const STATUS_BADGE: Record<string, string> = {

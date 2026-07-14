@@ -8,8 +8,8 @@ export const dynamic = 'force-dynamic'
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const post = await db.post.findFirst({ where: { slug, published: true }, select: { title: true, excerpt: true } })
-  if (!post) return { title: 'Not found — Chemparts' }
-  return { title: `${post.title} — Chemparts`, description: post.excerpt ?? undefined }
+  if (!post) return { title: 'Not found - Chemparts' }
+  return { title: `${post.title} - Chemparts`, description: post.excerpt ?? undefined }
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {

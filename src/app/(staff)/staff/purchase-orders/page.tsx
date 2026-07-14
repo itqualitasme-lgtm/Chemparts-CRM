@@ -3,7 +3,7 @@ import { db } from '@/lib/db'
 import PageHeader from '@/components/ui/PageHeader'
 import PurchaseOrders, { type PORow } from './PurchaseOrders'
 
-export const metadata = { title: 'Purchase orders — Chemparts Staff' }
+export const metadata = { title: 'Purchase orders - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function StaffPurchaseOrdersPage() {

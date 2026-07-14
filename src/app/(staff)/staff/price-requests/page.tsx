@@ -4,7 +4,7 @@ import { priceState } from '@/lib/price'
 import PageHeader from '@/components/ui/PageHeader'
 import PriceRequestsTable, { type PriceRow } from './PriceRequestsTable'
 
-export const metadata = { title: 'Price requests — Chemparts Staff' }
+export const metadata = { title: 'Price requests - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 function fmtPrice(currency: string, value: number | null): string {

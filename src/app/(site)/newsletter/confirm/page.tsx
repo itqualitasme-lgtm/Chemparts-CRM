@@ -1,7 +1,7 @@
 import { confirmNewsletter } from '../../newsletter-actions'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'Confirm subscription — Chemparts' }
+export const metadata = { title: 'Confirm subscription - Chemparts' }
 
 export default async function NewsletterConfirmPage({
   searchParams,

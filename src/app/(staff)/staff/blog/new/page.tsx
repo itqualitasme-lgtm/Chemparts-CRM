@@ -2,7 +2,7 @@ import { requirePortal } from '@/lib/auth/session'
 import PostForm from '../PostForm'
 import { createPost } from '../actions'
 
-export const metadata = { title: 'New post — Chemparts Staff' }
+export const metadata = { title: 'New post - Chemparts Staff' }
 
 export default async function NewPostPage() {
   await requirePortal('staff')

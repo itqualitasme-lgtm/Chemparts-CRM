@@ -3,7 +3,7 @@ import { getSessionUser } from '@/lib/auth/session'
 import { isOtpGraceActive } from '@/lib/auth/otp-grace'
 import PasswordChangeForm from './PasswordChangeForm'
 
-export const metadata = { title: 'Change password — Chemparts' }
+export const metadata = { title: 'Change password - Chemparts' }
 export const dynamic = 'force-dynamic'
 
 export default async function AccountPasswordPage() {

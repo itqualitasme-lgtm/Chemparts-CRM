@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { getSessionUser } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 
-export const metadata = { title: 'Vendor Portal — Chemparts' }
+export const metadata = { title: 'Vendor Portal - Chemparts' }
 export const dynamic = 'force-dynamic'
 
 export default async function VendorPage() {

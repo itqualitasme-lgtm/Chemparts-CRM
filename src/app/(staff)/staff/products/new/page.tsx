@@ -3,7 +3,7 @@ import { db } from '@/lib/db'
 import ProductForm from '../ProductForm'
 import { createProduct } from '../actions'
 
-export const metadata = { title: 'New product — Chemparts Staff' }
+export const metadata = { title: 'New product - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function NewProductPage() {

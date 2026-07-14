@@ -88,7 +88,7 @@ export async function POST(req: Request) {
     const link = `${appUrl()}/staff/chats`
     after(async () => {
       await notifyStaff('staff-chat-agent', { who, message, link })
-      await createNotification({ kind: 'INFO', title: 'Live chat — agent requested', body: `${who}: ${message.slice(0, 80)}`, link: '/staff/chats', entity: 'ChatConversation', entityId: conv!.id })
+      await createNotification({ kind: 'INFO', title: 'Live chat - agent requested', body: `${who}: ${message.slice(0, 80)}`, link: '/staff/chats', entity: 'ChatConversation', entityId: conv!.id })
     })
   }
 

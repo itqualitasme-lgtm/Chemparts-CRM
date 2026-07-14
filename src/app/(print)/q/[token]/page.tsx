@@ -6,7 +6,7 @@ import { getCompanyBranches, resolveBranch } from '@/lib/company'
 import QuotationDocument from '@/components/QuotationDocument'
 import PrintButton from '../../print/quotation/[id]/PrintButton'
 
-export const metadata = { title: 'Quotation — Chemparts', robots: { index: false } }
+export const metadata = { title: 'Quotation - Chemparts', robots: { index: false } }
 export const dynamic = 'force-dynamic'
 
 // Public, no-login quotation view reached via the QR code / share link. Only

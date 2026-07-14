@@ -7,7 +7,7 @@ import ProductImages from '../ProductImages'
 import { updateProduct, deleteProduct } from '../actions'
 import DeleteButton from '@/components/DeleteButton'
 
-export const metadata = { title: 'Edit product — Chemparts Staff' }
+export const metadata = { title: 'Edit product - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function EditProductPage({

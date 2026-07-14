@@ -72,7 +72,7 @@ export async function requestPrice(
       qty: String(qty),
       link: `${appUrl()}/staff/price-requests`,
     })
-    await createNotification({ kind: 'PRICE', title: `Price request — ${product.name}`, body: `${who} · qty ${qty}`, link: '/staff/price-requests', entity: 'PriceRequest' })
+    await createNotification({ kind: 'PRICE', title: `Price request - ${product.name}`, body: `${who} · qty ${qty}`, link: '/staff/price-requests', entity: 'PriceRequest' })
   })
 
   return { ok: true }

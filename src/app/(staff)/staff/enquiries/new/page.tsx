@@ -4,7 +4,7 @@ import { getActiveSalesPeople } from '@/lib/sales'
 import { db } from '@/lib/db'
 import EnquiryCreateForm from './EnquiryCreateForm'
 
-export const metadata = { title: 'New enquiry — Chemparts Staff' }
+export const metadata = { title: 'New enquiry - Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 export default async function NewEnquiryPage() {
