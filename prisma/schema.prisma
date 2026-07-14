@@ -320,6 +320,7 @@ model Product {
   lotNumber   String?
   stockStatus StockStatus @default(IN_STOCK)
   stockTracked Boolean    @default(false)
+  stockQty    Int         @default(0) // on-hand quantity
   // BOM: this equipment's spare parts, and (reverse) the equipment this spare belongs to
   sparesForThis     EquipmentSpare[] @relation("EquipmentToSpare")
   usedInEquipment   EquipmentSpare[] @relation("SpareToEquipment")
