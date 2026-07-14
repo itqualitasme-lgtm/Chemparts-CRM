@@ -78,7 +78,7 @@ function Row({ r }: { r: VendorPORow }) {
         <td className="px-3 py-2 font-mono text-slate-900">{r.poNo}</td>
         <td className="px-3 py-2"><span className={`rounded px-2 py-0.5 text-xs font-medium ${STATUS_BADGE[r.status]}`}>{r.status}</span></td>
         <td className="px-3 py-2 font-medium text-slate-800">{money(poTotal(r), r.currency)}</td>
-        <td className="px-3 py-2 whitespace-nowrap text-xs text-slate-500">{r.expectedDate ? fmtDate(r.expectedDate) : '—'}</td>
+        <td className="px-3 py-2 whitespace-nowrap text-xs text-slate-500">{r.expectedDate ? fmtDate(r.expectedDate) : ''}</td>
         <td className="px-3 py-2 text-right">
           <button type="button" onClick={() => setOpen(true)} className="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50" aria-haspopup="dialog">
             View

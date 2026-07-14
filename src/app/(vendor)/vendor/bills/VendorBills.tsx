@@ -89,7 +89,7 @@ export default function VendorBills({
                     {b.note ? <div className="text-xs text-slate-500">{b.note}</div> : null}
                     {b.fileUrl ? <a href={b.fileUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-[#0E7490] hover:underline">View invoice ↗</a> : null}
                   </td>
-                  <td className="px-3 py-3 font-mono text-xs text-slate-500">{b.poNo ?? '—'}</td>
+                  <td className="px-3 py-3 font-mono text-xs text-slate-500">{b.poNo ?? ''}</td>
                   <td className="px-3 py-3 font-medium text-slate-800">{money(b.amount, b.currency)}</td>
                   <td className="px-3 py-3"><span className={`rounded px-2 py-0.5 text-xs font-medium ${STATUS_BADGE[b.status] ?? 'bg-slate-100 text-slate-600'}`}>{b.status}</span></td>
                   <td className="px-3 py-3 whitespace-nowrap text-xs text-slate-500">{fmtDate(b.createdAt)}</td>

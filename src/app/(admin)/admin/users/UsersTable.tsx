@@ -121,7 +121,7 @@ function Row({ u, isSelf }: { u: UserRow; isSelf: boolean }) {
         <div className="font-medium text-slate-800">{u.fullName}{isSelf ? <span className="ml-1 text-xs text-slate-400">(you)</span> : null}</div>
         <div className="text-xs text-slate-500">{u.email}</div>
       </td>
-      <td className="px-3 py-3 text-slate-600">{u.org ?? <span className="text-slate-300">—</span>}</td>
+      <td className="px-3 py-3 text-slate-600">{u.org ?? <span className="text-slate-300"></span>}</td>
       <td className="px-3 py-3">
         {isSelf ? (
           <span className="rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">{role}</span>
@@ -138,7 +138,7 @@ function Row({ u, isSelf }: { u: UserRow; isSelf: boolean }) {
       <td className="px-3 py-3 whitespace-nowrap text-xs text-slate-500">{fmtDate(u.createdAt)}</td>
       <td className="px-3 py-3 text-right">
         {isSelf ? (
-          <span className="text-xs text-slate-300">—</span>
+          <span className="text-xs text-slate-300"></span>
         ) : (
           <div className="flex flex-wrap justify-end gap-1.5">
             {status === 'PENDING' && (

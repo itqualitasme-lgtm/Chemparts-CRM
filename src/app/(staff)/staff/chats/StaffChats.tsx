@@ -115,7 +115,7 @@ export default function StaffChats({ rows }: { rows: ChatRow[] }) {
                     <span className="truncate text-sm font-medium text-slate-800">{c.who}</span>
                     <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${STATUS_BADGE[c.status] ?? STATUS_BADGE.BOT}`}>{c.status}</span>
                   </div>
-                  <div className="truncate text-xs text-slate-500">{c.lastPreview || '—'}</div>
+                  <div className="truncate text-xs text-slate-500">{c.lastPreview || ''}</div>
                   <div className="text-[10px] text-slate-400">{timeAgo(c.lastMessageAt)} · {c.count} msg{c.count === 1 ? '' : 's'}</div>
                 </button>
               </li>

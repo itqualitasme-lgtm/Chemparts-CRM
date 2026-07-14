@@ -83,7 +83,7 @@ export default function QuotationsTable({ rows }: { rows: QuotationRow[] }) {
                   <td className="px-4 py-2.5 font-mono text-xs text-slate-500">{qr.fromEnquiry}</td>
                   <td className="px-4 py-2.5 text-slate-800">{qr.total}</td>
                   <td className="px-4 py-2.5"><StatusBadge status={qr.status} /></td>
-                  <td className="px-4 py-2.5 text-slate-600">{qr.validUntil ?? '—'}</td>
+                  <td className="px-4 py-2.5 text-slate-600">{qr.validUntil ?? ''}</td>
                   <td className="px-4 py-2.5 text-right"><Link href={`/staff/quotations/${qr.id}`} className="text-[#0A2540] underline">Open</Link></td>
                 </tr>
               ))

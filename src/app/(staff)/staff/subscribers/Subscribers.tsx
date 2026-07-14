@@ -48,8 +48,8 @@ export default function Subscribers({ subs }: { subs: Sub[] }) {
           {subs.map((s) => (
             <tr key={s.id} className="border-b border-slate-100 last:border-0">
               <td className="px-4 py-2.5 font-medium text-slate-800">{s.email}</td>
-              <td className="px-4 py-2.5 text-slate-600">{s.name || '—'}</td>
-              <td className="px-4 py-2.5 text-slate-500">{s.source || '—'}</td>
+              <td className="px-4 py-2.5 text-slate-600">{s.name || ''}</td>
+              <td className="px-4 py-2.5 text-slate-500">{s.source || ''}</td>
               <td className="px-4 py-2.5">
                 {statusOf(s) === 'pending' ? (
                   <span

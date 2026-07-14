@@ -194,7 +194,7 @@ function Row({ e, salesPeople }: { e: EnquiryRow; salesPeople: { id: string; nam
           )}
         </td>
         <td className="px-3 py-2 text-center text-slate-600">{e.items.length}</td>
-        <td className="px-3 py-2 text-slate-600">{e.salesPerson ?? <span className="text-slate-300">—</span>}</td>
+        <td className="px-3 py-2 text-slate-600">{e.salesPerson ?? <span className="text-slate-300"></span>}</td>
         <td className="px-3 py-2">
           <span className={`rounded px-2 py-0.5 text-xs font-medium ${STATUS_BADGE[e.status]}`}>{label(e.status)}</span>
         </td>
@@ -260,12 +260,12 @@ function Row({ e, salesPeople }: { e: EnquiryRow; salesPeople: { id: string; nam
                     </div>
                     <div className="flex gap-2">
                       <dt className="w-20 shrink-0 text-slate-400">Company</dt>
-                      <dd className="min-w-0 truncate text-slate-700">{e.company || <span className="text-slate-300">—</span>}</dd>
+                      <dd className="min-w-0 truncate text-slate-700">{e.company || <span className="text-slate-300"></span>}</dd>
                     </div>
                     <div className="flex gap-2">
                       <dt className="w-20 shrink-0 text-slate-400">Email</dt>
                       <dd className="min-w-0 truncate">
-                        {e.email ? <a href={`mailto:${e.email}?subject=Re: ${e.enquiryNo}`} className="font-medium text-[#0E7490] hover:underline">{e.email}</a> : <span className="text-slate-300">—</span>}
+                        {e.email ? <a href={`mailto:${e.email}?subject=Re: ${e.enquiryNo}`} className="font-medium text-[#0E7490] hover:underline">{e.email}</a> : <span className="text-slate-300"></span>}
                       </dd>
                     </div>
                     <div className="flex gap-2">

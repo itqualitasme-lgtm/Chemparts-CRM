@@ -72,7 +72,7 @@ export default async function ReportsPage() {
   })
   const nameById = new Map(brandNames.map((b) => [b.id, b.name]))
   const topBrands = brands
-    .map((b) => ({ name: nameById.get(b.brandId) ?? '—', count: b._count._all }))
+    .map((b) => ({ name: nameById.get(b.brandId) ?? '', count: b._count._all }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 8)
   const maxBrand = topBrands[0]?.count ?? 1

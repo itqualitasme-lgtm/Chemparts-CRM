@@ -33,7 +33,7 @@ export default function SalesPeople({ people }: { people: Sales[] }) {
             {people.map((p) => (
               <tr key={p.id} className="border-b border-slate-100 last:border-0">
                 <td className="px-4 py-2.5 font-medium text-slate-800">{p.name}</td>
-                <td className="px-4 py-2.5 text-slate-600">{[p.email, p.phone].filter(Boolean).join(' · ') || '—'}</td>
+                <td className="px-4 py-2.5 text-slate-600">{[p.email, p.phone].filter(Boolean).join(' · ') || ''}</td>
                 <td className="px-4 py-2.5">
                   {p.active ? (
                     <span className="text-xs text-green-700">Active</span>

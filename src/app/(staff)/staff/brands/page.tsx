@@ -78,7 +78,7 @@ export default async function StaffBrandsPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-2.5 text-slate-600">{b.countryOfOrigin ?? <span className="text-slate-300">—</span>}</td>
+                    <td className="px-4 py-2.5 text-slate-600">{b.countryOfOrigin ?? <span className="text-slate-300"></span>}</td>
                     <td className="px-4 py-2.5 text-center text-slate-600">{b._count.products}</td>
                     <td className="px-4 py-2.5 text-right">
                       <Link href={`/staff/brands/${b.id}`} className="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50">

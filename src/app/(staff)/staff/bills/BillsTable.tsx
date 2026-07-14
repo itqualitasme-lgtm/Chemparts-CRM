@@ -105,13 +105,13 @@ function Row({ r }: { r: BillRow }) {
         {r.fileUrl ? <a href={r.fileUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-[#0E7490] hover:underline">View invoice ↗</a> : <span className="text-xs text-slate-300">no file</span>}
       </td>
       <td className="px-3 py-3 text-slate-700">{r.vendor}</td>
-      <td className="px-3 py-3 font-mono text-xs text-slate-500">{r.poNo ?? '—'}</td>
+      <td className="px-3 py-3 font-mono text-xs text-slate-500">{r.poNo ?? ''}</td>
       <td className="px-3 py-3 font-medium text-slate-800">{money(r.amount, r.currency)}</td>
       <td className="px-3 py-3">
         <span className={`rounded px-2 py-0.5 text-xs font-medium ${STATUS_BADGE[status] ?? 'bg-slate-100 text-slate-600'}`}>{status}</span>
         {msg ? <div className="mt-1 text-xs text-rose-600">{msg}</div> : null}
       </td>
-      <td className="px-3 py-3 whitespace-nowrap text-xs text-slate-500">{r.dueDate ? fmtDate(r.dueDate) : '—'}</td>
+      <td className="px-3 py-3 whitespace-nowrap text-xs text-slate-500">{r.dueDate ? fmtDate(r.dueDate) : ''}</td>
       <td className="px-3 py-3 text-right">
         <div className="flex flex-wrap justify-end gap-1.5">
           {status === 'SUBMITTED' && (
@@ -123,7 +123,7 @@ function Row({ r }: { r: BillRow }) {
           {status === 'APPROVED' && (
             <button type="button" disabled={pending} onClick={() => move('PAID')} className="rounded-lg bg-green-600 px-2.5 py-1 text-xs font-medium text-white transition hover:bg-green-700 disabled:opacity-50">Mark paid</button>
           )}
-          {(status === 'PAID' || status === 'REJECTED') && <span className="text-xs text-slate-300">—</span>}
+          {(status === 'PAID' || status === 'REJECTED') && <span className="text-xs text-slate-300"></span>}
         </div>
       </td>
     </tr>

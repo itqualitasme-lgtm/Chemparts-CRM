@@ -110,7 +110,7 @@ export default async function StaffCustomersPage({
                   <div className="font-medium text-slate-800">{c.companyName}</div>
                   {location ? <div className="text-xs text-slate-500">{location}</div> : null}
                 </td>
-                <td className="px-4 py-3.5 text-slate-600">{c.industry ?? <span className="text-slate-300">—</span>}</td>
+                <td className="px-4 py-3.5 text-slate-600">{c.industry ?? <span className="text-slate-300"></span>}</td>
                 <td className="px-4 py-3.5 text-slate-600">
                   {c.contacts[0] ? (
                     <span>

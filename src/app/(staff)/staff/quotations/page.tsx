@@ -43,9 +43,9 @@ export default async function StaffQuotationsPage() {
     return {
       id: q.id,
       quotationNo: q.quotationNo,
-      customer: q.customer?.companyName ?? '—',
-      sales: q.salesPerson?.name ?? '—',
-      fromEnquiry: q.enquiry?.enquiryNo ?? '—',
+      customer: q.customer?.companyName ?? '',
+      sales: q.salesPerson?.name ?? '',
+      fromEnquiry: q.enquiry?.enquiryNo ?? '',
       total: `${q.currency} ${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       status: q.status,
       validUntil: q.validUntil ? fmtDate(q.validUntil) : null,

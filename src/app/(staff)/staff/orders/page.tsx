@@ -36,8 +36,8 @@ export default async function StaffOrdersPage() {
     return {
       id: o.id,
       orderNo: o.orderNo,
-      customer: o.customer?.companyName ?? '—',
-      fromQuote: o.quotation?.quotationNo ?? '—',
+      customer: o.customer?.companyName ?? '',
+      fromQuote: o.quotation?.quotationNo ?? '',
       total: `${o.currency} ${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       docs: o._count.documents,
       status: o.status,

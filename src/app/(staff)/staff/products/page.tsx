@@ -173,7 +173,7 @@ export default async function StaffProductsPage({
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={img} alt="" className="max-h-9 max-w-full object-contain" />
                         ) : (
-                          <span className="text-[8px] text-slate-300">—</span>
+                          <span className="text-[8px] text-slate-300"></span>
                         )}
                       </div>
                       <div className="min-w-0">

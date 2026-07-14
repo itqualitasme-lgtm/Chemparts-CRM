@@ -8,7 +8,7 @@ export const metadata = { title: 'Price requests — Chemparts Staff' }
 export const dynamic = 'force-dynamic'
 
 function fmtPrice(currency: string, value: number | null): string {
-  if (value == null) return '—'
+  if (value == null) return ''
   return `${currency} ${value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`
 }
 

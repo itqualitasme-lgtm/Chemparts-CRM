@@ -104,7 +104,7 @@ function Row({ r, salesPeople, isAdmin }: { r: ServiceRow; salesPeople: { id: st
         <td className="px-3 py-2 font-mono text-slate-900">{r.requestNo}</td>
         <td className="px-3 py-2"><span className="rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">{r.typeLabel}</span></td>
         <td className="px-3 py-2 text-slate-700">{r.who}</td>
-        <td className="px-3 py-2 text-slate-600">{r.equipment ?? <span className="text-slate-300">—</span>}</td>
+        <td className="px-3 py-2 text-slate-600">{r.equipment ?? <span className="text-slate-300"></span>}</td>
         <td className="px-3 py-2"><StatusBadge status={r.status} /></td>
         <td className="px-3 py-2 whitespace-nowrap text-xs text-slate-500">{fmtDate(r.createdAt)}</td>
         <td className="px-3 py-2 text-right">
@@ -139,9 +139,9 @@ function Row({ r, salesPeople, isAdmin }: { r: ServiceRow; salesPeople: { id: st
           <div className="border-b border-slate-100 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Request</div>
           <dl className="grid grid-cols-1 gap-x-6 gap-y-2 px-3 py-2.5 text-sm sm:grid-cols-2">
             <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Requester</dt><dd className="min-w-0 font-medium text-slate-800">{r.who}</dd></div>
-            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Contact</dt><dd className="min-w-0 truncate text-slate-700">{r.contact || <span className="text-slate-300">—</span>}</dd></div>
-            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Equipment</dt><dd className="min-w-0 text-slate-700">{r.equipment || <span className="text-slate-300">—</span>}</dd></div>
-            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Preferred</dt><dd className="min-w-0 text-slate-700">{r.preferredDate || <span className="text-slate-300">—</span>}</dd></div>
+            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Contact</dt><dd className="min-w-0 truncate text-slate-700">{r.contact || <span className="text-slate-300"></span>}</dd></div>
+            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Equipment</dt><dd className="min-w-0 text-slate-700">{r.equipment || <span className="text-slate-300"></span>}</dd></div>
+            <div className="flex gap-2"><dt className="w-24 shrink-0 text-slate-400">Preferred</dt><dd className="min-w-0 text-slate-700">{r.preferredDate || <span className="text-slate-300"></span>}</dd></div>
           </dl>
         </div>
 
