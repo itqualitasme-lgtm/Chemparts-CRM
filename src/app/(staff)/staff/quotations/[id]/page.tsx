@@ -4,6 +4,7 @@ import { requirePortal, getSessionUser } from '@/lib/auth/session'
 import { getActiveSalesPeople } from '@/lib/sales'
 import { getCompanyBranches } from '@/lib/company'
 import { db } from '@/lib/db'
+import { productImageUrl } from '@/lib/product-image'
 import QuotationEditor, { type Line } from './QuotationEditor'
 import CreateOrderButton from './CreateOrderButton'
 import DeleteButton from '@/components/DeleteButton'
@@ -20,7 +21,7 @@ function toDateInput(d: Date | null): string {
 export default async function QuotationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   await requirePortal('staff')
   const { id } = await params
-  const [q, user, salesPeople, branches] = await Promise.all([
+  const [q, user, salesPeople, branches, productRows] = await Promise.all([
     db.quotation.findUnique({
       where: { id },
       include: {
@@ -33,7 +34,19 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
     getSessionUser(),
     getActiveSalesPeople(),
     getCompanyBranches(),
+    db.product.findMany({
+      where: { active: true },
+      orderBy: { name: 'asc' },
+      select: { id: true, name: true, modelNo: true, listPrice: true, image: true },
+    }),
   ])
+  const products = productRows.map((p) => ({
+    id: p.id,
+    name: p.name,
+    modelNo: p.modelNo,
+    listPrice: p.listPrice != null ? Number(p.listPrice) : null,
+    image: productImageUrl(p.image),
+  }))
   if (!q) notFound()
 
   const lines: Line[] = q.items.map((it) => ({
@@ -96,6 +109,7 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
         lines={lines}
         salesPeople={salesPeople}
         branches={branches.map((b) => ({ id: b.id, name: b.name, isDefault: b.isDefault }))}
+        products={products}
       />
 
       {/* Convert an accepted quotation into an order (or jump to the existing one). */}

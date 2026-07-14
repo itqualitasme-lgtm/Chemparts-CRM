@@ -33,12 +33,14 @@ export default function QuotationEditor({
   lines: initialLines,
   salesPeople = [],
   branches = [],
+  products = [],
 }: {
   quotationId: string
   header: Header
   lines: Line[]
   salesPeople?: { id: string; name: string }[]
   branches?: { id: string; name: string; isDefault: boolean }[]
+  products?: { id: string; name: string; modelNo: string | null; listPrice: number | null; image: string | null }[]
 }) {
   const [state, formAction, pending] = useActionState<QuotationState, FormData>(
     updateQuotation.bind(null, quotationId),
@@ -71,6 +73,21 @@ export default function QuotationEditor({
     <form action={formAction} className="space-y-6">
       <input type="hidden" name="itemsJson" value={itemsJson} />
 
+      {/* Product picker source + preset payment terms (both allow custom text). */}
+      <datalist id="qe-products">
+        {products.map((p) => <option key={p.id} value={p.name} />)}
+      </datalist>
+      <datalist id="qe-terms">
+        {[
+          '100% advance with order',
+          '50% advance, balance before delivery',
+          '50% advance, 50% on delivery',
+          '30 days from invoice date',
+          'Against confirmed LC',
+          'As per agreement',
+        ].map((t) => <option key={t} value={t} />)}
+      </datalist>
+
       {state.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>}
       {state.ok && <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">Quotation saved.</p>}
 
@@ -91,24 +108,36 @@ export default function QuotationEditor({
             {lines.map((l, i) => (
               <tr key={i} className="border-b border-slate-100 last:border-0 align-top">
                 <td className="px-3 py-2">
-                  <input
-                    value={l.productName}
-                    onChange={(e) => setLine(i, { productName: e.target.value })}
-                    placeholder="Item description"
-                    className={inputCls}
-                  />
-                  <input
-                    value={l.note}
-                    onChange={(e) => setLine(i, { note: e.target.value })}
-                    placeholder="Note (optional)"
-                    className="mt-1 w-full rounded border border-slate-200 px-2 py-1 text-xs text-slate-600"
-                  />
-                  <input
-                    value={l.deliveryPeriod}
-                    onChange={(e) => setLine(i, { deliveryPeriod: e.target.value })}
-                    placeholder="Delivery / lead time (e.g. 2–4 weeks, ex-stock)"
-                    className="mt-1 w-full rounded border border-slate-200 px-2 py-1 text-xs text-slate-600"
-                  />
+                  <div className="flex items-start gap-2">
+                    {(() => {
+                      const prod = products.find((p) => p.id === l.productId)
+                      return prod?.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={prod.image} alt="" className="h-11 w-11 shrink-0 rounded border border-slate-200 bg-white object-contain" />
+                      ) : null
+                    })()}
+                    <div className="min-w-0 flex-1">
+                      <input
+                        list="qe-products"
+                        value={l.productName}
+                        onChange={(e) => {
+                          const val = e.target.value
+                          const match = products.find((p) => p.name === val)
+                          setLine(i, match
+                            ? { productName: val, productId: match.id, unitPrice: match.listPrice ?? l.unitPrice }
+                            : { productName: val, productId: null })
+                        }}
+                        placeholder="Search a product, or type a custom item"
+                        className={inputCls}
+                      />
+                      <input
+                        value={l.deliveryPeriod}
+                        onChange={(e) => setLine(i, { deliveryPeriod: e.target.value })}
+                        placeholder="Delivery / lead time (e.g. 2-4 weeks, ex-stock)"
+                        className="mt-1 w-full rounded border border-slate-200 px-2 py-1 text-xs text-slate-600"
+                      />
+                    </div>
+                  </div>
                 </td>
                 <td className="px-3 py-2">
                   <input
@@ -220,7 +249,7 @@ export default function QuotationEditor({
         </label>
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-slate-700">Payment terms</span>
-          <input name="terms" defaultValue={header.terms} placeholder="50% advance, balance before delivery · prices ex-works" className={inputCls} />
+          <input name="terms" list="qe-terms" defaultValue={header.terms} placeholder="Select or type payment terms" className={inputCls} />
         </label>
         <label className="block sm:col-span-2">
           <span className="mb-1 block text-sm font-medium text-slate-700">Notes (shown to customer)</span>
