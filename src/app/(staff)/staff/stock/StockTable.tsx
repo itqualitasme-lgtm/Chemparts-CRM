@@ -12,7 +12,14 @@ export type StockRow = {
   stockStatus: string
   stockTracked: boolean
   stockQty: number
+  type: string
 }
+
+const TYPES = [
+  { value: 'EQUIPMENT', label: 'Instruments' },
+  { value: 'CONSUMABLE', label: 'Consumables' },
+  { value: 'SPARE_PART', label: 'Spare parts' },
+] as const
 
 const STATUSES = [
   { value: 'IN_STOCK', label: 'In stock', cls: 'bg-green-100 text-green-800', active: 'bg-green-600 text-white' },
@@ -30,16 +37,18 @@ type SortKey = 'name' | 'brand' | 'qty' | 'status'
 export default function StockTable({ rows }: { rows: StockRow[] }) {
   const [q, setQ] = useState('')
   const [status, setStatus] = useState('ALL')
+  const [type, setType] = useState('ALL')
   const [page, setPage] = useState(1)
   const [sortKey, setSortKey] = useState<SortKey>('status')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [bulkPending, startBulk] = useTransition()
-  useEffect(() => setPage(1), [q, status])
+  useEffect(() => setPage(1), [q, status, type])
 
   const filtered = useMemo(() => {
     let r = rows
     if (status !== 'ALL') r = r.filter((x) => x.stockStatus === status)
+    if (type !== 'ALL') r = r.filter((x) => x.type === type)
     const s = q.trim().toLowerCase()
     if (s) r = r.filter((x) => [x.name, x.modelNo ?? '', x.brand].join(' ').toLowerCase().includes(s))
     const dir = sortDir === 'asc' ? 1 : -1
@@ -51,7 +60,7 @@ export default function StockTable({ rows }: { rows: StockRow[] }) {
       else c = (STATUS_RANK[a.stockStatus] ?? 9) - (STATUS_RANK[b.stockStatus] ?? 9) || a.name.localeCompare(b.name)
       return c * dir
     })
-  }, [rows, q, status, sortKey, sortDir])
+  }, [rows, q, status, type, sortKey, sortDir])
 
   const pageRows = pageSlice(filtered, page, PAGE_SIZE)
   const pageIds = pageRows.map((r) => r.id)
@@ -84,6 +93,10 @@ export default function StockTable({ rows }: { rows: StockRow[] }) {
     <div>
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search product, model, brand…" className={`${selectCls} min-w-0 flex-1`} />
+        <select value={type} onChange={(e) => setType(e.target.value)} className={selectCls} aria-label="Filter by category">
+          <option value="ALL">All categories</option>
+          {TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+        </select>
         <select value={status} onChange={(e) => setStatus(e.target.value)} className={selectCls} aria-label="Filter by stock status">
           <option value="ALL">All stock</option>
           {STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}

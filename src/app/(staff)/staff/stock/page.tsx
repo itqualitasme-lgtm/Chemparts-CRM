@@ -18,6 +18,7 @@ export default async function StockPage() {
       stockStatus: true,
       stockTracked: true,
       stockQty: true,
+      type: true,
       brand: { select: { name: true } },
     },
   })
@@ -30,6 +31,7 @@ export default async function StockPage() {
     stockStatus: p.stockStatus,
     stockTracked: p.stockTracked,
     stockQty: p.stockQty,
+    type: p.type,
   }))
 
   const counts = {
