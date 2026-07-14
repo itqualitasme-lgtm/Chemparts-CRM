@@ -21,7 +21,7 @@ function toDateInput(d: Date | null): string {
 export default async function QuotationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   await requirePortal('staff')
   const { id } = await params
-  const [q, user, salesPeople, branches, productRows] = await Promise.all([
+  const [q, user, salesPeople, branches, productRows, customers] = await Promise.all([
     db.quotation.findUnique({
       where: { id },
       include: {
@@ -39,6 +39,7 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
       orderBy: { name: 'asc' },
       select: { id: true, name: true, modelNo: true, listPrice: true, image: true },
     }),
+    db.customer.findMany({ orderBy: { companyName: 'asc' }, select: { id: true, companyName: true } }),
   ])
   const products = productRows.map((p) => ({
     id: p.id,
@@ -105,11 +106,13 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
           otherChargesLabel: q.otherChargesLabel ?? '',
           salesPersonId: q.salesPersonId ?? '',
           companyBranchId: q.companyBranchId ?? '',
+          customerId: q.customerId ?? '',
         }}
         lines={lines}
         salesPeople={salesPeople}
         branches={branches.map((b) => ({ id: b.id, name: b.name, isDefault: b.isDefault }))}
         products={products}
+        customers={customers}
       />
 
       {/* Convert an accepted quotation into an order (or jump to the existing one). */}

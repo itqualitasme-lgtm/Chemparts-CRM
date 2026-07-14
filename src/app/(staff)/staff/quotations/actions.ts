@@ -155,6 +155,7 @@ export async function updateQuotation(
   const notes = (formData.get('notes') as string | null)?.trim() || null
   const terms = (formData.get('terms') as string | null)?.trim() || null
   const deliveryTerms = (formData.get('deliveryTerms') as string | null)?.trim() || null
+  const customerId = (formData.get('customerId') as string | null)?.trim() || null
   const lines = parseLines(formData.get('itemsJson') as string | null)
   if (lines.length === 0) return { error: 'A quotation needs at least one line item.' }
 
@@ -170,6 +171,7 @@ export async function updateQuotation(
         notes,
         terms,
         deliveryTerms,
+        customerId,
         shipping: num(formData, 'shipping'),
         otherCharges: num(formData, 'otherCharges'),
         otherChargesLabel: (formData.get('otherChargesLabel') as string | null)?.trim() || null,

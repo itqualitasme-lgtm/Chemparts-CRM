@@ -50,7 +50,7 @@ export default function PortalDashboard({ data, firstName, title }: { data: Dash
   return (
     <div>
       <div className="mb-4">
-        <h1 className="text-lg font-semibold text-slate-900">{title}{firstName ? ` — ${firstName}` : ''}</h1>
+        <h1 className="text-lg font-semibold text-slate-900">{title}{firstName ? ` · ${firstName}` : ''}</h1>
         <p className="text-[13px] text-slate-500">Here&apos;s what needs attention today.</p>
       </div>
 

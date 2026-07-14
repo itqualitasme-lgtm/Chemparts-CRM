@@ -17,6 +17,7 @@ type Header = {
   otherChargesLabel: string
   salesPersonId: string
   companyBranchId: string
+  customerId: string
 }
 
 const STATUSES = ['DRAFT', 'SENT', 'ACCEPTED', 'REJECTED', 'EXPIRED']
@@ -34,6 +35,7 @@ export default function QuotationEditor({
   salesPeople = [],
   branches = [],
   products = [],
+  customers = [],
 }: {
   quotationId: string
   header: Header
@@ -41,6 +43,7 @@ export default function QuotationEditor({
   salesPeople?: { id: string; name: string }[]
   branches?: { id: string; name: string; isDefault: boolean }[]
   products?: { id: string; name: string; modelNo: string | null; listPrice: number | null; image: string | null }[]
+  customers?: { id: string; companyName: string }[]
 }) {
   const [state, formAction, pending] = useActionState<QuotationState, FormData>(
     updateQuotation.bind(null, quotationId),
@@ -206,6 +209,13 @@ export default function QuotationEditor({
 
       {/* Header fields */}
       <section className="grid gap-4 rounded-xl border border-slate-200 bg-white p-6 sm:grid-cols-2">
+        <label className="block sm:col-span-2">
+          <span className="mb-1 block text-sm font-medium text-slate-700">Customer</span>
+          <select name="customerId" defaultValue={header.customerId} className={inputCls}>
+            <option value="">No customer (guest)</option>
+            {customers.map((c) => <option key={c.id} value={c.id}>{c.companyName}</option>)}
+          </select>
+        </label>
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-slate-700">Status</span>
           <select name="status" defaultValue={header.status} className={inputCls}>
