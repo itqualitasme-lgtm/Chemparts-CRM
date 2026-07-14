@@ -1119,7 +1119,10 @@ html.modal-locked body { overflow: hidden; touch-action: none; }
 }
 @media (max-width: 800px) {
   .site-footer__cta { grid-template-columns: 1fr; gap: 24px; }
-  .site-footer__cols { grid-template-columns: 1fr 1fr; gap: 32px; }
+  /* About blurb spans the top; the three link groups sit in an even row
+     below — avoids the lopsided 2×2 gap when the Navigation list is tall. */
+  .site-footer__cols { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 28px; }
+  .site-footer__cols > div:first-child { grid-column: 1 / -1; }
   .site-footer__bottom { flex-direction: column; gap: 12px; align-items: flex-start; }
 }
 
