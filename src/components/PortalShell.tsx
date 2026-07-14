@@ -22,6 +22,7 @@ const STORE_NAV: NavItem[] = [
 // Staff/vendor/admin — grouped into a slide-in drawer menu.
 const SALES_ITEMS: NavItem[] = [
   { href: '/staff/enquiries', label: 'Enquiries' },
+  { href: '/staff/chats', label: 'Chats' },
   { href: '/staff/quotations', label: 'Quotations' },
   { href: '/staff/orders', label: 'Orders' },
   { href: '/staff/service-requests', label: 'Service requests' },

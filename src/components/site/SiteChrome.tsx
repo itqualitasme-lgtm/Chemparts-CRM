@@ -1,4 +1,5 @@
 import Script from 'next/script'
+import ChatWidget from '@/components/site/ChatWidget'
 import { getPublicCatalog } from '@/lib/catalog-data'
 import { getSessionUser } from '@/lib/auth/session'
 import { db } from '@/lib/db'
@@ -74,6 +75,9 @@ export default async function SiteChrome({ extraScripts = [] }: { extraScripts?:
       {extraScripts.map((src) => (
         <Script key={src} src={src} strategy="afterInteractive" />
       ))}
+
+      {/* Website live chat (bot + agent handoff) */}
+      <ChatWidget />
     </>
   )
 }

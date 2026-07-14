@@ -649,6 +649,45 @@ model Bill {
   @@index([vendorId, status])
 }
 
+// ---- Website live chat — a scripted bot handles the conversation and can
+//      hand off to a real agent, who replies from the staff portal. ----
+enum ChatSender {
+  VISITOR
+  BOT
+  STAFF
+}
+
+enum ChatStatus {
+  BOT // the bot is handling it
+  LIVE // a human agent was requested / is handling it
+  CLOSED
+}
+
+model ChatConversation {
+  id            String        @id @default(cuid())
+  token         String        @unique @default(cuid()) // visitor's private reconnect key
+  visitorName   String?
+  visitorEmail  String?
+  status        ChatStatus    @default(BOT)
+  agentRequested Boolean      @default(false)
+  createdAt     DateTime      @default(now())
+  lastMessageAt DateTime      @default(now())
+  messages      ChatMessage[]
+
+  @@index([status, lastMessageAt])
+}
+
+model ChatMessage {
+  id             String           @id @default(cuid())
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String
+  sender         ChatSender
+  body           String
+  createdAt      DateTime         @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
 model Setting {
   key       String   @id
   value     Json

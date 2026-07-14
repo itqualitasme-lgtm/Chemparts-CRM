@@ -21,6 +21,15 @@ type TemplateVars = Record<string, string>
 type Rendered = { subject: string; html: string }
 
 const templates: Record<string, (v: TemplateVars) => Rendered> = {
+  'staff-chat-agent': (v) => ({
+    subject: `Live chat — ${v.who} asked for an agent`,
+    html: layout(
+      'A visitor wants to chat with the team',
+      `<p><strong>${esc(v.who)}</strong> requested a live agent on the website chat.</p>
+${v.message ? `<p style="color:#66788a">“${esc(v.message)}”</p>` : ''}
+${button(v.link, 'Open chat inbox')}`,
+    ),
+  }),
   // ---- Procurement (Phase 5) ----
   'po-sent': (v) => ({
     subject: `New purchase order ${v.poNo} from Chemparts`,

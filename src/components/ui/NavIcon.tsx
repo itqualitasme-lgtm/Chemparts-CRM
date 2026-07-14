@@ -6,6 +6,7 @@ function iconFor(href: string) {
   if (href === '/admin' || href === '/staff' || href === '/vendor' || href === '/account')
     return <><rect x="2" y="2" width="5.5" height="5.5" rx="1" {...P} /><rect x="8.5" y="2" width="5.5" height="5.5" rx="1" {...P} /><rect x="2" y="8.5" width="5.5" height="5.5" rx="1" {...P} /><rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1" {...P} /></>
   if (href.includes('/enquiries')) return <><path d="M2 4h12v8H2z" {...P} /><path d="M2 5l6 4 6-4" {...P} /></>
+  if (href.includes('/chats')) return <><path d="M2 3.5h12v8H6l-3 2.5v-2.5H2z" {...P} /><path d="M5 6.5h6M5 8.8h4" {...P} /></>
   if (href.includes('/quotations')) return <><path d="M4 2h5l3 3v9H4z" {...P} /><path d="M9 2v3h3" {...P} /><path d="M6 8h4M6 10.5h4" {...P} /></>
   if (href.includes('/orders')) return <><path d="M2 5l6-3 6 3-6 3z" {...P} /><path d="M2 5v6l6 3 6-3V5" {...P} /><path d="M8 8v6" {...P} /></>
   if (href.includes('/service-requests')) return <><path d="M9.5 3a3 3 0 00-4 3.9L2.5 9.9a1.4 1.4 0 002 2l3-3A3 3 0 0011 4.5L9 6.5 8 5.5 10 3.5z" {...P} /></>
