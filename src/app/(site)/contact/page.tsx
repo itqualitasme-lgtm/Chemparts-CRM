@@ -105,7 +105,7 @@ export default async function ContactPage() {
                 <h3>Sales &amp; quotations</h3>
                 <p className="dept-card__desc">New instrument quotes, configuration help, brand selection, regional pricing.</p>
                 <div className="dept-card__contact">
-                  <a href="mailto:sales@chemparts-me.com">sales@chemparts-me.com</a>
+                  <a href="mailto:info@chemparts-me.com">info@chemparts-me.com</a>
                   <a href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp +971 55 756 6123</a>
                 </div>
               </div>
@@ -114,7 +114,7 @@ export default async function ContactPage() {
                 <h3>Service &amp; calibration</h3>
                 <p className="dept-card__desc">Installation, preventive maintenance, AMC, IQ/OQ/PQ documentation, emergency repairs.</p>
                 <div className="dept-card__contact">
-                  <a href="mailto:service@chemparts-me.com">service@chemparts-me.com</a>
+                  <a href="mailto:info@chemparts-me.com">info@chemparts-me.com</a>
                   <a href="tel:+97165574047">+971 6 5574047</a>
                 </div>
               </div>
@@ -123,7 +123,7 @@ export default async function ContactPage() {
                 <h3>Application support</h3>
                 <p className="dept-card__desc">Method selection, sample-suitability assessment, calibration plans, ASTM/ISO/IP shortlists.</p>
                 <div className="dept-card__contact">
-                  <a href="mailto:application@chemparts-me.com">application@chemparts-me.com</a>
+                  <a href="mailto:info@chemparts-me.com">info@chemparts-me.com</a>
                   <a href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp our specialists</a>
                 </div>
               </div>
@@ -132,7 +132,7 @@ export default async function ContactPage() {
                 <h3>Spares &amp; consumables</h3>
                 <p className="dept-card__desc">OEM spare parts, reference materials, calibration standards, lab consumables — held in regional stock.</p>
                 <div className="dept-card__contact">
-                  <a href="mailto:parts@chemparts-me.com">parts@chemparts-me.com</a>
+                  <a href="mailto:info@chemparts-me.com">info@chemparts-me.com</a>
                   <a href="tel:+97165574047">+971 6 5574047 ext. 2</a>
                 </div>
               </div>
