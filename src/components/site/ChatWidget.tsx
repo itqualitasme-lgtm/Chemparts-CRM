@@ -105,7 +105,7 @@ export default function ChatWidget() {
           }}
         >
           <div style={{ background: NAVY, color: '#fff', padding: '14px 16px' }}>
-            <div style={{ fontWeight: 700, fontSize: 15 }}>Chemparts — Chat</div>
+            <div style={{ fontWeight: 700, fontSize: 15 }}>Chemparts Chat</div>
             <div style={{ fontSize: 12, color: '#9fb3c8', display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ width: 7, height: 7, borderRadius: '50%', background: status === 'LIVE' ? '#22c55e' : '#22D3EE' }} />
               {status === 'LIVE' ? 'Connected to the team' : 'Assistant · usually replies within the working day'}

@@ -22,7 +22,7 @@ type Rendered = { subject: string; html: string }
 
 const templates: Record<string, (v: TemplateVars) => Rendered> = {
   'staff-chat-agent': (v) => ({
-    subject: `Live chat — ${v.who} asked for an agent`,
+    subject: `Live chat - ${v.who} asked for an agent`,
     html: layout(
       'A visitor wants to chat with the team',
       `<p><strong>${esc(v.who)}</strong> requested a live agent on the website chat.</p>
@@ -65,7 +65,7 @@ ${button(v.link, 'View your bills')}`,
     ),
   }),
   welcome: (v) => ({
-    subject: 'Welcome to Chemparts — your account is ready',
+    subject: 'Welcome to Chemparts - your account is ready',
     html: layout(
       'Welcome to Chemparts',
       `<p>Dear ${esc(v.name)},</p>
@@ -92,9 +92,9 @@ ${button(v.actionUrl, 'Activate account')}`,
     ),
   }),
   'enquiry-received': (v) => ({
-    subject: `Enquiry ${v.enquiryNo} received — Chemparts`,
+    subject: `Enquiry ${v.enquiryNo} received - Chemparts`,
     html: layout(
-      'Thanks — we have your enquiry',
+      'Thanks - we have your enquiry',
       `<p>Dear ${esc(v.name)},</p>
 <p>We've received your enquiry <strong>${esc(v.enquiryNo)}</strong> with ${esc(v.itemCount)} item${
         v.itemCount === '1' ? '' : 's'
@@ -103,18 +103,18 @@ ${button(v.actionUrl, 'Activate account')}`,
     ),
   }),
   'service-received': (v) => ({
-    subject: `Service request ${v.requestNo} received — Chemparts`,
+    subject: `Service request ${v.requestNo} received - Chemparts`,
     html: layout(
       'We’ve got your service request',
       `<p>Dear ${esc(v.name)},</p>
-<p>Thanks — your service request <strong>${esc(v.requestNo)}</strong> has been logged. Our service team will get back to you with next steps, usually within the working day.</p>
+<p>Thanks - your service request <strong>${esc(v.requestNo)}</strong> has been logged. Our service team will get back to you with next steps, usually within the working day.</p>
 <p style="color:#66788a;font-size:13px">Please quote ${esc(v.requestNo)} in any follow-up.</p>`,
     ),
   }),
   'contact-received': (v) => ({
-    subject: `We’ve got your message — Chemparts (${v.enquiryNo})`,
+    subject: `We’ve got your message - Chemparts (${v.enquiryNo})`,
     html: layout(
-      'Thanks — we have your message',
+      'Thanks - we have your message',
       `<p>Dear ${esc(v.name)},</p>
 <p>Thanks for reaching out. We’ve logged your message as <strong>${esc(v.enquiryNo)}</strong> and our team will reply, usually within the working day.</p>
 <p style="color:#66788a;font-size:13px">Please quote ${esc(v.enquiryNo)} in any follow-up.</p>`,
@@ -122,7 +122,7 @@ ${button(v.actionUrl, 'Activate account')}`,
   }),
   // ---- Staff notifications (to the info inbox, cc sales person) ----
   'staff-new-enquiry': (v) => ({
-    subject: `New enquiry ${v.enquiryNo} — ${v.who}`,
+    subject: `New enquiry ${v.enquiryNo} - ${v.who}`,
     html: layout(
       'New enquiry received',
       `<p><strong>${esc(v.enquiryNo)}</strong> from <strong>${esc(v.who)}</strong> via ${esc(v.channel)}.</p>
@@ -131,7 +131,7 @@ ${button(v.link, 'Open in portal')}`,
     ),
   }),
   'staff-new-service': (v) => ({
-    subject: `New service request ${v.requestNo} — ${v.type}`,
+    subject: `New service request ${v.requestNo} - ${v.type}`,
     html: layout(
       'New service request',
       `<p><strong>${esc(v.requestNo)}</strong> (${esc(v.type)}) from <strong>${esc(v.who)}</strong>.</p>
@@ -140,7 +140,7 @@ ${button(v.link, 'Open in portal')}`,
     ),
   }),
   'staff-new-price-request': (v) => ({
-    subject: `New price request — ${v.product}`,
+    subject: `New price request - ${v.product}`,
     html: layout(
       'New price request',
       `<p><strong>${esc(v.who)}</strong> asked for the current price of <strong>${esc(v.product)}</strong> (qty ${esc(v.qty)}).</p>
@@ -149,15 +149,15 @@ ${button(v.link, 'Open in portal')}`,
   }),
   // ---- Customer notifications ----
   'price-request-received': (v) => ({
-    subject: `We've got your price request — Chemparts`,
+    subject: `We've got your price request - Chemparts`,
     html: layout(
-      'Thanks — we have your request',
+      'Thanks - we have your request',
       `<p>Dear ${esc(v.name)},</p>
 <p>We've received your request for the current price of <strong>${esc(v.product)}</strong>. Our team will confirm pricing and availability, usually within the working day.</p>`,
     ),
   }),
   'enquiry-assigned': (v) => ({
-    subject: `Enquiry ${v.enquiryNo} assigned to you — Chemparts`,
+    subject: `Enquiry ${v.enquiryNo} assigned to you - Chemparts`,
     html: layout(
       'An enquiry is assigned to you',
       `<p>Dear ${esc(v.name)},</p>
@@ -177,17 +177,17 @@ ${button(v.link, 'Open enquiries')}`,
     ),
   }),
   'newsletter-confirm': (v) => ({
-    subject: `Confirm your subscription — Chemparts`,
+    subject: `Confirm your subscription - Chemparts`,
     html: layout(
-      'One more step — confirm your email',
+      'One more step - confirm your email',
       `<p>Hello${v.name && v.name !== 'there' ? ` ${esc(v.name)}` : ''},</p>
 <p>Please confirm you'd like to receive Chemparts product news, promotions and offers. We won't send anything until you click below.</p>
 ${button(v.confirmUrl, 'Confirm subscription')}
-<p style="color:#66788a;font-size:13px;margin-top:20px">If you didn't request this, just ignore this email — no subscription will be created.</p>`,
+<p style="color:#66788a;font-size:13px;margin-top:20px">If you didn't request this, just ignore this email - no subscription will be created.</p>`,
     ),
   }),
   'newsletter-welcome': (v) => ({
-    subject: `You're subscribed — Chemparts updates & offers`,
+    subject: `You're subscribed - Chemparts updates & offers`,
     html: layout(
       'Welcome to Chemparts updates',
       `<p>Dear ${esc(v.name)},</p>
@@ -196,7 +196,7 @@ ${button(v.confirmUrl, 'Confirm subscription')}
     ),
   }),
   'price-confirmed': (v) => ({
-    subject: `Your price for ${v.product} — Chemparts`,
+    subject: `Your price for ${v.product} - Chemparts`,
     html: layout(
       'Your price is confirmed',
       `<p>Dear ${esc(v.name)},</p>
@@ -207,7 +207,7 @@ ${v.validUntil ? `<p style="color:#66788a">Valid until ${esc(v.validUntil)}.</p>
     ),
   }),
   'enquiry-status-update': (v) => ({
-    subject: `Update on your enquiry ${v.enquiryNo} — Chemparts`,
+    subject: `Update on your enquiry ${v.enquiryNo} - Chemparts`,
     html: layout(
       'Your enquiry has an update',
       `<p>Dear ${esc(v.name)},</p>
@@ -215,7 +215,7 @@ ${v.validUntil ? `<p style="color:#66788a">Valid until ${esc(v.validUntil)}.</p>
     ),
   }),
   'quotation-sent': (v) => ({
-    subject: `Your quotation ${v.quotationNo} is ready — Chemparts`,
+    subject: `Your quotation ${v.quotationNo} is ready - Chemparts`,
     html: layout(
       'Your quotation is ready',
       `<p>Dear ${esc(v.name)},</p>
@@ -225,7 +225,7 @@ ${button(v.link, 'View quotation')}
     ),
   }),
   'order-status-update': (v) => ({
-    subject: `Update on your order ${v.orderNo} — Chemparts`,
+    subject: `Update on your order ${v.orderNo} - Chemparts`,
     html: layout(
       'Your order has an update',
       `<p>Dear ${esc(v.name)},</p>
@@ -233,7 +233,7 @@ ${button(v.link, 'View quotation')}
     ),
   }),
   'service-status-update': (v) => ({
-    subject: `Update on your service request ${v.requestNo} — Chemparts`,
+    subject: `Update on your service request ${v.requestNo} - Chemparts`,
     html: layout(
       'Your service request has an update',
       `<p>Dear ${esc(v.name)},</p>
