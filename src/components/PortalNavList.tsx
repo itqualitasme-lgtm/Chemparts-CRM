@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import NavIcon from '@/components/ui/NavIcon'
 
-type NavItem = { href: string; label: string }
+type NavItem = { href: string; label: string; badge?: number }
 export type NavGroup = { title?: string; items: NavItem[] }
 
 // Dashboard/overview roots match only exactly (so /admin doesn't stay active on
@@ -61,6 +61,11 @@ export default function PortalNavList({
                   }
                 />
                 <span className="truncate">{item.label}</span>
+                {item.badge ? (
+                  <span className="ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-semibold text-white">
+                    {item.badge > 9 ? '9+' : item.badge}
+                  </span>
+                ) : null}
               </Link>
             )
           })}

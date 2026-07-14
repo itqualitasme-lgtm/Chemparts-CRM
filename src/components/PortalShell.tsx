@@ -5,10 +5,11 @@ import PortalLogoLink from '@/components/PortalLogoLink'
 import PortalNavList, { type NavGroup } from '@/components/PortalNavList'
 import NotificationBell from '@/components/NotificationBell'
 import { getNotifications, getUnreadCount } from '@/lib/notifications'
+import { db } from '@/lib/db'
 import type { SessionUser } from '@/lib/auth/session'
 import type { Portal } from '@/lib/auth/rbac'
 
-type NavItem = { href: string; label: string }
+type NavItem = { href: string; label: string; badge?: number }
 
 // Customer store portal — flat, small (desktop top nav + mobile bottom tabs).
 const STORE_NAV: NavItem[] = [
@@ -96,7 +97,7 @@ export default async function PortalShell({
   const isCustomer = portal === 'store'
   // Admins see one comprehensive menu everywhere (they can reach every tool),
   // so the drawer stays consistent when they open a staff-area module.
-  const groups: NavGroup[] = isCustomer
+  const baseGroups: NavGroup[] = isCustomer
     ? []
     : user.role === 'ADMIN'
       ? GROUPS.admin
@@ -104,10 +105,15 @@ export default async function PortalShell({
 
   const initial = user.fullName?.trim()?.[0]?.toUpperCase() ?? '?'
 
-  // Staff/admin get the notification bell (shared team inbox).
-  const [notifications, unread] = isCustomer
-    ? [[], 0]
-    : await Promise.all([getNotifications(), getUnreadCount()])
+  // Staff/admin get the notification bell (shared team inbox) + a live-chat
+  // count badge on the "Chats" nav item.
+  const [notifications, unread, chatsWaiting] = isCustomer
+    ? [[], 0, 0]
+    : await Promise.all([getNotifications(), getUnreadCount(), db.chatConversation.count({ where: { status: 'LIVE' } })])
+
+  const groups: NavGroup[] = chatsWaiting > 0
+    ? baseGroups.map((g) => ({ ...g, items: g.items.map((it) => (it.href === '/staff/chats' ? { ...it, badge: chatsWaiting } : it)) }))
+    : baseGroups
   const bellItems = notifications.map((n) => ({
     id: n.id,
     kind: n.kind,
