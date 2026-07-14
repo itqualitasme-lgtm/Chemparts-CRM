@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { revalidatePath } from 'next/cache'
-import { requirePortal, requireAdmin } from '@/lib/auth/session'
+import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { nextEnquiryNo } from '@/lib/enquiry-no'
 import { notify } from '@/lib/mail/notify'
@@ -37,18 +37,6 @@ export async function assignSalesPerson(enquiryId: string, salesPersonId: string
   return { ok: true }
 }
 export type CreateEnquiryState = { ok?: boolean; error?: string }
-
-/** Admin-only: delete an enquiry (line items cascade). */
-export async function deleteEnquiry(enquiryId: string): Promise<{ error?: string }> {
-  const admin = await requireAdmin()
-  if (!admin) return { error: 'Only administrators can delete enquiries.' }
-  const e = await db.enquiry.findUnique({ where: { id: enquiryId }, select: { id: true } })
-  if (!e) return { error: 'Enquiry not found.' }
-  await db.enquiry.delete({ where: { id: enquiryId } })
-  await db.auditLog.create({ data: { actorId: admin.id, action: 'DELETE', entity: 'Enquiry', entityId: enquiryId } })
-  revalidatePath('/staff/enquiries')
-  return {}
-}
 
 const ENQUIRY_TYPES: EnquiryType[] = [
   'WEBSITE', 'PHONE', 'EMAIL', 'WHATSAPP', 'WALK_IN', 'REFERRAL', 'EXHIBITION', 'TENDER', 'OTHER',
@@ -171,7 +159,7 @@ export async function rejectAsSpam(enquiryId: string): Promise<UpdateStatusState
   const user = await requirePortal('staff')
   const e = await db.enquiry.findUnique({ where: { id: enquiryId }, select: { id: true, enquiryNo: true } })
   if (!e) return { error: 'Enquiry not found.' }
-  await db.enquiry.update({ where: { id: enquiryId }, data: { status: 'SPAM', lostReason: null } })
+  await db.enquiry.update({ where: { id: enquiryId }, data: { status: 'SPAM', rejectReason: null } })
   await db.auditLog.create({
     data: { actorId: user.id, action: 'UPDATE', entity: 'Enquiry', entityId: enquiryId, detail: { status: 'SPAM', enquiryNo: e.enquiryNo } },
   })
@@ -196,13 +184,13 @@ export async function updateEnquiryStatus(
 
   // Capture a reason when rejecting; clear it otherwise. (Field reused as the
   // reject reason.) The four statuses are all internal, so no customer email.
-  const reasonRaw = (formData.get('lostReason') as string | null)?.trim() || null
+  const reasonRaw = (formData.get('rejectReason') as string | null)?.trim() || null
   if (status === 'REJECTED' && !reasonRaw) {
     return { error: 'Add a reason for rejecting this enquiry.' }
   }
-  const lostReason = status === 'REJECTED' ? reasonRaw : null
+  const rejectReason = status === 'REJECTED' ? reasonRaw : null
 
-  await db.enquiry.update({ where: { id: enquiryId }, data: { status, lostReason } })
+  await db.enquiry.update({ where: { id: enquiryId }, data: { status, rejectReason } })
 
   revalidatePath('/staff/enquiries')
   return { ok: true }

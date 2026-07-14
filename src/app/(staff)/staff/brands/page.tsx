@@ -32,11 +32,11 @@ export default async function StaffBrandsPage() {
         <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
           <table className="w-full min-w-[520px] text-sm">
             <thead>
-              <tr className="border-b border-slate-200 bg-slate-50 text-left text-slate-600">
+              <tr className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
                 <th className="px-4 py-2.5 font-medium">Sort</th>
                 <th className="px-4 py-2.5 font-medium">Brand</th>
                 <th className="px-4 py-2.5 font-medium">Country</th>
-                <th className="px-4 py-2.5 font-medium">Products</th>
+                <th className="px-4 py-2.5 text-center font-medium">Products</th>
                 <th className="px-4 py-2.5 font-medium"></th>
               </tr>
             </thead>
@@ -78,10 +78,10 @@ export default async function StaffBrandsPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-2.5 text-slate-600">{b.countryOfOrigin ?? '—'}</td>
-                    <td className="px-4 py-2.5 text-slate-600">{b._count.products}</td>
+                    <td className="px-4 py-2.5 text-slate-600">{b.countryOfOrigin ?? <span className="text-slate-300">—</span>}</td>
+                    <td className="px-4 py-2.5 text-center text-slate-600">{b._count.products}</td>
                     <td className="px-4 py-2.5 text-right">
-                      <Link href={`/staff/brands/${b.id}`} className="text-[#0A2540] underline">
+                      <Link href={`/staff/brands/${b.id}`} className="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50">
                         Edit
                       </Link>
                     </td>

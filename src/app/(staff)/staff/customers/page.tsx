@@ -93,22 +93,25 @@ export default async function StaffCustomersPage({
       <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-200 bg-slate-50 text-left text-slate-600">
-              <th className="px-4 py-2.5 font-medium">Company</th>
-              <th className="px-4 py-2.5 font-medium">Location</th>
+            <tr className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+              <th className="px-4 py-2.5 font-medium">Customer</th>
               <th className="px-4 py-2.5 font-medium">Industry</th>
               <th className="px-4 py-2.5 font-medium">Primary contact</th>
-              <th className="px-4 py-2.5 font-medium">Enquiries</th>
+              <th className="px-4 py-2.5 text-center font-medium">Enquiries</th>
               <th className="px-4 py-2.5"></th>
             </tr>
           </thead>
           <tbody>
-            {customers.map((c) => (
+            {customers.map((c) => {
+              const location = [c.city, c.country].filter(Boolean).join(', ')
+              return (
               <tr key={c.id} className="border-b border-slate-100 last:border-0">
-                <td className="px-4 py-2.5 font-medium text-slate-800">{c.companyName}</td>
-                <td className="px-4 py-2.5 text-slate-600">{[c.city, c.country].filter(Boolean).join(', ')}</td>
-                <td className="px-4 py-2.5 text-slate-600">{c.industry ?? '—'}</td>
-                <td className="px-4 py-2.5 text-slate-600">
+                <td className="px-4 py-3.5">
+                  <div className="font-medium text-slate-800">{c.companyName}</div>
+                  {location ? <div className="text-xs text-slate-500">{location}</div> : null}
+                </td>
+                <td className="px-4 py-3.5 text-slate-600">{c.industry ?? <span className="text-slate-300">—</span>}</td>
+                <td className="px-4 py-3.5 text-slate-600">
                   {c.contacts[0] ? (
                     <span>
                       {c.contacts[0].name}
@@ -118,17 +121,18 @@ export default async function StaffCustomersPage({
                     <span className="text-slate-400">{c._count.contacts} contact{c._count.contacts === 1 ? '' : 's'}</span>
                   )}
                 </td>
-                <td className="px-4 py-2.5 text-slate-600">{c._count.enquiries}</td>
-                <td className="px-4 py-2.5 text-right">
-                  <Link href={`/staff/customers/${c.id}`} className="text-[#0A2540] underline">
+                <td className="px-4 py-3.5 text-center text-slate-600">{c._count.enquiries}</td>
+                <td className="px-4 py-3.5 text-right">
+                  <Link href={`/staff/customers/${c.id}`} className="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50">
                     Open
                   </Link>
                 </td>
               </tr>
-            ))}
+              )
+            })}
             {customers.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-10 text-center text-slate-500">
+                <td colSpan={5} className="px-4 py-10 text-center text-slate-500">
                   {q ? 'No customers match your search.' : 'No customers yet. Create the first one.'}
                 </td>
               </tr>

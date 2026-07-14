@@ -21,7 +21,7 @@ export type EnquiryRow = {
   salesPerson: string | null
   salesPersonId: string
   message: string | null
-  lostReason: string | null
+  rejectReason: string | null
   createdAt: string // ISO
   items: { id: string; productName: string; qty: number; priceRequested: boolean }[]
   quotations: { id: string; quotationNo: string }[]
@@ -141,7 +141,7 @@ export default function EnquiriesTable({ enquiries, salesPeople }: { enquiries: 
 function Row({ e, salesPeople }: { e: EnquiryRow; salesPeople: { id: string; name: string }[] }) {
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState(e.status)
-  const [reason, setReason] = useState(e.lostReason ?? '')
+  const [reason, setReason] = useState(e.rejectReason ?? '')
   const [pending, start] = useTransition()
   const [msg, setMsg] = useState<{ ok?: boolean; error?: string }>({})
   const [assignee, setAssignee] = useState(e.salesPersonId)
@@ -163,7 +163,7 @@ function Row({ e, salesPeople }: { e: EnquiryRow; salesPeople: { id: string; nam
     })
   }
 
-  const dirty = draft !== e.status || (draft === 'REJECTED' && reason.trim() !== (e.lostReason ?? ''))
+  const dirty = draft !== e.status || (draft === 'REJECTED' && reason.trim() !== (e.rejectReason ?? ''))
   const canSave = dirty && !(draft === 'REJECTED' && !reason.trim())
 
   function save() {
@@ -171,7 +171,7 @@ function Row({ e, salesPeople }: { e: EnquiryRow; salesPeople: { id: string; nam
       setMsg({})
       const fd = new FormData()
       fd.set('status', draft)
-      if (draft === 'REJECTED') fd.set('lostReason', reason)
+      if (draft === 'REJECTED') fd.set('rejectReason', reason)
       const res = await updateEnquiryStatus(e.id, fd)
       setMsg(res)
     })
@@ -325,8 +325,8 @@ function Row({ e, salesPeople }: { e: EnquiryRow; salesPeople: { id: string; nam
                   )}
                 </div>
 
-                {e.status === 'REJECTED' && e.lostReason ? (
-                  <p className="text-sm text-slate-600"><span className="text-slate-400">Reject reason:</span> {e.lostReason}</p>
+                {e.status === 'REJECTED' && e.rejectReason ? (
+                  <p className="text-sm text-slate-600"><span className="text-slate-400">Reject reason:</span> {e.rejectReason}</p>
                 ) : null}
 
                 {e.message ? (

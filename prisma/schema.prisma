@@ -453,7 +453,7 @@ model Enquiry {
   guestPhone   String?
   message      String?
   status       EnquiryStatus @default(OPEN)
-  lostReason   String? // why the enquiry was marked LOST
+  rejectReason String? @map("lostReason") // why the enquiry was rejected
   items        EnquiryItem[]
   quotations   Quotation[]
   salesPerson   SalesPerson? @relation(fields: [salesPersonId], references: [id])
