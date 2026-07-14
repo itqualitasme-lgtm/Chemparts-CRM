@@ -498,6 +498,8 @@ model Quotation {
   notes            String? // customer-facing notes
   terms            String? // payment terms
   deliveryTerms    String? // e.g. "2–4 weeks from order confirmation"
+  billingAddress   String? // bill-to address on the quotation
+  deliveryAddress  String? // ship-to / delivery address on the quotation
   shipping         Decimal  @default(0) @db.Decimal(12, 2)
   otherCharges     Decimal  @default(0) @db.Decimal(12, 2)
   otherChargesLabel String?

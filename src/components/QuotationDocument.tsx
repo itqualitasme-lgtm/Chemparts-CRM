@@ -64,6 +64,8 @@ export type QuotationDocData = {
   deliveryTerms: string | null
   terms: string | null
   notes: string | null
+  billingAddress: string | null
+  deliveryAddress: string | null
   salesPerson: { name: string; email: string | null; phone: string | null } | null
   customer: {
     companyName: string
@@ -163,20 +165,30 @@ export default function QuotationDocument({
         ) : null}
       </div>
 
-      {/* Bill to */}
-      <div className="mt-4 rounded border border-slate-200 bg-slate-50 p-4">
-        <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Prepared for</div>
-        <div className="mt-1 font-semibold text-slate-800">{q.customer?.companyName ?? '—'}</div>
-        <div className="text-[12px] text-slate-600">
-          {[q.customer?.address, q.customer?.city, q.customer?.country].filter(Boolean).join(', ')}
-          {q.customer?.trn ? <div>TRN: {q.customer.trn}</div> : null}
-          {contact ? (
-            <div className="mt-1">
-              Attn: {contact.name}{contact.designation ? `, ${contact.designation}` : ''}
-              {contact.email ? ` · ${contact.email}` : ''}{contact.phone ? ` · ${contact.phone}` : ''}
-            </div>
-          ) : null}
+      {/* Bill to / Deliver to */}
+      <div className={`mt-4 grid gap-3 ${q.deliveryAddress ? 'sm:grid-cols-2' : ''}`}>
+        <div className="rounded border border-slate-200 bg-slate-50 p-4">
+          <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Bill to</div>
+          <div className="mt-1 font-semibold text-slate-800">{q.customer?.companyName ?? 'Prospective customer'}</div>
+          <div className="text-[12px] text-slate-600">
+            {q.billingAddress
+              ? <div className="whitespace-pre-line">{q.billingAddress}</div>
+              : [q.customer?.address, q.customer?.city, q.customer?.country].filter(Boolean).join(', ')}
+            {q.customer?.trn ? <div>TRN: {q.customer.trn}</div> : null}
+            {contact ? (
+              <div className="mt-1">
+                Attn: {contact.name}{contact.designation ? `, ${contact.designation}` : ''}
+                {contact.email ? ` · ${contact.email}` : ''}{contact.phone ? ` · ${contact.phone}` : ''}
+              </div>
+            ) : null}
+          </div>
         </div>
+        {q.deliveryAddress ? (
+          <div className="rounded border border-slate-200 bg-slate-50 p-4">
+            <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Deliver to</div>
+            <div className="mt-1 whitespace-pre-line text-[12px] text-slate-600">{q.deliveryAddress}</div>
+          </div>
+        ) : null}
       </div>
 
       {/* Items */}

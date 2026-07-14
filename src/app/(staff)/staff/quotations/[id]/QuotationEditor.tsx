@@ -18,6 +18,8 @@ type Header = {
   salesPersonId: string
   companyBranchId: string
   customerId: string
+  billingAddress: string
+  deliveryAddress: string
 }
 
 const STATUSES = ['DRAFT', 'SENT', 'ACCEPTED', 'REJECTED', 'EXPIRED']
@@ -43,7 +45,7 @@ export default function QuotationEditor({
   salesPeople?: { id: string; name: string }[]
   branches?: { id: string; name: string; isDefault: boolean }[]
   products?: { id: string; name: string; modelNo: string | null; listPrice: number | null; image: string | null }[]
-  customers?: { id: string; companyName: string }[]
+  customers?: { id: string; companyName: string; address: string }[]
 }) {
   const [state, formAction, pending] = useActionState<QuotationState, FormData>(
     updateQuotation.bind(null, quotationId),
@@ -55,6 +57,17 @@ export default function QuotationEditor({
   const [vat, setVat] = useState(header.vatPercent)
   const [shipping, setShipping] = useState(header.shipping)
   const [other, setOther] = useState(header.otherCharges)
+  const [billing, setBilling] = useState(header.billingAddress)
+  const [delivery, setDelivery] = useState(header.deliveryAddress)
+
+  // Pick a customer → prefill any empty address with theirs (still editable).
+  const onCustomerChange = (id: string) => {
+    const c = customers.find((x) => x.id === id)
+    if (c?.address) {
+      setBilling((b) => b.trim() ? b : c.address)
+      setDelivery((d) => d.trim() ? d : c.address)
+    }
+  }
 
   const setLine = (i: number, patch: Partial<Line>) =>
     setLines((ls) => ls.map((l, idx) => (idx === i ? { ...l, ...patch } : l)))
@@ -211,10 +224,18 @@ export default function QuotationEditor({
       <section className="grid gap-4 rounded-xl border border-slate-200 bg-white p-6 sm:grid-cols-2">
         <label className="block sm:col-span-2">
           <span className="mb-1 block text-sm font-medium text-slate-700">Customer</span>
-          <select name="customerId" defaultValue={header.customerId} className={inputCls}>
+          <select name="customerId" defaultValue={header.customerId} onChange={(e) => onCustomerChange(e.target.value)} className={inputCls}>
             <option value="">No customer (guest)</option>
             {customers.map((c) => <option key={c.id} value={c.id}>{c.companyName}</option>)}
           </select>
+        </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium text-slate-700">Billing address</span>
+          <textarea name="billingAddress" rows={3} value={billing} onChange={(e) => setBilling(e.target.value)} placeholder="Bill-to address" className={inputCls} />
+        </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium text-slate-700">Delivery address</span>
+          <textarea name="deliveryAddress" rows={3} value={delivery} onChange={(e) => setDelivery(e.target.value)} placeholder="Ship-to / delivery address" className={inputCls} />
         </label>
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-slate-700">Status</span>

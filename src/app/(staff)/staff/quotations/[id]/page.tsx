@@ -39,8 +39,13 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
       orderBy: { name: 'asc' },
       select: { id: true, name: true, modelNo: true, listPrice: true, image: true },
     }),
-    db.customer.findMany({ orderBy: { companyName: 'asc' }, select: { id: true, companyName: true } }),
+    db.customer.findMany({ orderBy: { companyName: 'asc' }, select: { id: true, companyName: true, address: true, city: true, country: true } }),
   ])
+  const customerList = customers.map((c) => ({
+    id: c.id,
+    companyName: c.companyName,
+    address: [c.companyName, c.address, [c.city, c.country].filter(Boolean).join(', ')].filter(Boolean).join('\n'),
+  }))
   const products = productRows.map((p) => ({
     id: p.id,
     name: p.name,
@@ -107,12 +112,14 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
           salesPersonId: q.salesPersonId ?? '',
           companyBranchId: q.companyBranchId ?? '',
           customerId: q.customerId ?? '',
+          billingAddress: q.billingAddress ?? '',
+          deliveryAddress: q.deliveryAddress ?? '',
         }}
         lines={lines}
         salesPeople={salesPeople}
         branches={branches.map((b) => ({ id: b.id, name: b.name, isDefault: b.isDefault }))}
         products={products}
-        customers={customers}
+        customers={customerList}
       />
 
       {/* Convert an accepted quotation into an order (or jump to the existing one). */}
