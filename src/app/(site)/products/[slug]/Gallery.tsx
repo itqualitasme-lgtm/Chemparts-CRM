@@ -100,8 +100,10 @@ export default function Gallery({ images, name }: { images: string[]; name: stri
               style={{
                 position: 'fixed',
                 inset: 0,
-                zIndex: 1000,
-                background: 'rgba(8,18,30,0.92)',
+                // Above everything in the ported site: header (100), skip-link
+                // (999), chat bubble (1000), preloader (9999).
+                zIndex: 100000,
+                background: 'rgba(8,18,30,0.96)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
