@@ -39,7 +39,7 @@ export default async function UnsubscribePage({
               <h1 className="h-2" style={{ marginTop: 16 }}>Unsubscribe <em>{sub.email}</em>?</h1>
               <p className="body-lg" style={{ marginTop: 12 }}>You'll stop receiving Chemparts promotions and offers. You can re-subscribe anytime from our website.</p>
               <form action={doUnsub} style={{ marginTop: 20 }}>
-                <button type="submit" className="btn btn--accent">Confirm unsubscribe <span className="arrow">→</span></button>
+                <button type="submit" className="btn btn--accent">Confirm unsubscribe</button>
               </form>
             </>
           )}

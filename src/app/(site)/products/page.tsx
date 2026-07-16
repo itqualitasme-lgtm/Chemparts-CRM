@@ -96,7 +96,7 @@ export default async function ProductsPage() {
             <h2 className="h-1">Tell us your <em>standard</em>.</h2>
             <p className="body-lg" style={{ textAlign: 'center' }}>Send us the ASTM, ISO or IP method you need to comply with. We&apos;ll come back with the right shortlist — usually within the working day.</p>
             <div className="actions">
-              <a className="btn btn--whatsapp" href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp +971 55 756 6123 <span className="arrow">→</span></a>
+              <a className="btn btn--whatsapp" href="https://wa.me/971557566123" target="_blank" rel="noopener">WhatsApp +971 55 756 6123</a>
               <a className="btn btn--ghost" href="/contact">Use the contact form</a>
             </div>
           </div>

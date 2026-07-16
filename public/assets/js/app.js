@@ -37,7 +37,7 @@
     // Brand logos are deduped into window.BRAND_LOGOS (not carried per product).
     const brandLogo = (window.BRAND_LOGOS || {})[p.brand];
     return `
-      <a class="card" href="/product?slug=${encodeURIComponent(p.slug)}" data-industry="${inds}">
+      <a class="card" href="/products/${encodeURIComponent(p.slug)}" data-industry="${inds}">
         <div class="card__media">
           ${featuredPill}
           <img src="${p.thumb || p.image}" onerror="this.onerror=null;this.src='${p.image}'" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">
@@ -483,7 +483,7 @@
           img.src = p.image;
           img.alt = p.brand + ' ' + p.name;
           name.textContent = p.name;
-          if (link) link.href = `/product?slug=${encodeURIComponent(p.slug)}`;
+          if (link) link.href = `/products/${encodeURIComponent(p.slug)}`;
           // `standards` is on the lean product; `specs` is detail-only (not injected).
           specs.innerHTML =
             `<tr><th>Make</th><td>${esc(p.brand)}</td></tr>` +

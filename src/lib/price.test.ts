@@ -92,6 +92,15 @@ describe('canAddToCart', () => {
     expect(canAddToCart({ ...fresh, saleMode: 'CART_ENABLED', stockStatus: 'OUT_OF_STOCK' }, NOW)).toBe(false)
   })
 
+  it('is always false for instruments (EQUIPMENT) — quote-only', () => {
+    expect(canAddToCart({ ...fresh, saleMode: 'CART_ENABLED', stockStatus: 'IN_STOCK', type: 'EQUIPMENT' }, NOW)).toBe(false)
+  })
+
+  it('stays true for consumables and spare parts', () => {
+    expect(canAddToCart({ ...fresh, saleMode: 'CART_ENABLED', stockStatus: 'IN_STOCK', type: 'CONSUMABLE' }, NOW)).toBe(true)
+    expect(canAddToCart({ ...fresh, saleMode: 'CART_ENABLED', stockStatus: 'IN_STOCK', type: 'SPARE_PART' }, NOW)).toBe(true)
+  })
+
   it('is false when the price is stale (indicative)', () => {
     expect(
       canAddToCart(

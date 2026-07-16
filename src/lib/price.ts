@@ -22,6 +22,7 @@ export type PriceInput = {
   priceUpdatedAt: Date | null
   saleMode?: string
   stockStatus?: string
+  type?: string
 }
 
 /**
@@ -48,10 +49,12 @@ export function priceState(p: PriceInput, now: Date = new Date()): PriceState {
 
 /**
  * Whether this product can actually go into the cart: only a fresh LISTED price,
- * on a cart-enabled product, that isn't out of stock. (The cart button is a
- * later slice; for now this just informs labels.)
+ * on a cart-enabled product, that isn't out of stock. Instruments (EQUIPMENT)
+ * are always quote-only — capital equipment is sold via quotation, never
+ * direct add-to-cart. Consumables and spare parts remain cart-eligible.
  */
 export function canAddToCart(p: PriceInput, now: Date = new Date()): boolean {
+  if (p.type === 'EQUIPMENT') return false
   const state = priceState(p, now)
   return state.mode === 'listed' && p.saleMode === 'CART_ENABLED' && p.stockStatus !== 'OUT_OF_STOCK'
 }

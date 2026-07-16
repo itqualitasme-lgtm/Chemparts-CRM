@@ -343,7 +343,7 @@ export default async function SectionPage({
           </p>
           <div className="actions">
             <a className="btn btn--whatsapp" href="https://wa.me/971557566123" target="_blank" rel="noopener">
-              WhatsApp +971 55 756 6123 <span className="arrow">→</span>
+              WhatsApp +971 55 756 6123
             </a>
             <a className="btn btn--ghost" href="/contact">
               Use the contact form

@@ -40,7 +40,7 @@ export default function AddToQuote({
         disabled={pending}
       >
         {pending ? 'Adding…' : added ? 'Added to cart ✓' : label}
-        {!pending && !added ? <span className="arrow">→</span> : null}
+        
       </button>
       {error ? (
         <p className="mono" style={{ fontSize: 12, color: 'var(--crimson)', margin: 0 }}>

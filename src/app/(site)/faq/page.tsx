@@ -44,7 +44,7 @@ export default async function FaqPage() {
           </div>
 
           <div className="cta-band__inner" style={{ marginTop: 40, textAlign: 'center' }}>
-            <a className="btn btn--primary" href="/contact">Still have a question? Contact us <span className="arrow">→</span></a>
+            <a className="btn btn--primary" href="/contact">Still have a question? Contact us</a>
           </div>
         </div>
       </section>

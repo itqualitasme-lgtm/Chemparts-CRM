@@ -223,7 +223,7 @@ export default function AboutPage() {
             <span className="eyebrow">Talk to us</span>
             <h2 className="h-1">Looking for a specific <em>instrument?</em></h2>
             <div className="actions">
-              <a className="btn btn--primary" href="/products">Browse the catalog <span className="arrow">→</span></a>
+              <a className="btn btn--primary" href="/products">Browse the catalog</a>
               <a className="btn btn--ghost" href="/contact">Contact our team</a>
             </div>
           </div>

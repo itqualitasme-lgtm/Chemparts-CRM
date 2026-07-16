@@ -9,8 +9,8 @@ export default async function SiteFooter() {
       <div className="site-footer__cta">
         <h2>Need analytical <em>instruments?</em><br />Or service for one you already have?</h2>
         <div className="site-footer__cta-actions">
-          <a className="btn btn--whatsapp" href={wa} target="_blank" rel="noopener">WhatsApp our team <span className="arrow">→</span></a>
-          <a className="btn btn--ghost" style={{ color: 'white', borderColor: 'rgba(255,255,255,0.2)' }} href="/book-service">Book a service <span className="arrow">→</span></a>
+          <a className="btn btn--whatsapp" href={wa} target="_blank" rel="noopener">WhatsApp our team</a>
+          <a className="btn btn--ghost" style={{ color: 'white', borderColor: 'rgba(255,255,255,0.2)' }} href="/book-service">Book a service</a>
         </div>
       </div>
 

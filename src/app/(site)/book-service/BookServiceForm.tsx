@@ -31,7 +31,7 @@ export default function BookServiceForm({ loggedIn }: { loggedIn: boolean }) {
           <span className="mono">{state.requestNo}</span> in any follow-up.
         </p>
         <div style={{ marginTop: 8 }}>
-          <a className="btn btn--ghost btn--sm" href="/products">Continue browsing →</a>
+          <a className="btn btn--ghost btn--sm" href="/products">Continue browsing</a>
         </div>
       </div>
     )
@@ -94,7 +94,7 @@ export default function BookServiceForm({ loggedIn }: { loggedIn: boolean }) {
       <div>
         <button type="submit" className="btn btn--accent" disabled={pending}>
           {pending ? 'Submitting…' : 'Request service'}
-          {!pending ? <span className="arrow">→</span> : null}
+          
         </button>
       </div>
     </form>

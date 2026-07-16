@@ -35,7 +35,7 @@ export default async function HomePage() {
             </h1>
             <p className="body-lg hero-banner__lede">Authorized partner for <strong>Hitachi · Tanaka · Oxford · KEM</strong> and {moreBrands} more specialist brands. <strong>{instrumentCount} analytical instruments</strong> in stock — XRF, flash point, distillation, NMR, FTIR — plus OEM spares, consumables and turnkey lab fit-outs. <strong>Same-day quotes. Working-day response.</strong></p>
             <div className="hero-banner__cta hero-banner__fade-in">
-              <a className="btn btn--accent btn--lg" href="/products">Browse {instrumentCount} instruments <span className="arrow">→</span></a>
+              <a className="btn btn--accent btn--lg" href="/products">Browse {instrumentCount} instruments</a>
               <a className="btn btn--inverse btn--lg" href="/contact">Talk to an expert</a>
             </div>
             <div className="banner-section__stats hero-banner__fade-in">
@@ -143,7 +143,7 @@ export default async function HomePage() {
                 </h1>
                 <p className="body-lg hero__lede">Analytical instruments, OEM <strong>spare parts</strong>, lab consumables and <strong>turnkey lab solutions</strong> for petroleum, chemical, materials and environmental testing across the Middle East.</p>
                 <div className="hero__cta">
-                  <a className="btn btn--primary btn--lg" href="/products">Browse instruments <span className="arrow">→</span></a>
+                  <a className="btn btn--primary btn--lg" href="/products">Browse instruments</a>
                   <a className="btn btn--ghost btn--lg" href="/contact">Talk to an expert</a>
                 </div>
                 <div className="hero__trust">
@@ -161,7 +161,7 @@ export default async function HomePage() {
 
               <aside className="hero__feature" data-reveal data-hero-rotator data-hero-tilt style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
                 <div className="hero__feature-glow" aria-hidden="true"></div>
-                <a className="hero__feature-img" data-hero-link href="/product?slug=lab-x5000" aria-label="View featured instrument">
+                <a className="hero__feature-img" data-hero-link href="/products/lab-x5000" aria-label="View featured instrument">
                   <img data-hero-img src="/assets/images/products/LAB-X5000.png" alt="Hitachi LAB-X5000 benchtop XRF analyzer" fetchPriority="high" />
                 </a>
                 <div className="hero__feature-meta">
@@ -272,7 +272,7 @@ export default async function HomePage() {
 
             <div className="impressions-cta">
               <span className="mono">— Browse the analytical catalog</span>
-              <a className="btn btn--primary" href="/products">See featured instruments <span className="arrow">→</span></a>
+              <a className="btn btn--primary" href="/products">See featured instruments</a>
             </div>
           </div>
         </section>
@@ -302,7 +302,7 @@ export default async function HomePage() {
                 </div>
                 <h3>Analytical instruments</h3>
                 <p>Authorized distribution for {brandCount} specialist brands — XRF, flash point, distillation, mercury, NMR, FTIR, viscosity, RoHS and more. Full manufacturer warranty, factory-certified service.</p>
-                <a className="capability__link" href="/products">Browse {instrumentCount} instruments <span className="arrow">→</span></a>
+                <a className="capability__link" href="/products">Browse {instrumentCount} instruments</a>
               </article>
 
               <article className="capability">
@@ -315,7 +315,7 @@ export default async function HomePage() {
                 </div>
                 <h3>Genuine spare parts</h3>
                 <p>OEM spares for every instrument we sell — held in regional stock, not parallel imports. No 6-week waits for a thermocouple, lamp, syringe pump or filter cartridge.</p>
-                <a className="capability__link" href="/contact">Enquire spares <span className="arrow">→</span></a>
+                <a className="capability__link" href="/contact">Enquire spares</a>
               </article>
 
               <article className="capability">
@@ -330,7 +330,7 @@ export default async function HomePage() {
                 </div>
                 <h3>Consumables &amp; reagents</h3>
                 <p>Reference materials, calibration standards, sample cells, filter papers, vials, septa and lab consumables — NIST/NABL traceable where it matters. Recurring orders accepted.</p>
-                <a className="capability__link" href="/contact">Request a list <span className="arrow">→</span></a>
+                <a className="capability__link" href="/contact">Request a list</a>
               </article>
 
               <article className="capability capability--feature">
@@ -346,7 +346,7 @@ export default async function HomePage() {
                 </div>
                 <h3>Turnkey lab solutions</h3>
                 <p>Full lab fit-outs for petroleum QC, refinery on-line monitoring, university teaching labs and environmental compliance. Design, instrument selection, install, commissioning, training, AMC — single point of accountability.</p>
-                <a className="capability__link" href="/contact">Scope a project <span className="arrow">→</span></a>
+                <a className="capability__link" href="/contact">Scope a project</a>
               </article>
             </div>
           </div>
@@ -371,7 +371,7 @@ export default async function HomePage() {
                 <b>What standard do you need to comply with?</b>
               </div>
               <input className="promptbox__input" type="search" name="q" placeholder="flash point of jet fuel, ASTM D93..." aria-label="Search instruments by standard, brand or sample" />
-              <button type="submit" className="btn btn--accent">Run search <span className="arrow">→</span></button>
+              <button type="submit" className="btn btn--accent">Run search</button>
             </form>
 
             <div className="promptbox__chips" role="group" aria-label="Common standards">
@@ -624,7 +624,7 @@ export default async function HomePage() {
               </figure>
               <div className="service-head__rhs">
                 <p className="body-lg">The <strong>Chemparts</strong> team is not a call centre. Trained application engineers and factory-certified service technicians across the <strong>UAE</strong> and <strong>Qatar</strong> — same time zone as your lab, same-day response, same standards your auditors expect.</p>
-                <a className="btn btn--primary" href="/contact">Talk to a service engineer <span className="arrow">→</span></a>
+                <a className="btn btn--primary" href="/contact">Talk to a service engineer</a>
               </div>
             </div>
 
@@ -908,7 +908,7 @@ export default async function HomePage() {
             <h2 className="h-1">Ready to find your <em>instrument?</em></h2>
             <p className="body-lg" style={{ textAlign: 'center' }}>Tell us your standard, sample or budget. Our team will reply with options and a quote — usually the same working day.</p>
             <div className="actions">
-              <a className="btn btn--whatsapp" href="https://wa.me/971557566123?text=Hello%20Chemparts%2C%20I%27d%20like%20to%20discuss%20an%20instrument%20requirement." target="_blank" rel="noopener">WhatsApp +971 55 756 6123 <span className="arrow">→</span></a>
+              <a className="btn btn--whatsapp" href="https://wa.me/971557566123?text=Hello%20Chemparts%2C%20I%27d%20like%20to%20discuss%20an%20instrument%20requirement." target="_blank" rel="noopener">WhatsApp +971 55 756 6123</a>
               <a className="btn btn--ghost" href="/contact">Contact form</a>
             </div>
           </div>

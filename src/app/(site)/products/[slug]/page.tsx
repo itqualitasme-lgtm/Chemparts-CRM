@@ -78,22 +78,19 @@ function InfoCta({ product, loggedIn }: { product: ProductDetail; loggedIn: bool
           <>
             <AddToCart productId={product.id} variant="full" />
             <a className="btn btn--ghost btn--sm" href="/cart">
-              View cart →
+              View cart
             </a>
           </>
         ) : (
           <>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               <button type="button" className="btn btn--accent" data-quote={product.slug}>
-                Request this item <span className="arrow">→</span>
+                Request this item
               </button>
               <a className="btn btn--ghost" href={mailto}>
                 Email us
               </a>
             </div>
-            <span className="mono text-muted" style={{ fontSize: 11 }}>
-              Online ordering coming soon
-            </span>
           </>
         )}
       </div>
@@ -350,7 +347,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             <div style={{ marginTop: 12 }}>
               {product.datasheetUrl ? (
                 <a className="btn btn--ghost btn--sm" href={product.datasheetUrl} target="_blank" rel="noopener">
-                  Download spec sheet <span className="arrow">→</span>
+                  Download spec sheet
                 </a>
               ) : (
                 <p className="text-muted">

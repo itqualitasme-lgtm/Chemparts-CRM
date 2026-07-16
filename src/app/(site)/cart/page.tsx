@@ -55,7 +55,7 @@ export default async function CartPage() {
               <h3>Your cart is empty.</h3>
               <p>Browse the catalog and add listed items, or request a price on anything quote-only.</p>
               <a className="btn btn--primary btn--sm" href="/products">
-                Browse products →
+                Browse products
               </a>
             </div>
           ) : (

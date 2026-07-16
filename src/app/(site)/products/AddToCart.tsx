@@ -98,7 +98,7 @@ export default function AddToCart({ productId, variant = 'compact' }: Props) {
           disabled={pending}
         >
           {pending ? 'Adding…' : added ? 'Added ✓' : 'Add to cart'}
-          {!pending && !added ? <span className="arrow">→</span> : null}
+          
         </button>
       </div>
 

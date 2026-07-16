@@ -86,23 +86,23 @@ export default function SiteHeaderClient({
             <div className="nav__cta nav__cta--account">
               <span className="nav__cta-label">— Account</span>
               <Link className="btn btn--ghost" href="/cart">
-                Cart{cartCount > 0 ? ` (${cartCount})` : ''} <span className="arrow">&rarr;</span>
+                Cart{cartCount > 0 ? ` (${cartCount})` : ''}
               </Link>
               {isAuthed ? (
                 <Link className="btn btn--primary" href={dashboardHref}>
-                  My account · {firstName} <span className="arrow">&rarr;</span>
+                  My account · {firstName}
                 </Link>
               ) : (
                 <>
-                  <Link className="btn btn--ghost" href="/login">Sign in <span className="arrow">&rarr;</span></Link>
-                  <Link className="btn btn--primary" href="/register">Register <span className="arrow">&rarr;</span></Link>
+                  <Link className="btn btn--ghost" href="/login">Sign in</Link>
+                  <Link className="btn btn--primary" href="/register">Register</Link>
                 </>
               )}
             </div>
             <div className="nav__cta">
               <span className="nav__cta-label">— Take action</span>
-              <button type="button" className="btn btn--accent" data-quote="">Get a quote <span className="arrow">&rarr;</span></button>
-              <a className="btn btn--whatsapp" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener">WhatsApp {whatsappDisplay} <span className="arrow">&rarr;</span></a>
+              <button type="button" className="btn btn--accent" data-quote="">Get a quote</button>
+              <a className="btn btn--whatsapp" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener">WhatsApp {whatsappDisplay}</a>
             </div>
           </nav>
           <div className="header-cta">
@@ -175,7 +175,7 @@ export default function SiteHeaderClient({
               </>
             )}
             <a className="btn btn--ghost btn--sm header-cta__phone" href={`tel:${phone.replace(/[^\d+]/g, '')}`}>{phone}</a>
-            <button type="button" className="btn btn--primary btn--sm" data-quote="">Get a quote <span className="arrow">→</span></button>
+            <button type="button" className="btn btn--primary btn--sm" data-quote="">Get a quote</button>
             <button className="btn menu-toggle" aria-expanded="false" aria-label="Open menu"><span></span></button>
           </div>
         </div>

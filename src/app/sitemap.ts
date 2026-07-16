@@ -29,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [
     ...staticPaths.map((s) => ({ url: `${SITE_URL}${s.path}`, changeFrequency: 'weekly' as const, priority: s.priority })),
     ...brands.map((b) => ({ url: `${SITE_URL}/brands/${b.slug}`, lastModified: b.updatedAt, changeFrequency: 'weekly' as const, priority: 0.8 })),
-    ...products.map((p) => ({ url: `${SITE_URL}/product?slug=${p.slug}`, lastModified: p.updatedAt, changeFrequency: 'weekly' as const, priority: 0.6 })),
+    ...products.map((p) => ({ url: `${SITE_URL}/products/${p.slug}`, lastModified: p.updatedAt, changeFrequency: 'weekly' as const, priority: 0.6 })),
     ...posts.map((p) => ({ url: `${SITE_URL}/blog/${p.slug}`, lastModified: p.updatedAt, changeFrequency: 'monthly' as const, priority: 0.5 })),
   ]
 

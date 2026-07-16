@@ -52,6 +52,7 @@ export async function addToCart(productId: string, qty = 1): Promise<CartActionS
       priceUpdatedAt: true,
       saleMode: true,
       stockStatus: true,
+      type: true,
     },
   })
   if (!product) return { error: 'This product is no longer available.' }
@@ -63,6 +64,7 @@ export async function addToCart(productId: string, qty = 1): Promise<CartActionS
     priceUpdatedAt: product.priceUpdatedAt,
     saleMode: product.saleMode,
     stockStatus: product.stockStatus,
+    type: product.type,
   })
   if (!eligible) {
     return { error: 'This item is not available for direct add-to-cart — request a price instead.' }

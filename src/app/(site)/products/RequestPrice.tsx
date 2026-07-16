@@ -51,7 +51,7 @@ export default function RequestPrice({ productId, loggedIn, variant = 'primary',
     return (
       <button type="button" className={btnClass} onClick={() => setOpen(true)}>
         {btnLabel}
-        {variant === 'primary' ? <span className="arrow">→</span> : null}
+        
       </button>
     )
   }

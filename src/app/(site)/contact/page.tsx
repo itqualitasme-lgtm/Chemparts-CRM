@@ -149,7 +149,7 @@ export default async function ContactPage() {
               <span className="eyebrow">Contact form</span>
               <h2 className="h-2" style={{ marginTop: 16 }}>Send us a <em>note</em>.</h2>
               <p className="body-lg" style={{ marginTop: 16 }}>Form submissions land in our shared inbox. For urgent quotes, WhatsApp is faster:</p>
-              <a className="btn btn--whatsapp" style={{ marginTop: 16 }} href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener">WhatsApp {contact.whatsappDisplay} <span className="arrow">→</span></a>
+              <a className="btn btn--whatsapp" style={{ marginTop: 16 }} href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener">WhatsApp {contact.whatsappDisplay}</a>
               <hr className="rule" style={{ margin: '32px 0' }} />
               <div className="stat-strip">
                 <div><div className="lbl">Phone</div><div className="val">{contact.phone}</div></div>

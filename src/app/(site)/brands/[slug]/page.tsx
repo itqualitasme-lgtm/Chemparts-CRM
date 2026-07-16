@@ -74,7 +74,7 @@ export default async function BrandPage({ params }: { params: Promise<{ slug: st
               </p>
               {brand.description ? <p className="body-lg" style={{ marginTop: 12 }}>{brand.description}</p> : null}
               <div className="hero__cta" style={{ marginTop: 20 }}>
-                <button type="button" className="btn btn--accent" data-quote="">Request a {brand.name} quote <span className="arrow">→</span></button>
+                <button type="button" className="btn btn--accent" data-quote="">Request a {brand.name} quote</button>
                 <a className="btn btn--ghost" href="/contact">Talk to an expert</a>
               </div>
             </div>
@@ -107,7 +107,7 @@ export default async function BrandPage({ params }: { params: Promise<{ slug: st
               {brand.products.map((p) => {
                 const thumb = optimizedImg(p.image, 640)
                 return (
-                  <a key={p.slug} className="card" href={`/product?slug=${encodeURIComponent(p.slug)}`}>
+                  <a key={p.slug} className="card" href={`/products/${encodeURIComponent(p.slug)}`}>
                     {thumb ? (
                       <div className="card__media">
                         {/* eslint-disable-next-line @next/next/no-img-element */}

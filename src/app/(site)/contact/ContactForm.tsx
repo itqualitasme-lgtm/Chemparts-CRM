@@ -55,7 +55,7 @@ export default function ContactForm({
       ) : null}
       <div className="form-actions">
         <button type="submit" className="btn btn--primary" disabled={pending}>
-          {pending ? 'Sending…' : <>Send message <span className="arrow">→</span></>}
+          {pending ? 'Sending…' : 'Send message'}
         </button>
         <a className="btn btn--ghost" href="mailto:info@chemparts-me.com">Or email instead</a>
       </div>

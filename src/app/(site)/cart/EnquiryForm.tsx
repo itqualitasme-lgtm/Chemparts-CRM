@@ -37,7 +37,7 @@ export default function EnquiryForm({ loggedIn }: { loggedIn: boolean }) {
         </p>
         <div style={{ marginTop: 8 }}>
           <a className="btn btn--ghost btn--sm" href="/products">
-            Continue browsing →
+            Continue browsing
           </a>
         </div>
       </div>
@@ -104,7 +104,7 @@ export default function EnquiryForm({ loggedIn }: { loggedIn: boolean }) {
       <div>
         <button type="submit" className="btn btn--accent" disabled={pending}>
           {pending ? 'Submitting…' : 'Submit enquiry'}
-          {!pending ? <span className="arrow">→</span> : null}
+          
         </button>
       </div>
     </form>
