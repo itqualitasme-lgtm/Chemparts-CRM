@@ -38,8 +38,8 @@ export default async function CartPage() {
               <h1 className="h-1">Your cart</h1>
             </div>
             <p className="section-head__sub">
-              Add items and submit them as an enquiry. Our team confirms pricing and availability before anything is
-              finalised — no online payment yet.
+              Add items and submit them as an enquiry. Our team confirms pricing and availability
+              with a formal quotation.
             </p>
           </div>
         </div>

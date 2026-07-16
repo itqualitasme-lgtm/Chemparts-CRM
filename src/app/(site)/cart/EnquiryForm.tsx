@@ -59,8 +59,8 @@ export default function EnquiryForm({ loggedIn }: { loggedIn: boolean }) {
       <div>
         <span className="eyebrow">Submit as enquiry</span>
         <p className="text-muted" style={{ margin: '6px 0 0', fontSize: 14 }}>
-          There is no online payment yet. Send this cart as an enquiry and our team will confirm pricing,
-          availability and next steps.
+          Send this cart as an enquiry and our team will confirm pricing,
+          availability and next steps — usually within one working day.
         </p>
       </div>
 
