@@ -4348,6 +4348,9 @@ figure[data-reveal][data-shown="true"] img,
   .brand-card__body { padding: 16px 18px; }
 }
 
+/* Anchored contact sections land below the sticky header. */
+#offices, #departments, #form, #map { scroll-margin-top: 110px; }
+
 /* ========== PRODUCT DETAIL ========== */
 .pdp-layout {
   display: grid;

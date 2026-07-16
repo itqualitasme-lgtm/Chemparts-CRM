@@ -300,7 +300,7 @@ export default async function SectionPage({
                   <h3>No {meta.countLabel} match the current filters.</h3>
                   <p>
                     Try removing a filter, or{' '}
-                    <a href="/contact" style={{ color: 'var(--crimson)', textDecoration: 'underline' }}>
+                    <a href="/contact#form" style={{ color: 'var(--crimson)', textDecoration: 'underline' }}>
                       contact our team
                     </a>{' '}
                     — we can source items outside this catalog too.
@@ -345,7 +345,7 @@ export default async function SectionPage({
             <a className="btn btn--whatsapp" href="https://wa.me/971557566123" target="_blank" rel="noopener">
               WhatsApp +971 55 756 6123
             </a>
-            <a className="btn btn--ghost" href="/contact">
+            <a className="btn btn--ghost" href="/contact#form">
               Use the contact form
             </a>
           </div>

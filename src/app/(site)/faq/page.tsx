@@ -31,7 +31,7 @@ export default async function FaqPage() {
               <span className="eyebrow">Questions &amp; answers</span>
               <h1 className="h-1">Frequently asked <em>questions</em>.</h1>
             </div>
-            <p className="section-head__sub">Instruments, spares, consumables, quotes and service across the Gulf. Can’t find it? <a href="/contact" style={{ color: 'var(--crimson)' }}>Ask our team</a>.</p>
+            <p className="section-head__sub">Instruments, spares, consumables, quotes and service across the Gulf. Can’t find it? <a href="/contact#form" style={{ color: 'var(--crimson)' }}>Ask our team</a>.</p>
           </div>
 
           <div style={{ marginTop: 24 }}>
@@ -44,7 +44,7 @@ export default async function FaqPage() {
           </div>
 
           <div className="cta-band__inner" style={{ marginTop: 40, textAlign: 'center' }}>
-            <a className="btn btn--primary" href="/contact">Still have a question? Contact us</a>
+            <a className="btn btn--primary" href="/contact#form">Still have a question? Contact us</a>
           </div>
         </div>
       </section>

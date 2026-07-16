@@ -44,7 +44,7 @@ export default async function SiteFooter() {
             <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
             <li><a href={wa} target="_blank" rel="noopener">WhatsApp our team</a></li>
             <li><a href="/book-service">Book a service</a></li>
-            <li><a href="/contact">Request a quote</a></li>
+            <li><a href="/contact#form" data-quote="">Request a quote</a></li>
           </ul>
           <p style={{ fontFamily: 'var(--font-mono)', marginTop: 12 }}>{contact.phone}</p>
         </div>

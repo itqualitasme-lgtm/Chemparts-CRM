@@ -36,7 +36,7 @@ export default async function HomePage() {
             <p className="body-lg hero-banner__lede">Authorized partner for <strong>Hitachi · Tanaka · Oxford · KEM</strong> and {moreBrands} more specialist brands. <strong>{instrumentCount} analytical instruments</strong> in stock — XRF, flash point, distillation, NMR, FTIR — plus OEM spares, consumables and turnkey lab fit-outs. <strong>Same-day quotes. Working-day response.</strong></p>
             <div className="hero-banner__cta hero-banner__fade-in">
               <a className="btn btn--accent btn--lg" href="/products">Browse {instrumentCount} instruments</a>
-              <a className="btn btn--inverse btn--lg" href="/contact">Talk to an expert</a>
+              <a className="btn btn--inverse btn--lg" href="/contact#departments">Talk to an expert</a>
             </div>
             <div className="banner-section__stats hero-banner__fade-in">
               <div><span className="num num-display">500+</span><span className="lbl">Active clients</span></div>
@@ -144,7 +144,7 @@ export default async function HomePage() {
                 <p className="body-lg hero__lede">Analytical instruments, OEM <strong>spare parts</strong>, lab consumables and <strong>turnkey lab solutions</strong> for petroleum, chemical, materials and environmental testing across the Middle East.</p>
                 <div className="hero__cta">
                   <a className="btn btn--primary btn--lg" href="/products">Browse instruments</a>
-                  <a className="btn btn--ghost btn--lg" href="/contact">Talk to an expert</a>
+                  <a className="btn btn--ghost btn--lg" href="/contact#departments">Talk to an expert</a>
                 </div>
                 <div className="hero__trust">
                   <span className="hero__trust-label mono">— Authorized partner</span>
@@ -315,7 +315,7 @@ export default async function HomePage() {
                 </div>
                 <h3>Genuine spare parts</h3>
                 <p>OEM spares for every instrument we sell — held in regional stock, not parallel imports. No 6-week waits for a thermocouple, lamp, syringe pump or filter cartridge.</p>
-                <a className="capability__link" href="/contact">Enquire spares</a>
+                <a className="capability__link" href="/contact#form">Enquire spares</a>
               </article>
 
               <article className="capability">
@@ -330,7 +330,7 @@ export default async function HomePage() {
                 </div>
                 <h3>Consumables &amp; reagents</h3>
                 <p>Reference materials, calibration standards, sample cells, filter papers, vials, septa and lab consumables — NIST/NABL traceable where it matters. Recurring orders accepted.</p>
-                <a className="capability__link" href="/contact">Request a list</a>
+                <a className="capability__link" href="/contact#form">Request a list</a>
               </article>
 
               <article className="capability capability--feature">
@@ -346,7 +346,7 @@ export default async function HomePage() {
                 </div>
                 <h3>Turnkey lab solutions</h3>
                 <p>Full lab fit-outs for petroleum QC, refinery on-line monitoring, university teaching labs and environmental compliance. Design, instrument selection, install, commissioning, training, AMC — single point of accountability.</p>
-                <a className="capability__link" href="/contact">Scope a project</a>
+                <a className="capability__link" href="/contact#form">Scope a project</a>
               </article>
             </div>
           </div>
@@ -624,7 +624,7 @@ export default async function HomePage() {
               </figure>
               <div className="service-head__rhs">
                 <p className="body-lg">The <strong>Chemparts</strong> team is not a call centre. Trained application engineers and factory-certified service technicians across the <strong>UAE</strong> and <strong>Qatar</strong> — same time zone as your lab, same-day response, same standards your auditors expect.</p>
-                <a className="btn btn--primary" href="/contact">Talk to a service engineer</a>
+                <a className="btn btn--primary" href="/contact#departments">Talk to a service engineer</a>
               </div>
             </div>
 
@@ -909,7 +909,7 @@ export default async function HomePage() {
             <p className="body-lg" style={{ textAlign: 'center' }}>Tell us your standard, sample or budget. Our team will reply with options and a quote — usually the same working day.</p>
             <div className="actions">
               <a className="btn btn--whatsapp" href="https://wa.me/971557566123?text=Hello%20Chemparts%2C%20I%27d%20like%20to%20discuss%20an%20instrument%20requirement." target="_blank" rel="noopener">WhatsApp +971 55 756 6123</a>
-              <a className="btn btn--ghost" href="/contact">Contact form</a>
+              <a className="btn btn--ghost" href="/contact#form">Contact form</a>
             </div>
           </div>
         </section>

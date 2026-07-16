@@ -50,7 +50,7 @@ export default async function ContactPage() {
         <hr className="rule" />
 
         {/* Offices */}
-        <section className="section">
+        <section className="section" id="offices">
           <div className="container">
             <div className="section-head">
               <div className="section-head__title">
@@ -89,7 +89,7 @@ export default async function ContactPage() {
         <hr className="rule" />
 
         {/* Departments */}
-        <section className="section section--slate">
+        <section className="section section--slate" id="departments">
           <div className="container">
             <div className="section-head">
               <div className="section-head__title">
@@ -143,7 +143,7 @@ export default async function ContactPage() {
         <hr className="rule" />
 
         {/* Contact form */}
-        <section className="section">
+        <section className="section" id="form">
           <div className="container contact-grid">
             <div data-reveal>
               <span className="eyebrow">Contact form</span>
@@ -166,7 +166,7 @@ export default async function ContactPage() {
         <hr className="rule" />
 
         {/* Map embed */}
-        <section className="section">
+        <section className="section" id="map">
           <div className="container">
             <div className="section-head">
               <div className="section-head__title">

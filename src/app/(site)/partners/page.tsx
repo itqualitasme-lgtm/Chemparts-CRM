@@ -188,7 +188,7 @@ export default async function PartnersPage() {
             <p className="body-lg" style={{ textAlign: 'center' }}>We can often source instruments outside this catalog through our partner network. Tell us the manufacturer and model — we&apos;ll come back with options.</p>
             <div className="actions">
               <a className="btn btn--primary" href="/products">Browse instruments</a>
-              <a className="btn btn--ghost" href="/contact">Contact our team</a>
+              <a className="btn btn--ghost" href="/contact#form">Contact our team</a>
             </div>
           </div>
         </section>

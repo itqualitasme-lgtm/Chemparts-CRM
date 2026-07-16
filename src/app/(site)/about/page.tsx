@@ -224,7 +224,7 @@ export default function AboutPage() {
             <h2 className="h-1">Looking for a specific <em>instrument?</em></h2>
             <div className="actions">
               <a className="btn btn--primary" href="/products">Browse the catalog</a>
-              <a className="btn btn--ghost" href="/contact">Contact our team</a>
+              <a className="btn btn--ghost" href="/contact#form">Contact our team</a>
             </div>
           </div>
         </section>

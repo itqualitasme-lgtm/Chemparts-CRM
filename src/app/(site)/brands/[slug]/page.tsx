@@ -75,7 +75,7 @@ export default async function BrandPage({ params }: { params: Promise<{ slug: st
               {brand.description ? <p className="body-lg" style={{ marginTop: 12 }}>{brand.description}</p> : null}
               <div className="hero__cta" style={{ marginTop: 20 }}>
                 <button type="button" className="btn btn--accent" data-quote="">Request a {brand.name} quote</button>
-                <a className="btn btn--ghost" href="/contact">Talk to an expert</a>
+                <a className="btn btn--ghost" href="/contact#departments">Talk to an expert</a>
               </div>
             </div>
             {logo ? (
@@ -101,7 +101,7 @@ export default async function BrandPage({ params }: { params: Promise<{ slug: st
           </div>
 
           {brand.products.length === 0 ? (
-            <p className="body-lg" style={{ marginTop: 24 }}>Contact us for the current {brand.name} range — <a href="/contact" style={{ color: 'var(--crimson)' }}>request a catalog</a>.</p>
+            <p className="body-lg" style={{ marginTop: 24 }}>Contact us for the current {brand.name} range — <a href="/contact#form" style={{ color: 'var(--crimson)' }}>request a catalog</a>.</p>
           ) : (
             <div className="products-page-grid" style={{ marginTop: 24 }}>
               {brand.products.map((p) => {
