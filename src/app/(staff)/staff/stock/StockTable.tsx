@@ -156,8 +156,10 @@ function Row({ r, selected, onToggle }: { r: StockRow; selected: boolean; onTogg
   function saveQty() {
     const n = Math.max(0, Math.floor(Number(qty) || 0))
     if (n === r.stockQty) return
-    start(async () => { await setStockQty(r.id, n) })
+    start(async () => { const res = await setStockQty(r.id, n); if (res.status) setStatusLocal(res.status) })
   }
+
+  const nQty = Math.max(0, Math.floor(Number(qty) || 0))
 
   return (
     <tr className={`border-b border-slate-100 last:border-0 align-middle ${selected ? 'bg-[#0A2540]/[0.03]' : ''}`}>
@@ -184,8 +186,10 @@ function Row({ r, selected, onToggle }: { r: StockRow; selected: boolean; onTogg
         <div className="inline-flex overflow-hidden rounded-lg border border-slate-200" role="group" aria-label="Stock status">
           {STATUSES.map((s) => {
             const on = status === s.value
+            const blocked = s.value === 'IN_STOCK' && nQty === 0
             return (
-              <button key={s.value} type="button" disabled={pending} onClick={() => set(s.value)} aria-pressed={on}
+              <button key={s.value} type="button" disabled={pending || blocked} onClick={() => set(s.value)} aria-pressed={on}
+                title={blocked ? 'Set a quantity above 0 to mark In stock' : undefined}
                 className={`px-2.5 py-1 text-xs font-medium transition disabled:opacity-60 ${on ? s.active : 'bg-white text-slate-500 hover:bg-slate-50'}`}>
                 {s.label}
               </button>

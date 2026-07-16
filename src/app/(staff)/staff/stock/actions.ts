@@ -18,15 +18,18 @@ export async function setStockStatus(productId: string, status: string): Promise
   return { ok: true }
 }
 
-/** Set the on-hand quantity for a product. */
-export async function setStockQty(productId: string, qty: number): Promise<{ ok?: boolean; error?: string }> {
+/** Set the on-hand quantity for a product. Quantity drives availability. */
+export async function setStockQty(productId: string, qty: number): Promise<{ ok?: boolean; status?: StockStatus; error?: string }> {
   await requirePortal('staff')
   const n = Math.max(0, Math.floor(Number(qty) || 0))
-  const p = await db.product.findUnique({ where: { id: productId }, select: { id: true } })
+  const p = await db.product.findUnique({ where: { id: productId }, select: { id: true, stockStatus: true } })
   if (!p) return { error: 'Product not found.' }
-  await db.product.update({ where: { id: productId }, data: { stockQty: n } })
+  // Any on-hand stock ⇒ In stock; zero ⇒ Out of stock — unless it's On order
+  // (0 on hand but incoming), which we leave alone.
+  const status: StockStatus = n > 0 ? 'IN_STOCK' : p.stockStatus === 'ON_ORDER' ? 'ON_ORDER' : 'OUT_OF_STOCK'
+  await db.product.update({ where: { id: productId }, data: { stockQty: n, stockStatus: status } })
   revalidatePath('/staff/stock')
-  return { ok: true }
+  return { ok: true, status }
 }
 
 /** Set the same stock status on many products at once. */
