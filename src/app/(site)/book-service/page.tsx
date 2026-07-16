@@ -131,7 +131,7 @@ export default async function BookServicePage() {
       <hr className="rule" />
 
       {/* Booking form */}
-      <section className="section">
+      <section className="section" id="book">
         <div className="container">
           <div className="section-head">
             <div className="section-head__title">

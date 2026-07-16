@@ -10,7 +10,7 @@ export default async function SiteFooter() {
         <h2>Need analytical <em>instruments?</em><br />Or service for one you already have?</h2>
         <div className="site-footer__cta-actions">
           <a className="btn btn--whatsapp" href={wa} target="_blank" rel="noopener">WhatsApp our team</a>
-          <a className="btn btn--ghost" style={{ color: 'white', borderColor: 'rgba(255,255,255,0.2)' }} href="/book-service">Book a service</a>
+          <a className="btn btn--ghost" style={{ color: 'white', borderColor: 'rgba(255,255,255,0.2)' }} href="/book-service#book">Book a service</a>
         </div>
       </div>
 
@@ -43,7 +43,7 @@ export default async function SiteFooter() {
           <ul>
             <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
             <li><a href={wa} target="_blank" rel="noopener">WhatsApp our team</a></li>
-            <li><a href="/book-service">Book a service</a></li>
+            <li><a href="/book-service#book">Book a service</a></li>
             <li><a href="/contact#form" data-quote="">Request a quote</a></li>
           </ul>
           <p style={{ fontFamily: 'var(--font-mono)', marginTop: 12 }}>{contact.phone}</p>
