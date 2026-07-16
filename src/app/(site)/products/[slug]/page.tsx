@@ -452,7 +452,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   <h2 className="h-2">Related products.</h2>
                 </div>
               </div>
-              <div className="products-grid">
+              <div className="products-grid products-grid--compact">
                 {product.related.map((p) => (
                   <RelatedCard key={p.slug} p={p} />
                 ))}
