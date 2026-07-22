@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
+import { CHAT_CLOSED_MESSAGE } from '@/lib/chat-bot'
 
 export type ChatState = { ok?: boolean; error?: string }
 
@@ -22,11 +23,13 @@ export async function replyToChat(token: string, body: string): Promise<ChatStat
   return { ok: true }
 }
 
-/** Staff close a chat once it's resolved. */
+/** Staff close a chat once it's resolved. The visitor is told in-thread. */
 export async function closeChat(token: string): Promise<ChatState> {
   await requirePortal('staff')
-  const conv = await db.chatConversation.findUnique({ where: { token }, select: { id: true } })
+  const conv = await db.chatConversation.findUnique({ where: { token }, select: { id: true, status: true } })
   if (!conv) return { error: 'Conversation not found.' }
+  if (conv.status === 'CLOSED') return { ok: true }
+  await db.chatMessage.create({ data: { conversationId: conv.id, sender: 'BOT', body: CHAT_CLOSED_MESSAGE } })
   await db.chatConversation.update({ where: { id: conv.id }, data: { status: 'CLOSED', closedAt: new Date() } })
   revalidatePath('/staff/chats')
   return { ok: true }

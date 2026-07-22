@@ -56,5 +56,13 @@ export function getBotReply(text: string): BotResult {
 }
 
 /** Opening line shown when a visitor first opens the chat. */
+/** Posted into the thread when staff close a chat. */
+export const CHAT_CLOSED_MESSAGE =
+  'This chat has been closed by our team. Thanks for contacting Chemparts - if you need anything else, just type below and we will pick it up again.'
+
+/** Posted into the thread when a chat is closed automatically for inactivity. */
+export const CHAT_IDLE_CLOSED_MESSAGE =
+  'This chat was closed automatically after a period of inactivity. If you still need help, type below and we will reopen it.'
+
 export const BOT_GREETING =
   "Hi 👋 I'm the Chemparts assistant. Ask me about instruments, spare parts, consumables or service — or type “agent” to chat with a real person."

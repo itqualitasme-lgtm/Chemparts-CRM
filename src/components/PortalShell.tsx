@@ -105,15 +105,25 @@ export default async function PortalShell({
 
   const initial = user.fullName?.trim()?.[0]?.toUpperCase() ?? '?'
 
-  // Staff/admin get the notification bell (shared team inbox) + a live-chat
-  // count badge on the "Chats" nav item.
-  const [notifications, unread, chatsWaiting] = isCustomer
-    ? [[], 0, 0]
-    : await Promise.all([getNotifications(), getUnreadCount(), db.chatConversation.count({ where: { status: 'LIVE' } })])
+  // Staff/admin get the notification bell (shared team inbox) plus count badges
+  // for work waiting on them: live chats and unanswered price requests.
+  const [notifications, unread, chatsWaiting, priceRequestsOpen] = isCustomer
+    ? [[], 0, 0, 0]
+    : await Promise.all([
+        getNotifications(),
+        getUnreadCount(),
+        db.chatConversation.count({ where: { status: 'LIVE' } }),
+        db.priceRequest.count({ where: { status: 'OPEN' } }),
+      ])
 
-  const groups: NavGroup[] = chatsWaiting > 0
-    ? baseGroups.map((g) => ({ ...g, items: g.items.map((it) => (it.href === '/staff/chats' ? { ...it, badge: chatsWaiting } : it)) }))
-    : baseGroups
+  const BADGES: Record<string, number> = {
+    '/staff/chats': chatsWaiting,
+    '/staff/price-requests': priceRequestsOpen,
+  }
+  const groups: NavGroup[] = baseGroups.map((g) => ({
+    ...g,
+    items: g.items.map((it) => (BADGES[it.href] ? { ...it, badge: BADGES[it.href] } : it)),
+  }))
   const bellItems = notifications.map((n) => ({
     id: n.id,
     kind: n.kind,
@@ -129,7 +139,7 @@ export default async function PortalShell({
   if (isCustomer) {
     return (
       <div className="flex min-h-screen flex-col bg-slate-50">
-        <header className="sticky top-0 z-20 border-b border-black/10 bg-[#0A2540] text-white">
+        <header className="portal-dark sticky top-0 z-20 border-b border-black/10 bg-[#0A2540] text-white">
           <div className="mx-auto flex h-12 max-w-6xl items-center justify-between px-3 sm:px-4">
             <PortalLogoLink label={PORTAL_LABEL[portal]} />
             <div className="flex items-center gap-2.5">
@@ -165,7 +175,7 @@ export default async function PortalShell({
   // Staff / vendor / admin — full-height dark sidebar shell.
   return (
     <div className="flex min-h-screen bg-slate-50">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col bg-[#0A2540] md:flex">
+      <aside className="portal-dark fixed inset-y-0 left-0 z-30 hidden w-60 flex-col bg-[#0A2540] md:flex">
         <div className="border-b border-white/10 px-4 py-4 text-white">
           <PortalLogoLink label={PORTAL_LABEL[portal]} />
         </div>
@@ -192,7 +202,7 @@ export default async function PortalShell({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col md:pl-60">
-        <header className="sticky top-0 z-20 flex h-12 items-center justify-between gap-2 border-b border-black/10 bg-[#0A2540] px-3 text-white md:hidden">
+        <header className="portal-dark sticky top-0 z-20 flex h-12 items-center justify-between gap-2 border-b border-black/10 bg-[#0A2540] px-3 text-white md:hidden">
           <div className="flex items-center gap-2.5">
             <PortalMenu groups={groups} label={PORTAL_LABEL[portal]} />
             <PortalLogoLink label={PORTAL_LABEL[portal]} />

@@ -37,12 +37,20 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
     return { error: MAINTENANCE_MESSAGE }
   }
 
+  await stampLogin(profile.id)
+
   // Honour a ?next= target only if this user's role may access it.
   const nextPortal = next ? portalFromPath(next) : null
   if (next && nextPortal && canAccessPortal(profile.role, nextPortal)) {
     redirect(next)
   }
   redirect(homePathFor(profile.role))
+}
+
+/** Record a successful sign-in for the admin user-activity view. */
+async function stampLogin(profileId: string) {
+  const now = new Date()
+  await db.profile.update({ where: { id: profileId }, data: { lastLoginAt: now, lastSeenAt: now } }).catch(() => {})
 }
 
 export type OtpState = { error?: string; sent?: boolean; email?: string }
@@ -174,6 +182,7 @@ export async function verifyOtp(_prev: LoginState, formData: FormData): Promise<
   // Mark a fresh OTP verification so the customer can change their password
   // within the grace window without re-verifying.
   await markOtpVerified()
+  await stampLogin(profile.id)
 
   const nextPortal = next ? portalFromPath(next) : null
   if (next && nextPortal && canAccessPortal(profile.role, nextPortal)) {

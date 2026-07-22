@@ -13,6 +13,8 @@ export type UserRow = {
   status: string
   org: string | null
   createdAt: string
+  lastLoginAt: string | null
+  online: boolean
 }
 
 const ROLES = ['ADMIN', 'STAFF', 'CUSTOMER', 'VENDOR']
@@ -29,6 +31,19 @@ const PAGE_SIZE = 20
 
 function fmtDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+}
+
+/** "3 min ago" / "2 days ago" — compact enough for a table cell. */
+function fmtSince(iso: string | null): string {
+  if (!iso) return 'Never'
+  const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60_000)
+  if (mins < 1) return 'Just now'
+  if (mins < 60) return `${mins} min ago`
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return `${hours} hr${hours === 1 ? '' : 's'} ago`
+  const days = Math.floor(hours / 24)
+  if (days < 30) return `${days} day${days === 1 ? '' : 's'} ago`
+  return fmtDate(iso)
 }
 
 export default function UsersTable({ rows, selfId }: { rows: UserRow[]; selfId: string }) {
@@ -71,13 +86,15 @@ export default function UsersTable({ rows, selfId }: { rows: UserRow[]; selfId: 
               <th className="px-3 py-2 font-medium">Organisation</th>
               <th className="px-3 py-2 font-medium">Role</th>
               <th className="px-3 py-2 font-medium">Status</th>
+              <th className="px-3 py-2 font-medium">Activity</th>
+              <th className="px-3 py-2 font-medium">Last login</th>
               <th className="px-3 py-2 font-medium">Joined</th>
               <th className="px-3 py-2"></th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
-              <tr><td colSpan={6} className="px-3 py-10 text-center text-slate-500">No users match these filters.</td></tr>
+              <tr><td colSpan={8} className="px-3 py-10 text-center text-slate-500">No users match these filters.</td></tr>
             ) : (
               pageSlice(filtered, page, PAGE_SIZE).map((u) => <Row key={u.id} u={u} isSelf={u.id === selfId} />)
             )}
@@ -135,6 +152,13 @@ function Row({ u, isSelf }: { u: UserRow; isSelf: boolean }) {
         <span className={`rounded px-2 py-0.5 text-xs font-medium ${STATUS_BADGE[status] ?? 'bg-slate-100 text-slate-600'}`}>{status}</span>
         {msg ? <div className="mt-1 text-xs text-rose-600">{msg}</div> : null}
       </td>
+      <td className="px-3 py-3 whitespace-nowrap">
+        <span className="inline-flex items-center gap-1.5 text-xs font-medium">
+          <span className={`h-2 w-2 shrink-0 rounded-full ${u.online ? 'bg-green-500' : 'bg-slate-300'}`} aria-hidden="true" />
+          <span className={u.online ? 'text-green-700' : 'text-slate-500'}>{u.online ? 'Online' : 'Offline'}</span>
+        </span>
+      </td>
+      <td className="px-3 py-3 whitespace-nowrap text-xs text-slate-500">{fmtSince(u.lastLoginAt)}</td>
       <td className="px-3 py-3 whitespace-nowrap text-xs text-slate-500">{fmtDate(u.createdAt)}</td>
       <td className="px-3 py-3 text-right">
         {isSelf ? (

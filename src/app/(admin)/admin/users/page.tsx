@@ -1,4 +1,4 @@
-import { requireAdmin } from '@/lib/auth/session'
+import { requireAdmin, ONLINE_WINDOW_MINUTES } from '@/lib/auth/session'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import PageHeader from '@/components/ui/PageHeader'
@@ -21,10 +21,14 @@ export default async function UsersPage() {
       role: true,
       status: true,
       createdAt: true,
+      lastLoginAt: true,
+      lastSeenAt: true,
       customer: { select: { companyName: true } },
       vendor: { select: { companyName: true } },
     },
   })
+
+  const onlineCutoff = Date.now() - ONLINE_WINDOW_MINUTES * 60_000
 
   const rows: UserRow[] = profiles.map((p) => ({
     id: p.id,
@@ -35,15 +39,18 @@ export default async function UsersPage() {
     status: p.status,
     org: p.customer?.companyName ?? p.vendor?.companyName ?? null,
     createdAt: p.createdAt.toISOString(),
+    lastLoginAt: p.lastLoginAt?.toISOString() ?? null,
+    online: p.status === 'ACTIVE' && (p.lastSeenAt?.getTime() ?? 0) > onlineCutoff,
   }))
 
   const pending = rows.filter((r) => r.status === 'PENDING').length
+  const online = rows.filter((r) => r.online).length
 
   return (
     <div>
       <PageHeader
         title="Users & approvals"
-        subtitle={`${rows.length} accounts${pending ? ` · ${pending} awaiting approval` : ''}.`}
+        subtitle={`${rows.length} accounts${pending ? ` · ${pending} awaiting approval` : ''}${online ? ` · ${online} online now` : ''}.`}
       />
       <UsersTable rows={rows} selfId={admin.id} />
     </div>

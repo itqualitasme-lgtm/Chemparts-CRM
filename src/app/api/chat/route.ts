@@ -1,6 +1,6 @@
 import { NextResponse, after } from 'next/server'
 import { db } from '@/lib/db'
-import { getBotReply } from '@/lib/chat-bot'
+import { getBotReply, CHAT_IDLE_CLOSED_MESSAGE } from '@/lib/chat-bot'
 import { notifyStaff } from '@/lib/mail/notify'
 import { createNotification } from '@/lib/notifications'
 import { appUrl } from '@/lib/env'
@@ -17,8 +17,20 @@ export const IDLE_CLOSE_MINUTES = 30
  */
 async function closeIdleConversations() {
   const cutoff = new Date(Date.now() - IDLE_CLOSE_MINUTES * 60_000)
-  await db.chatConversation.updateMany({
+  const stale = await db.chatConversation.findMany({
     where: { status: { in: ['BOT', 'LIVE'] }, lastMessageAt: { lt: cutoff } },
+    select: { id: true },
+    take: 200,
+  })
+  if (stale.length === 0) return
+  const ids = stale.map((c) => c.id)
+  // Tell the visitor why it ended, then close. lastMessageAt is deliberately
+  // NOT bumped, so this notice can't keep the conversation alive.
+  await db.chatMessage.createMany({
+    data: ids.map((conversationId) => ({ conversationId, sender: 'BOT' as const, body: CHAT_IDLE_CLOSED_MESSAGE })),
+  })
+  await db.chatConversation.updateMany({
+    where: { id: { in: ids } },
     data: { status: 'CLOSED', closedAt: new Date() },
   })
 }

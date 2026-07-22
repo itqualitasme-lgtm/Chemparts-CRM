@@ -31,6 +31,8 @@ model Profile {
   customerId String?
   vendor     Vendor?    @relation(fields: [vendorId], references: [id])
   vendorId   String?
+  lastLoginAt DateTime? // stamped on each successful sign-in
+  lastSeenAt  DateTime? // heartbeat from authenticated requests -> online status
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
