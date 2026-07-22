@@ -14,6 +14,11 @@ export default function ChatWidget() {
   const [sending, setSending] = useState(false)
   const [status, setStatus] = useState('BOT')
   const [token, setToken] = useState<string | null>(null)
+  const [contactCaptured, setContactCaptured] = useState(false)
+  const [leadEmail, setLeadEmail] = useState('')
+  const [leadPhone, setLeadPhone] = useState('')
+  const [leadError, setLeadError] = useState('')
+  const [leadSending, setLeadSending] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   // Restore an existing conversation on mount.
@@ -31,7 +36,11 @@ export default function ChatWidget() {
         const r = await fetch(`/api/chat?token=${encodeURIComponent(token)}`)
         if (!r.ok) return
         const data = await r.json()
-        if (alive && Array.isArray(data.messages)) { setMsgs(data.messages); setStatus(data.status) }
+        if (alive && Array.isArray(data.messages)) {
+          setMsgs(data.messages)
+          setStatus(data.status)
+          setContactCaptured(Boolean(data.contactCaptured))
+        }
       } catch { /* ignore */ }
     }
     load()
@@ -60,6 +69,7 @@ export default function ChatWidget() {
       if (data.token) { setToken(data.token); window.localStorage.setItem(TOKEN_KEY, data.token) }
       if (Array.isArray(data.messages)) setMsgs(data.messages)
       if (data.status) setStatus(data.status)
+      setContactCaptured(Boolean(data.contactCaptured))
     } catch {
       setMsgs((m) => [...m, { id: `err-${Date.now()}`, sender: 'BOT', body: 'Sorry — something went wrong. Please try again or email info@chemparts-me.com.', createdAt: new Date().toISOString() }])
     } finally {
@@ -67,14 +77,44 @@ export default function ChatWidget() {
     }
   }
 
+  async function submitLead(e: React.FormEvent) {
+    e.preventDefault()
+    if (leadSending || !token) return
+    setLeadSending(true)
+    setLeadError('')
+    try {
+      const r = await fetch('/api/chat', {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token, email: leadEmail, phone: leadPhone }),
+      })
+      const data = await r.json()
+      if (!r.ok) { setLeadError(data.error || 'Could not save your details.'); return }
+      if (Array.isArray(data.messages)) setMsgs(data.messages)
+      if (data.status) setStatus(data.status)
+      setContactCaptured(Boolean(data.contactCaptured))
+    } catch {
+      setLeadError('Could not save your details. Please try again.')
+    } finally {
+      setLeadSending(false)
+    }
+  }
+
   const shown: Msg[] = msgs.length ? msgs : [{ id: 'greet', sender: 'BOT', body: BOT_GREETING, createdAt: '' }]
 
-  // If an agent was requested but nobody has replied within 2 minutes, nudge
-  // the visitor to call. Re-evaluated on every 4s poll while the panel is open.
+  // If an agent was requested but nobody has replied within 2 minutes, ask for
+  // contact details so the team can follow up, and offer the phone/WhatsApp
+  // shortcut. Re-evaluated on every 4s poll while the panel is open.
   const last = msgs[msgs.length - 1]
   const staffReplied = msgs.some((m) => m.sender === 'STAFF')
   const waitingBusy =
     status === 'LIVE' && !staffReplied && !!last && Date.now() - new Date(last.createdAt).getTime() > 120000
+  const askForContact = waitingBusy && !contactCaptured
+
+  const leadInputStyle = {
+    width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid #cbd5e1',
+    fontSize: 13, color: '#1a2733', background: '#fff',
+  } as const
 
   return (
     <>
@@ -136,18 +176,58 @@ export default function ChatWidget() {
             })}
           </div>
 
-          {waitingBusy && (
-            <div style={{ margin: '0 14px 8px', padding: '10px 12px', borderRadius: 10, background: '#fff7ed', border: '1px solid #fed7aa', fontSize: 13, lineHeight: 1.45, color: '#9a3412' }}>
-              Our team is currently busy. For a faster response, please call{' '}
-              <a href="tel:+97165574047" style={{ color: '#0E7490', fontWeight: 600 }}>+971 6 557 4047</a>
-              {' '}or{' '}
-              <a href="https://wa.me/971557566123" target="_blank" rel="noopener" style={{ color: '#0E7490', fontWeight: 600 }}>WhatsApp us</a>.
+          {askForContact && (
+            <form onSubmit={submitLead} style={{ margin: '0 14px 8px', padding: '10px 12px', borderRadius: 10, background: '#fff7ed', border: '1px solid #fed7aa', fontSize: 13, lineHeight: 1.45, color: '#9a3412', display: 'grid', gap: 8 }}>
+              <div>
+                Our team is busy right now. Leave your email and number — an agent will get back to you as soon as they&apos;re free.
+              </div>
+              <input
+                type="email"
+                required
+                value={leadEmail}
+                onChange={(e) => setLeadEmail(e.target.value)}
+                placeholder="Your email"
+                aria-label="Your email"
+                autoComplete="email"
+                style={leadInputStyle}
+              />
+              <input
+                type="tel"
+                required
+                value={leadPhone}
+                onChange={(e) => setLeadPhone(e.target.value)}
+                placeholder="Contact number"
+                aria-label="Contact number"
+                autoComplete="tel"
+                style={leadInputStyle}
+              />
+              {leadError ? <div style={{ color: '#b91c1c', fontSize: 12 }}>{leadError}</div> : null}
+              <button
+                type="submit"
+                disabled={leadSending}
+                style={{ padding: '8px 12px', borderRadius: 8, border: 'none', background: NAVY, color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', opacity: leadSending ? 0.6 : 1 }}
+              >
+                {leadSending ? 'Sending…' : 'Request a callback'}
+              </button>
+              <div style={{ fontSize: 12 }}>
+                Need it now? Call{' '}
+                <a href="tel:+97165574047" style={{ color: '#0E7490', fontWeight: 600 }}>+971 6 557 4047</a>
+                {' '}or{' '}
+                <a href="https://wa.me/971557566123" target="_blank" rel="noopener" style={{ color: '#0E7490', fontWeight: 600 }}>WhatsApp us</a>.
+              </div>
+            </form>
+          )}
+
+          {waitingBusy && contactCaptured && (
+            <div style={{ margin: '0 14px 8px', padding: '10px 12px', borderRadius: 10, background: '#f0fdf4', border: '1px solid #86efac', fontSize: 13, lineHeight: 1.45, color: '#065f46' }}>
+              Thanks — we have your details. An agent will get back to you. For anything urgent, call{' '}
+              <a href="tel:+97165574047" style={{ color: '#0E7490', fontWeight: 600 }}>+971 6 557 4047</a>.
             </div>
           )}
 
           {status === 'CLOSED' && (
             <div style={{ margin: '0 14px 8px', padding: '10px 12px', borderRadius: 10, background: '#f1f5f9', border: '1px solid #e2e8f0', fontSize: 13, lineHeight: 1.45, color: '#475569', textAlign: 'center' }}>
-              This chat has been closed by our team. Type below to start a new one.
+              This chat is closed. Type below to start a new one.
             </div>
           )}
 

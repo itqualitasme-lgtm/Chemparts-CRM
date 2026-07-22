@@ -8,6 +8,7 @@ export type ChatRow = {
   token: string
   who: string
   email: string | null
+  phone: string | null
   status: string
   agentRequested: boolean
   lastMessageAt: string
@@ -130,7 +131,10 @@ export default function StaffChats({ rows }: { rows: ChatRow[] }) {
           <div className="flex items-center justify-between gap-2 border-b border-slate-200 px-4 py-2.5">
             <div className="min-w-0">
               <div className="truncate text-sm font-semibold text-slate-900">{selected.who}</div>
-              {selected.email ? <a href={`mailto:${selected.email}`} className="text-xs text-[#0E7490] hover:underline">{selected.email}</a> : <span className="text-xs text-slate-400">no email shared</span>}
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                {selected.email ? <a href={`mailto:${selected.email}`} className="text-xs text-[#0E7490] hover:underline">{selected.email}</a> : <span className="text-xs text-slate-400">no email shared</span>}
+                {selected.phone ? <a href={`tel:${selected.phone}`} className="text-xs font-medium text-[#0E7490] hover:underline">{selected.phone}</a> : null}
+              </div>
             </div>
             {status !== 'CLOSED' && (
               <button type="button" onClick={() => start(async () => { await closeChat(selected.token); router.refresh() })} className="shrink-0 rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50">

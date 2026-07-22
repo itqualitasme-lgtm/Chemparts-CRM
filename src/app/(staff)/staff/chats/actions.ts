@@ -27,7 +27,7 @@ export async function closeChat(token: string): Promise<ChatState> {
   await requirePortal('staff')
   const conv = await db.chatConversation.findUnique({ where: { token }, select: { id: true } })
   if (!conv) return { error: 'Conversation not found.' }
-  await db.chatConversation.update({ where: { id: conv.id }, data: { status: 'CLOSED' } })
+  await db.chatConversation.update({ where: { id: conv.id }, data: { status: 'CLOSED', closedAt: new Date() } })
   revalidatePath('/staff/chats')
   return { ok: true }
 }

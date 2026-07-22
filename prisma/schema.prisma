@@ -671,10 +671,12 @@ model ChatConversation {
   token         String        @unique @default(cuid()) // visitor's private reconnect key
   visitorName   String?
   visitorEmail  String?
+  visitorPhone  String?       // captured when nobody answers a live request
   status        ChatStatus    @default(BOT)
   agentRequested Boolean      @default(false)
   createdAt     DateTime      @default(now())
   lastMessageAt DateTime      @default(now())
+  closedAt      DateTime?     // set when staff close it or it goes idle
   messages      ChatMessage[]
 
   @@index([status, lastMessageAt])

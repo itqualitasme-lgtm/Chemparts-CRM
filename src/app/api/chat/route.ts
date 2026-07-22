@@ -7,6 +7,22 @@ import { appUrl } from '@/lib/env'
 
 const EMAIL_RE = /[^\s@]+@[^\s@]+\.[^\s@]+/
 
+/** A chat with no activity for this long is closed automatically. */
+export const IDLE_CLOSE_MINUTES = 30
+
+/**
+ * Lazily close conversations that have gone quiet, so the staff inbox only ever
+ * shows chats that are actually alive. Runs on every chat API hit — no cron
+ * needed, and it's a single indexed UPDATE (status, lastMessageAt).
+ */
+async function closeIdleConversations() {
+  const cutoff = new Date(Date.now() - IDLE_CLOSE_MINUTES * 60_000)
+  await db.chatConversation.updateMany({
+    where: { status: { in: ['BOT', 'LIVE'] }, lastMessageAt: { lt: cutoff } },
+    data: { status: 'CLOSED', closedAt: new Date() },
+  })
+}
+
 type MsgOut = { id: string; sender: string; body: string; createdAt: string }
 const shape = (m: { id: string; sender: string; body: string; createdAt: Date }): MsgOut => ({
   id: m.id,
@@ -18,10 +34,23 @@ const shape = (m: { id: string; sender: string; body: string; createdAt: Date })
 async function conversationPayload(id: string) {
   const conv = await db.chatConversation.findUnique({
     where: { id },
-    select: { token: true, status: true, messages: { orderBy: { createdAt: 'asc' }, select: { id: true, sender: true, body: true, createdAt: true } } },
+    select: {
+      token: true,
+      status: true,
+      visitorEmail: true,
+      visitorPhone: true,
+      messages: { orderBy: { createdAt: 'asc' }, select: { id: true, sender: true, body: true, createdAt: true } },
+    },
   })
   if (!conv) return null
-  return { token: conv.token, status: conv.status, messages: conv.messages.map(shape) }
+  return {
+    token: conv.token,
+    status: conv.status,
+    // Drives the widget's "leave your details" prompt — never expose the values.
+    contactCaptured: Boolean(conv.visitorEmail && conv.visitorPhone),
+    idleCloseMinutes: IDLE_CLOSE_MINUTES,
+    messages: conv.messages.map(shape),
+  }
 }
 
 /** Visitor sends a message. Creates the conversation on first contact, runs the
@@ -29,6 +58,8 @@ async function conversationPayload(id: string) {
 export async function POST(req: Request) {
   let body: Record<string, unknown> = {}
   try { body = await req.json() } catch { /* validated below */ }
+
+  await closeIdleConversations()
 
   const token = typeof body.token === 'string' ? body.token : null
   const message = (typeof body.message === 'string' ? body.message : '').trim().slice(0, 2000)
@@ -51,7 +82,7 @@ export async function POST(req: Request) {
 
   // A visitor writing into a closed chat reopens it (back to the bot).
   if (conv.status === 'CLOSED') {
-    await db.chatConversation.update({ where: { id: conv.id }, data: { status: 'BOT', agentRequested: false } })
+    await db.chatConversation.update({ where: { id: conv.id }, data: { status: 'BOT', agentRequested: false, closedAt: null } })
     conv = { ...conv, status: 'BOT', agentRequested: false }
   }
 
@@ -96,10 +127,60 @@ export async function POST(req: Request) {
   return NextResponse.json(payload)
 }
 
+/**
+ * Visitor leaves an email + phone because nobody picked up the live request.
+ * Staff get notified so an agent can follow up once they're back.
+ */
+export async function PUT(req: Request) {
+  let body: Record<string, unknown> = {}
+  try { body = await req.json() } catch { /* validated below */ }
+
+  const token = typeof body.token === 'string' ? body.token : null
+  const email = (typeof body.email === 'string' ? body.email : '').trim().slice(0, 160)
+  const phone = (typeof body.phone === 'string' ? body.phone : '').trim().slice(0, 40)
+  if (!token) return NextResponse.json({ error: 'Missing token.' }, { status: 400 })
+  if (!EMAIL_RE.test(email)) return NextResponse.json({ error: 'Enter a valid email address.' }, { status: 400 })
+  if (phone.replace(/\D/g, '').length < 7) return NextResponse.json({ error: 'Enter a valid contact number.' }, { status: 400 })
+
+  const conv = await db.chatConversation.findUnique({ where: { token }, select: { id: true, visitorName: true } })
+  if (!conv) return NextResponse.json({ error: 'Not found.' }, { status: 404 })
+
+  await db.chatConversation.update({
+    where: { id: conv.id },
+    // Keep it open and flagged for a human — this is a callback request.
+    data: { visitorEmail: email, visitorPhone: phone, agentRequested: true, status: 'LIVE', lastMessageAt: new Date() },
+  })
+  await db.chatMessage.create({
+    data: {
+      conversationId: conv.id,
+      sender: 'BOT',
+      body: `Thanks - we have your email (${email}) and number (${phone}). An agent will get back to you as soon as they're available.`,
+    },
+  })
+
+  const who = conv.visitorName || email
+  const link = `${appUrl()}/staff/chats`
+  after(async () => {
+    await notifyStaff('staff-chat-agent', { who, message: `Callback requested - email: ${email}, phone: ${phone}`, link })
+    await createNotification({
+      kind: 'INFO',
+      title: 'Live chat - callback requested',
+      body: `${who} left contact details: ${email} / ${phone}`,
+      link: '/staff/chats',
+      entity: 'ChatConversation',
+      entityId: conv.id,
+    })
+  })
+
+  const payload = await conversationPayload(conv.id)
+  return NextResponse.json(payload)
+}
+
 /** Visitor polls for new messages (staff replies) on their conversation. */
 export async function GET(req: Request) {
   const token = new URL(req.url).searchParams.get('token')
   if (!token) return NextResponse.json({ error: 'Missing token.' }, { status: 400 })
+  await closeIdleConversations()
   const conv = await db.chatConversation.findUnique({ where: { token }, select: { id: true } })
   if (!conv) return NextResponse.json({ error: 'Not found.' }, { status: 404 })
   const payload = await conversationPayload(conv.id)
