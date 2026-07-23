@@ -59,6 +59,7 @@ function ProductCard({ p, loggedIn, section }: { p: SectionProduct; loggedIn: bo
           {p.brandLogo ? (
             <span className="card__brandlogo">
               {/* eslint-disable-next-line @next/next/no-img-element */}
+              {/* brandLogo is already an optimized /_next/image URL (see catalog-db). */}
               <img src={p.brandLogo} alt={p.brand} loading="lazy" />
             </span>
           ) : null}

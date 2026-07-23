@@ -8,6 +8,7 @@ import {
   type CompatibleSpare,
 } from '@/lib/catalog-db'
 import { priceState, canAddToCart } from '@/lib/price'
+import { optimizedImg } from '@/lib/img'
 import { getSessionUser } from '@/lib/auth/session'
 import Gallery from './Gallery'
 import RequestPrice from '../RequestPrice'
@@ -40,6 +41,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: product.overview || product.desc,
     openGraph: { title, description: product.overview || product.desc },
   }
+}
+
+// Serve product/brand images resized + CDN-cached via Next's optimizer so
+// Supabase Storage is hit once per size, not full-res on every page view.
+function optImg(raw: string | null | undefined, width: number): string | null {
+  const resolved = productImageUrl(raw)
+  return optimizedImg(resolved, width) ?? resolved
 }
 
 function formatPrice(currency: string, value: number): string {
@@ -182,7 +190,7 @@ function FullSpec({ product }: { product: ProductDetail }) {
 
 /** One compatible-spare row: image, name, brand, req pill, qty, included. */
 function SpareItem({ s }: { s: CompatibleSpare }) {
-  const src = productImageUrl(s.image)
+  const src = optImg(s.image, 128)
   const required = s.requirement === 'REQUIRED'
   return (
     <a
@@ -238,7 +246,7 @@ function RelatedCard({
 }: {
   p: { slug: string; name: string; brand: string; image: string | null; desc: string }
 }) {
-  const src = productImageUrl(p.image)
+  const src = optImg(p.image, 640)
   return (
     <a className="card" href={`/products/${encodeURIComponent(p.slug)}`}>
       <div className="card__media">{src ? <img src={src} alt={p.name} loading="lazy" decoding="async" /> : null}</div>
@@ -292,7 +300,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               {product.brandLogo ? (
                 <span className="pdp-info__brand pdp-info__brand--logo">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={product.brandLogo} alt={product.brand} className="pdp-info__brandimg" />
+                  <img src={optimizedImg(product.brandLogo, 256) ?? product.brandLogo} alt={product.brand} className="pdp-info__brandimg" />
                 </span>
               ) : (
                 <span className="pdp-info__brand">{product.brand}</span>
@@ -391,7 +399,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               </h2>
               <div style={{ display: 'grid', gap: 12, marginTop: 20 }}>
                 {product.usedInEquipment.map((e) => {
-                  const src = productImageUrl(e.image)
+                  const src = optImg(e.image, 128)
                   return (
                     <a
                       key={e.slug}

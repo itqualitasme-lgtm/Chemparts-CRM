@@ -35,7 +35,7 @@ export async function uploadProductImage(
   const supabase = createAdminClient()
   const { error: upErr } = await supabase.storage
     .from(BUCKET)
-    .upload(path, file, { contentType: file.type, upsert: false })
+    .upload(path, file, { contentType: file.type, upsert: false, cacheControl: '31536000' })
   if (upErr) return { error: `Upload failed: ${upErr.message}` }
 
   const { data } = supabase.storage.from(BUCKET).getPublicUrl(path)

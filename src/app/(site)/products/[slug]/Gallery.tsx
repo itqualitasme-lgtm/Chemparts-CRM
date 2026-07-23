@@ -2,6 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { optimizedImg } from '@/lib/img'
+
+// Route Storage images through Next's optimizer (resized WebP/AVIF, CDN-cached)
+// so Supabase serves each size once, not full-res on every page view.
+const thumbSrc = (s: string) => optimizedImg(s, 256) ?? s
+const mainSrc = (s: string) => optimizedImg(s, 1080) ?? s
 
 // PDP image gallery: main image + thumbnail strip, plus a click-to-zoom
 // lightbox so customers can view the equipment at large scale. Reuses the
@@ -34,7 +40,7 @@ export default function Gallery({ images, name }: { images: string[]; name: stri
       <div className="pdp-gallery__main">
         {current ? (
           <img
-            src={current}
+            src={mainSrc(current)}
             alt={name}
             style={{ cursor: 'zoom-in' }}
             onClick={() => setZoom(true)}
@@ -82,7 +88,7 @@ export default function Gallery({ images, name }: { images: string[]; name: stri
               aria-pressed={i === active ? 'true' : 'false'}
               onClick={() => setActive(i)}
             >
-              <img src={src} alt="" />
+              <img src={thumbSrc(src)} alt="" />
             </button>
           ))}
         </div>
@@ -113,7 +119,7 @@ export default function Gallery({ images, name }: { images: string[]; name: stri
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={current}
+                src={mainSrc(current)}
                 alt={name}
                 onClick={(e) => e.stopPropagation()}
                 style={{ maxWidth: '92vw', maxHeight: '92vh', objectFit: 'contain', background: '#fff', padding: 12, borderRadius: 2 }}

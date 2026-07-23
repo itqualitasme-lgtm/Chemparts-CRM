@@ -21,7 +21,7 @@ async function uploadLogo(name: string, file: File): Promise<{ url?: string; err
   const ext = file.name.split('.').pop()?.toLowerCase() || 'png'
   const path = `clients/${slugify(name)}/${Date.now()}.${ext}`
   const supabase = createAdminClient()
-  const { error } = await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type, upsert: false })
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type, upsert: false, cacheControl: '31536000' })
   if (error) return { error: `Upload failed: ${error.message}` }
   return { url: supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl }
 }

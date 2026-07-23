@@ -24,7 +24,7 @@ export async function uploadBlogImage(formData: FormData): Promise<{ url?: strin
   // No timestamp source in scripts, but here we run in the request runtime.
   const path = `blog/${Date.now()}-${Math.round(performance.now())}.${ext}`
   const supabase = createAdminClient()
-  const { error } = await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type, upsert: false })
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type, upsert: false, cacheControl: '31536000' })
   if (error) return { error: `Upload failed: ${error.message}` }
   return { url: supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl }
 }
