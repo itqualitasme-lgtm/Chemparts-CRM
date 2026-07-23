@@ -14,19 +14,22 @@ function valid(email: string | null | undefined): email is string {
   return !!email && EMAIL_RE.test(email)
 }
 
-/** Send one notification, swallowing any error. */
+/** Send one notification, swallowing any error. Returns whether it was sent. */
 export async function notify(
   to: string | null | undefined,
   template: string,
   vars: Record<string, string>,
-  opts?: { cc?: string | null },
-): Promise<void> {
-  if (!valid(to)) return
+  opts?: { cc?: string | null; replyTo?: string | null },
+): Promise<boolean> {
+  if (!valid(to)) return false
   const cc = valid(opts?.cc) && opts?.cc !== to ? opts?.cc : undefined
+  const replyTo = valid(opts?.replyTo) ? opts?.replyTo : undefined
   try {
-    await sendMail(to, template, vars, cc ? { cc } : undefined)
+    await sendMail(to, template, vars, { cc, replyTo })
+    return true
   } catch {
     // swallowed — sendMail already recorded a FAILED EmailLog row.
+    return false
   }
 }
 

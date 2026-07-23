@@ -372,6 +372,7 @@ model PriceHistory {
 // ---- Price verification / update-on-request ----
 enum PriceRequestStatus {
   OPEN
+  AWAITING_INFO // staff asked the client for more requirement details
   QUOTED
   CLOSED
 }

@@ -1,7 +1,12 @@
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
-function layout(title: string, bodyHtml: string): string {
+function layout(title: string, bodyHtml: string, opts?: { replyable?: boolean }): string {
+  // Replyable emails carry a Reply-To: info@ header, so the footer invites a
+  // reply instead of the default no-reply notice.
+  const footer = opts?.replyable
+    ? 'Reply to this email to reach our team, or write to info@chemparts-me.com.'
+    : 'This is an automated no-reply message. For assistance email info@chemparts-me.com.'
   return `<!doctype html><html><body style="margin:0;background:#f4f6f8;font-family:Arial,Helvetica,sans-serif;color:#1a2733">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:24px">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden">
@@ -10,7 +15,7 @@ function layout(title: string, bodyHtml: string): string {
 <tr><td style="padding:32px"><h2 style="margin:0 0 16px;font-size:18px;color:#0A2540">${title}</h2>${bodyHtml}</td></tr>
 <tr><td style="background:#f4f6f8;padding:16px 32px;font-size:11px;color:#66788a">
 Chemparts Middle East FZC &middot; SAIF Zone, Sharjah, UAE &middot; chemparts-me.com<br>
-This is an automated no-reply message. For assistance email info@chemparts-me.com.</td></tr>
+${footer}</td></tr>
 </table></td></tr></table></body></html>`
 }
 
@@ -203,7 +208,22 @@ ${button(v.confirmUrl, 'Confirm subscription')}
 <p>The current price for <strong>${esc(v.product)}</strong> is:</p>
 <p style="font-size:22px;font-weight:bold;color:#0A2540;margin:12px 0">${esc(v.price)}</p>
 ${v.validUntil ? `<p style="color:#66788a">Valid until ${esc(v.validUntil)}.</p>` : ''}
-<p>Reply to this enquiry or contact us to place an order.</p>`,
+<p>Reply to this email or contact us to place an order.</p>`,
+      { replyable: true },
+    ),
+  }),
+  // Combined update covering all of one client's open price requests. Some items
+  // carry a confirmed price; others ask for more requirement details. itemsHtml
+  // is built server-side (already escaped) so it's interpolated raw here.
+  'price-update': (v) => ({
+    subject: v.subject || 'Your Chemparts price request',
+    html: layout(
+      'Your price request',
+      `<p>Dear ${esc(v.name)},</p>
+${v.message ? `<p style="white-space:pre-line">${esc(v.message)}</p>` : ''}
+${v.itemsHtml}
+<p style="color:#66788a">Reply to this email and our team will get back to you.</p>`,
+      { replyable: true },
     ),
   }),
   'enquiry-status-update': (v) => ({

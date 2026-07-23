@@ -14,12 +14,12 @@ export async function sendMail(
   to: string,
   template: string,
   vars: Record<string, string>,
-  opts?: { cc?: string },
+  opts?: { cc?: string; replyTo?: string },
 ) {
   const { subject, html } = renderEmail(template, vars)
   const logTo = opts?.cc ? `${to} (cc ${opts.cc})` : to
   try {
-    await transporter.sendMail({ from: process.env.MAIL_FROM, to, cc: opts?.cc, subject, html })
+    await transporter.sendMail({ from: process.env.MAIL_FROM, to, cc: opts?.cc, replyTo: opts?.replyTo, subject, html })
     await db.emailLog.create({ data: { to: logTo, subject, template, status: 'SENT' } })
   } catch (err) {
     await db.emailLog.create({
