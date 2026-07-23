@@ -1,7 +1,7 @@
 'use server'
 
 import { redirect } from 'next/navigation'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { brandSchema } from '@/lib/validation/brand'
@@ -20,7 +20,7 @@ function revalidateBrand(brandId?: string) {
   revalidatePath('/staff/brands')
   if (brandId) revalidatePath(`/staff/brands/${brandId}`)
   revalidatePath('/partners')
-  revalidatePath('/products')
+  revalidatePath('/products'); revalidateTag('catalog', 'max')
   revalidatePath('/products/instruments')
   revalidatePath('/products/consumables')
   revalidatePath('/products/spare-parts')

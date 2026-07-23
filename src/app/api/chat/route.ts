@@ -10,13 +10,20 @@ const EMAIL_RE = /[^\s@]+@[^\s@]+\.[^\s@]+/
 /** A chat with no activity for this long is closed automatically. */
 export const IDLE_CLOSE_MINUTES = 30
 
+// The idle sweep runs on every chat request; throttle it so a warm instance
+// fielding 4s polls does the DB work at most once a minute, not every hit.
+let lastSweepAt = 0
+
 /**
  * Lazily close conversations that have gone quiet, so the staff inbox only ever
  * shows chats that are actually alive. Runs on every chat API hit — no cron
  * needed, and it's a single indexed UPDATE (status, lastMessageAt).
  */
 async function closeIdleConversations() {
-  const cutoff = new Date(Date.now() - IDLE_CLOSE_MINUTES * 60_000)
+  const now = Date.now()
+  if (now - lastSweepAt < 60_000) return // throttled — at most once per minute
+  lastSweepAt = now
+  const cutoff = new Date(now - IDLE_CLOSE_MINUTES * 60_000)
   const stale = await db.chatConversation.findMany({
     where: { status: { in: ['BOT', 'LIVE'] }, lastMessageAt: { lt: cutoff } },
     select: { id: true },

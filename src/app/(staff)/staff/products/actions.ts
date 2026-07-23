@@ -1,7 +1,7 @@
 'use server'
 
 import { redirect } from 'next/navigation'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { requirePortal } from '@/lib/auth/session'
 import { db } from '@/lib/db'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -75,7 +75,7 @@ export async function deleteProduct(id: string, returnTo?: string): Promise<{ er
   await db.product.delete({ where: { id } })
   await db.auditLog.create({ data: { actorId: user.id, action: 'DELETE', entity: 'Product', entityId: id } })
   revalidatePath('/staff/products')
-  revalidatePath('/products')
+  revalidatePath('/products'); revalidateTag('catalog', 'max')
   redirect(safeReturn(returnTo))
 }
 
@@ -141,7 +141,7 @@ export async function createProduct(_prev: ProductState, formData: FormData): Pr
     data: { actorId: user.id, action: 'CREATE', entity: 'Product', entityId: product.id, detail: { slug, name: d.name } },
   })
   revalidatePath('/staff/products')
-  revalidatePath('/products')
+  revalidatePath('/products'); revalidateTag('catalog', 'max')
   redirect('/staff/products')
 }
 
@@ -195,7 +195,7 @@ export async function updateProduct(id: string, _prev: ProductState, formData: F
     data: { actorId: user.id, action: 'UPDATE', entity: 'Product', entityId: id, detail: { slug, name: d.name } },
   })
   revalidatePath('/staff/products')
-  revalidatePath('/products')
+  revalidatePath('/products'); revalidateTag('catalog', 'max')
   revalidatePath(`/products/${slug}`)
   redirect(safeReturn((formData.get('returnTo') as string | null) ?? undefined))
 }

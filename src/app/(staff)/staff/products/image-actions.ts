@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { requirePortal } from '@/lib/auth/session'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { db } from '@/lib/db'
@@ -51,7 +51,7 @@ export async function uploadProductImage(
 
   revalidatePath(`/staff/products/${productId}`)
   revalidatePath('/staff/products')
-  revalidatePath('/products')
+  revalidatePath('/products'); revalidateTag('catalog', 'max')
   revalidatePath(`/products/${product.slug}`)
   return { ok: true }
 }
@@ -61,7 +61,7 @@ export async function setPrimaryImage(productId: string, url: string): Promise<v
   const product = await db.product.findUnique({ where: { id: productId }, select: { slug: true } })
   await db.product.update({ where: { id: productId }, data: { image: url } })
   revalidatePath(`/staff/products/${productId}`)
-  revalidatePath('/products')
+  revalidatePath('/products'); revalidateTag('catalog', 'max')
   if (product) revalidatePath(`/products/${product.slug}`)
 }
 
@@ -91,6 +91,6 @@ export async function removeProductImage(productId: string, url: string): Promis
 
   revalidatePath(`/staff/products/${productId}`)
   revalidatePath('/staff/products')
-  revalidatePath('/products')
+  revalidatePath('/products'); revalidateTag('catalog', 'max')
   revalidatePath(`/products/${product.slug}`)
 }

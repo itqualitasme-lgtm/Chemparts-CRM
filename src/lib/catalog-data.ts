@@ -1,4 +1,5 @@
 import 'server-only'
+import { unstable_cache } from 'next/cache'
 import { db } from '@/lib/db'
 import { INDUSTRIES, TEST_TYPE_LABELS } from '@/lib/taxonomy'
 import { absImg, optimizedImg } from '@/lib/img'
@@ -65,7 +66,19 @@ function buildSpecs(p: { productType?: string | null; sample?: string | null; ou
 }
 
 /** Live public catalog (LEAN list), shaped for the ported site's client scripts. */
-export async function getPublicCatalog(): Promise<CatalogData> {
+/**
+ * The full public catalog is injected into window.PRODUCTS on EVERY public page
+ * (via SiteChrome in the site layout). Caching it collapses one identical DB read
+ * per page view into one read per change window — the biggest DB-egress lever.
+ * Tagged 'catalog' so staff product/brand edits refresh it instantly
+ * (revalidateTag('catalog')); the 5-min TTL is just a safety net.
+ */
+export const getPublicCatalog = unstable_cache(loadPublicCatalog, ['public-catalog'], {
+  revalidate: 300,
+  tags: ['catalog'],
+})
+
+async function loadPublicCatalog(): Promise<CatalogData> {
   const rows = await db.product.findMany({
     where: { active: true },
     orderBy: [{ featured: 'desc' }, { name: 'asc' }],
