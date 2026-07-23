@@ -16,6 +16,7 @@ export type PriceUpdateItem = {
   price?: number
   currency?: string
   validUntil?: string
+  note?: string // for 'ask': the specific details staff need from the client
 }
 
 const esc = (s: string) =>
@@ -82,7 +83,7 @@ export async function sendPriceUpdate(input: {
   let askedCount = 0
 
   // Pre-validate every item before touching the DB, so nothing partially applies.
-  type Plan = { req: (typeof requests)[number]; mode: 'quote' | 'ask'; price?: number; currency?: string; validUntil?: Date | null }
+  type Plan = { req: (typeof requests)[number]; mode: 'quote' | 'ask'; price?: number; currency?: string; validUntil?: Date | null; note?: string }
   const plans: Plan[] = []
   for (const item of items) {
     const req = byId.get(item.requestId)
@@ -107,9 +108,18 @@ export async function sendPriceUpdate(input: {
         ask: false,
       })
     } else {
-      plans.push({ req, mode: 'ask' })
+      const note = (item.note ?? '').trim()
+      if (!note) return { error: `Say what details you need for ${req.product.name}.` }
+      plans.push({ req, mode: 'ask', note })
       askedCount++
-      emailRows.push({ name: req.product.name, qty: req.qty, modelNo: req.product.modelNo, outcome: 'We need a few more details - please reply to this email.', ask: true })
+      emailRows.push({
+        name: req.product.name,
+        qty: req.qty,
+        modelNo: req.product.modelNo,
+        // The exact ask, entered by staff in the portal — shown to the client.
+        outcome: `To quote this, please confirm: ${esc(note)}`,
+        ask: true,
+      })
     }
   }
   if (plans.length === 0) return { error: 'Nothing to update.' }

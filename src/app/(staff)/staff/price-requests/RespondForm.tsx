@@ -9,6 +9,7 @@ type LineState = {
   price: string
   currency: string
   validUntil: string
+  note: string
 }
 
 const inputCls =
@@ -23,7 +24,7 @@ export default function RespondForm({ items, clientEmail }: { items: RespondItem
     Object.fromEntries(
       items.map((it) => [
         it.id,
-        { mode: 'quote', price: it.defaultPrice != null ? String(it.defaultPrice) : '', currency: it.defaultCurrency || 'AED', validUntil: '' },
+        { mode: 'quote', price: it.defaultPrice != null ? String(it.defaultPrice) : '', currency: it.defaultCurrency || 'AED', validUntil: '', note: '' },
       ]),
     ),
   )
@@ -38,7 +39,7 @@ export default function RespondForm({ items, clientEmail }: { items: RespondItem
       const l = lines[it.id]
       return l.mode === 'quote'
         ? { requestId: it.id, mode: 'quote' as const, price: Number(l.price), currency: l.currency, validUntil: l.validUntil }
-        : { requestId: it.id, mode: 'ask' as const }
+        : { requestId: it.id, mode: 'ask' as const, note: l.note }
     })
     start(async () => setState(await sendPriceUpdate({ message, items: payload })))
   }
@@ -50,8 +51,6 @@ export default function RespondForm({ items, clientEmail }: { items: RespondItem
       </div>
     )
   }
-
-  const anyAsk = items.some((it) => lines[it.id]?.mode === 'ask')
 
   return (
     <div className="space-y-3">
@@ -85,19 +84,29 @@ export default function RespondForm({ items, clientEmail }: { items: RespondItem
                   <input type="date" value={l.validUntil} onChange={(e) => set(it.id, { validUntil: e.target.value })} className={inputCls} /></label>
               </div>
             ) : (
-              <p className="text-xs text-amber-700">The email will ask the client to send more requirement details. This item is kept open (awaiting info).</p>
+              <label className="block">
+                <span className="mb-1 block text-xs font-medium text-amber-700">What details do you need to quote this? (the client sees this)</span>
+                <textarea
+                  value={l.note}
+                  onChange={(e) => set(it.id, { note: e.target.value })}
+                  rows={2}
+                  placeholder="e.g. sample type, required standard (ASTM/ISO), and quantity"
+                  className={`${inputCls} w-full`}
+                />
+                <span className="mt-1 block text-[11px] text-amber-600">Kept open as “awaiting info” until the client replies.</span>
+              </label>
             )}
           </div>
         )
       })}
 
       <label className="block">
-        <span className="mb-1 block text-xs font-medium text-slate-500">Message to the client {anyAsk ? '(what details do you need?)' : '(optional)'}</span>
+        <span className="mb-1 block text-xs font-medium text-slate-500">Covering note (optional)</span>
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          rows={3}
-          placeholder={anyAsk ? 'e.g. Could you confirm the sample type, required standard and quantity?' : 'Optional note to include in the email.'}
+          rows={2}
+          placeholder="Optional greeting/note shown above the items in the email."
           className={`${inputCls} w-full`}
         />
       </label>

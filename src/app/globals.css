@@ -30,18 +30,18 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* The navy sidebar / portal header are genuinely dark surfaces (white text on
-   #0A2540). Declaring the scheme on the element itself keeps browser auto-dark
-   (Chrome's "Auto Dark Mode for Web Contents", which ignores the page-level
-   `only light`) from re-inverting their white text to black. */
+/* The navy sidebar / portal headers are genuinely dark surfaces (white text on
+   #0A2540). Chrome's "Auto Dark Mode for Web Contents" ignores the page-level
+   `color-scheme: only light` and was inverting their white text to black (black
+   on first paint, correct only after a refresh). Two layered defenses:
+   1) declare the element's own scheme as dark; and
+   2) paint the background with an IMAGE (a flat gradient that looks identical to
+      the solid navy) — auto-dark leaves subtrees with a background-image alone,
+      whereas a plain background-color gets inverted. */
 .portal-dark {
   color-scheme: dark;
-}
-.portal-dark,
-.portal-dark a,
-.portal-dark button,
-.portal-dark span {
-  -webkit-text-fill-color: currentColor; /* survives forced-color inversion */
+  background-color: #0a2540;
+  background-image: linear-gradient(#0a2540, #0a2540);
 }
 
 /* Slim, translucent scrollbar that blends into the dark navy sidebar instead
